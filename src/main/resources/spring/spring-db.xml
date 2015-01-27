@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           					http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+							http://www.springframework.org/schema/context
+							http://www.springframework.org/schema/context/spring-context-4.0.xsd
+							http://www.springframework.org/schema/tx 
+							http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+							http://www.springframework.org/schema/aop
+							http://www.springframework.org/schema/tx/spring-aop-4.0.xsd">
+	<context:component-scan base-package="com.rci" />
+	<!-- 载入properties配置文件 -->
+	<bean id="envConfig"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>classpath:hibernate.properties</value>
+				<value>classpath:environment.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+		<property name="properties" ref="envConfig" />
+	</bean>
+
+	<bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${mysql.jdbc.driver}" />
+		<property name="jdbcUrl" value="${mysql.jdbc.url}" />
+		<property name="username" value="${mysql.jdbc.username}" />
+		<property name="password" value="${mysql.jdbc.password}" />
+		<property name="partitionCount" value="3" />
+		<property name="acquireIncrement" value="5" />
+		<property name="maxConnectionsPerPartition" value="50" />
+		<property name="poolName" value="frypanPool" />
+		<property name="closeConnectionWatch" value="true" />
+		<property name="logStatementsEnabled" value="true" />
+		<property name="initSQL" value="SELECT 1 FROM DUAL"></property>
+	</bean>
+	
+	<bean id="SQLServerDataSource" class="com.jolbox.bonecp.BoneCPDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${sqlserver.jdbc.driver}" />
+		<property name="jdbcUrl" value="${sqlserver.jdbc.url}" />
+		<property name="username" value="${sqlserver.jdbc.username}" />
+		<property name="password" value="${sqlserver.jdbc.password}" />
+		<property name="partitionCount" value="3" />
+		<property name="acquireIncrement" value="5" />
+		<property name="maxConnectionsPerPartition" value="50" />
+		<property name="poolName" value="frypanPool" />
+		<property name="closeConnectionWatch" value="true" />
+		<property name="logStatementsEnabled" value="true" />
+		<property name="initSQL" value="SELECT 1 FROM DUAL"></property>
+	</bean>
+	
+	<!-- sessionFactory -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="packagesToScan">
+			<list>
+				<value>com.rci.bean.entity</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+<!-- 				<prop key="hibernate.current_session_context_class">thread</prop> -->
+<!-- 				<prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop> -->
+<!-- 				<prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop> -->
+<!-- 				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop> -->
+<!-- 				<prop key="hibernate.cache.provider_configuration_file_resource_path">c:\tmp</prop> -->
+			</props>
+		</property>
+	</bean>
+	<!-- 配置事务管理器 -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!-- 注解风格支持 -->
+	<aop:aspectj-autoproxy expose-proxy="true"/>
+	
+	<!-- XML 风格支持 -->
+	<aop:config proxy-target-class="true" expose-proxy="true">
+		<aop:advisor pointcut="execution(* com.rci.dao..*DAOFacadeImpl.*(..))"
+					advice-ref="txAdvice" />
+		<aop:advisor
+			pointcut="execution(* com.rci.service..*ServiceImpl.*(..))"
+			advice-ref="txAdvice" />
+	</aop:config>
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="rw*" propagation="REQUIRED" read-only="false" rollback-for="Exception" />
+			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="query*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="*" propagation="REQUIRED" read-only="true" />
+			<!-- for DAO -->
+			<tx:method name="save*" propagation="REQUIRED" read-only="false" rollback-for="Exception"/>
+			<tx:method name="update*" propagation="REQUIRED" read-only="false" rollback-for="Exception"/>
+			<tx:method name="delete*" propagation="REQUIRED" read-only="false" rollback-for="Exception"/>
+		</tx:attributes>
+	</tx:advice>
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+</beans>
