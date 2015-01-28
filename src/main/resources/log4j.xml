@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration
+	xmlns:log4j='http://jakarta.apache.org/log4j/'>
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<param name="ImmediateFlush" value="true" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d [%p] - [%t] %c %x - %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="COMMONLOG" class="org.apache.log4j.FileAppender">
+		<!-- 设置File参数：日志输出文件名 -->
+		<param name="File" value="${rci.root}/logs/common.log" />
+		<!-- 设置是否在重新启动服务时，在原有日志的基础添加新日志 -->
+		<param name="Append" value="true" />
+		<param name="ImmediateFlush" value="true" />
+		<param name="Encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%p] - [%t] %c %x - %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="DEBUG" />
+			<param name="LevelMax" value="FATAL" />
+		</filter>
+	</appender>
+
+	<appender name="RECONCILIATIONLOG" class="org.apache.log4j.FileAppender">
+		<!-- 设置File参数：日志输出文件名 -->
+		<param name="File" value="${rci.root}/logs/rci.log" />
+		<!-- 设置是否在重新启动服务时，在原有日志的基础添加新日志 -->
+		<param name="Append" value="true" />
+		<param name="ImmediateFlush" value="true" />
+		<param name="Encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%p] - [%t] %l %x - %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="DEBUG" />
+			<param name="LevelMax" value="ERROR" />
+		</filter>
+	</appender>
+	
+	<!-- logPath 通过 java -DlogPath 设置 -->
+	<appender name="SQLLOG" class="org.apache.log4j.FileAppender">
+		<!-- 设置File参数：日志输出文件名 -->
+		<param name="File" value="${rci.root}/logs/sql.log" />
+		<!-- 设置是否在重新启动服务时，在原有日志的基础添加新日志 -->
+		<param name="Append" value="true" />
+		<param name="ImmediateFlush" value="true" />
+		<param name="Encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} - %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="DEBUG" />
+			<param name="LevelMax" value="ERROR" />
+		</filter>
+	</appender>
+
+	<appender name="SPRINGLOG" class="org.apache.log4j.FileAppender">
+		<!-- 设置File参数：日志输出文件名 -->
+		<param name="File" value="${rci.root}}/logs/spring.log" />
+		<!-- 设置是否在重新启动服务时，在原有日志的基础添加新日志 -->
+		<param name="Append" value="true" />
+		<param name="ImmediateFlush" value="true" />
+		<param name="Encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%p] - [%t] %l %x - %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="HIBERNATELOG" class="org.apache.log4j.FileAppender">
+		<!-- 设置File参数：日志输出文件名 -->
+		<param name="File" value="${rci.root}}/logs/hibernate.log" />
+		<!-- 设置是否在重新启动服务时，在原有日志的基础添加新日志 -->
+		<param name="Append" value="true" />
+		<param name="ImmediateFlush" value="true" />
+		<param name="Encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%p] - [%t] %l %x - %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="INFO" />
+			<param name="LevelMax" value="ERROR" />
+		</filter>
+	</appender>
+	
+	<!-- reconciliation Log -->
+	<logger name="com.rci" additivity="false">
+		<level value="DEBUG"></level>
+		<appender-ref ref="RECONCILIATIONLOG" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+
+	<!-- SQL Log -->
+	<logger name="org.hibernate.SQL" additivity="false">
+		<level value="DEBUG" />
+		<appender-ref ref="SQLLOG" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+
+	<!-- Spring Log -->
+	<logger name="org.springframework" additivity="false">
+		<level value="WARN" />
+		<appender-ref ref="SPRINGLOG" />
+	</logger>
+	
+	<!-- Spring orm -->
+	<logger name="org.springframework.orm" additivity="false">
+		<level value="DEBUG" />
+		<appender-ref ref="SQLLOG" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+	<!-- Hibernate Log -->
+	<logger name="org.hibernate" additivity="false">
+		<level value="WARN" />
+		<appender-ref ref="HIBERNATELOG" />
+	</logger>
+
+	<root>
+		<priority value="DEBUG" />
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="COMMONLOG" />
+	</root>
+</log4j:configuration>

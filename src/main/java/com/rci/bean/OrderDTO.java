@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 import com.rci.annotation.ColumnName;
-import com.rci.bean.entity.DiscountScheme;
 
 public class OrderDTO {
 	private String orderNo;
@@ -19,7 +18,7 @@ public class OrderDTO {
 	private BigDecimal receivableAmount;
 
 	/* 折扣方案  */
-	private DiscountScheme scheme;  //代金券或者是打折
+	private String scheme;  //代金券或者是打折
 	
 //	/* 临时折扣方案  */
 //	private BigDecimal tempDiscountRate; //解决收银员自己手动输入打折率
@@ -64,11 +63,11 @@ public class OrderDTO {
 		this.receivableAmount = receivableAmount;
 	}
 
-	public DiscountScheme getScheme() {
+	public String getScheme() {
 		return scheme;
 	}
 
-	public void setScheme(DiscountScheme scheme) {
+	public void setScheme(String scheme) {
 		this.scheme = scheme;
 	}
 

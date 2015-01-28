@@ -35,7 +35,6 @@ import com.rci.tools.GenericsUtils;
 /**
  * @Description
  * @author zj
- * @Date 2014�?0�?7�?
  *	
  */
 public class DefaultHibernateDAOFacadeImpl<T extends BaseEntity,PK extends Serializable> implements DAOFacade<T,PK>{

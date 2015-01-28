@@ -11,7 +11,7 @@
 							http://www.springframework.org/schema/tx 
 							http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
 							http://www.springframework.org/schema/aop
-							http://www.springframework.org/schema/tx/spring-aop-4.0.xsd">
+							http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 	<context:component-scan base-package="com.rci" />
 	<!-- 载入properties配置文件 -->
 	<bean id="envConfig"
@@ -116,6 +116,10 @@
 
 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
 		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="sqlServerJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="SQLServerDataSource" />
 	</bean>
 
 </beans>
