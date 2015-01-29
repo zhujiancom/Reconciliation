@@ -17,7 +17,7 @@ import com.rci.mapper.BeanRowMapper;
 
 @Service("DataFetchService")
 public class DataFetchServiceImpl implements IDataFetchService {
-	@Resource
+	@Resource(name="sqlServerJdbcTemplate")
 	private JdbcTemplate sqlServerJdbcTemplate;
 	
 	@Override

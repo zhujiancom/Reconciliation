@@ -3,6 +3,7 @@ package com.rci.bean.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.rci.annotation.ColumnName;
 
 /**
  * 菜品表 ，香辣炸鸡（小），部队火锅等。 饮料
@@ -45,7 +48,7 @@ public class Dish extends BaseEntity{
 	private BigDecimal dishPrice;
 	
 	/* 产品添加时间   */
-	private Timestamp createTime;
+	private Date createTime;
 	
 	/* 产品类型  */
 	private DishType dishType;
@@ -66,6 +69,7 @@ public class Dish extends BaseEntity{
 		return dishNo;
 	}
 
+	@ColumnName("ch_dishno")
 	public void setDishNo(String dishNo) {
 		this.dishNo = dishNo;
 	}
@@ -75,6 +79,7 @@ public class Dish extends BaseEntity{
 		return dishName;
 	}
 
+	@ColumnName("vch_dishname")
 	public void setDishName(String dishName) {
 		this.dishName = dishName;
 	}
@@ -84,17 +89,19 @@ public class Dish extends BaseEntity{
 		return dishPrice;
 	}
 
+	@ColumnName("num_price1")
 	public void setDishPrice(BigDecimal dishPrice) {
 		this.dishPrice = dishPrice;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="create_time")
-	public Timestamp getCreateTime() {
+	public Date getCreateTime() {
 		return createTime;
 	}
 
-	public void setCreateTime(Timestamp createTime) {
+	@ColumnName("dt_build")
+	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
 
@@ -104,14 +111,15 @@ public class Dish extends BaseEntity{
 		return dishType;
 	}
 
+	@ColumnName("ch_typeno")
 	public void setDishType(DishType dishType) {
 		this.dishType = dishType;
 	}
 
-	@Override
-	public Serializable getId() {
-		return did;
-	}
+//	@Override
+//	public Serializable getId() {
+//		return did;
+//	}
 
 	@Override
 	public Integer getVersion() {

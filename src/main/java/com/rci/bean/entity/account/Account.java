@@ -2,7 +2,7 @@ package com.rci.bean.entity.account;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -58,7 +58,7 @@ public class Account extends BaseEntity{
 	private List<TradeInfo> trades;
 	
 	/* 最后交易时间 */
-	private Timestamp lastOperateTime;
+	private Date lastOperateTime;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator
@@ -136,18 +136,18 @@ public class Account extends BaseEntity{
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="acc_last_oper_time")
-	public Timestamp getLastOperateTime() {
+	public Date getLastOperateTime() {
 		return lastOperateTime;
 	}
 
-	public void setLastOperateTime(Timestamp lastOperateTime) {
+	public void setLastOperateTime(Date lastOperateTime) {
 		this.lastOperateTime = lastOperateTime;
 	}
 
-	@Override
-	public Serializable getId() {
-		return aid;
-	}
+//	@Override
+//	public Serializable getId() {
+//		return aid;
+//	}
 
 	@Override
 	public Integer getVersion() {

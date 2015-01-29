@@ -2,7 +2,7 @@ package com.rci.bean.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -38,7 +38,7 @@ public class PostOrderAccount extends BaseEntity{
 	private BigDecimal postAmount;
 	
 	/* 入账时间  */
-	private Timestamp postTime;
+	private Date postTime;
 	
 	/* 对应票据  */
 	private Order order;
@@ -70,11 +70,11 @@ public class PostOrderAccount extends BaseEntity{
 		this.postAmount = postAmount;
 	}
 
-	public Timestamp getPostTime() {
+	public Date getPostTime() {
 		return postTime;
 	}
 
-	public void setPostTime(Timestamp postTime) {
+	public void setPostTime(Date postTime) {
 		this.postTime = postTime;
 	}
 
@@ -88,10 +88,10 @@ public class PostOrderAccount extends BaseEntity{
 		this.order = order;
 	}
 
-	@Override
-	public Serializable getId() {
-		return poaid;
-	}
+//	@Override
+//	public Serializable getId() {
+//		return poaid;
+//	}
 
 	@Override
 	public Integer getVersion() {

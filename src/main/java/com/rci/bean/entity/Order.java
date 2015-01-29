@@ -2,7 +2,7 @@ package com.rci.bean.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -40,10 +40,10 @@ public class Order extends BaseEntity{
 	private String orderNo;
 	
 	/* 开桌时间  */
-	private Timestamp openDeskTime;
+	private Date openDeskTime;
 	
 	/* 结账时间  */
-	private Timestamp checkoutTime;
+	private Date checkoutTime;
 	
 	/* 票据应收金额    */
 	private BigDecimal receivableAmount;
@@ -88,21 +88,21 @@ public class Order extends BaseEntity{
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="order_opendesk_time")
-	public Timestamp getOpenDeskTime() {
+	public Date getOpenDeskTime() {
 		return openDeskTime;
 	}
 
-	public void setOpenDeskTime(Timestamp openDeskTime) {
+	public void setOpenDeskTime(Date openDeskTime) {
 		this.openDeskTime = openDeskTime;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="order_checkout_time")
-	public Timestamp getCheckoutTime() {
+	public Date getCheckoutTime() {
 		return checkoutTime;
 	}
 
-	public void setCheckoutTime(Timestamp checkoutTime) {
+	public void setCheckoutTime(Date checkoutTime) {
 		this.checkoutTime = checkoutTime;
 	}
 
@@ -161,10 +161,10 @@ public class Order extends BaseEntity{
 		this.items = items;
 	}
 
-	@Override
-	public Serializable getId() {
-		return oid;
-	}
+//	@Override
+//	public Serializable getId() {
+//		return oid;
+//	}
 
 	@Override
 	public Integer getVersion() {

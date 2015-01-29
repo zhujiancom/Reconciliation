@@ -2,7 +2,7 @@ package com.rci.bean.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -48,7 +48,7 @@ public class OrderItem extends BaseEntity{
 	private BigDecimal actualAmount;
 	
 	/* 消费时间  */
-	private Timestamp consumeTime;
+	private Date consumeTime;
 	
 	/* 对应票据  */
 	private Order order;
@@ -111,11 +111,11 @@ public class OrderItem extends BaseEntity{
 	}
 
 	@Column(name="item_consume_time")
-	public Timestamp getConsumeTime() {
+	public Date getConsumeTime() {
 		return consumeTime;
 	}
 
-	public void setConsumeTime(Timestamp consumeTime) {
+	public void setConsumeTime(Date consumeTime) {
 		this.consumeTime = consumeTime;
 	}
 
@@ -129,10 +129,10 @@ public class OrderItem extends BaseEntity{
 		this.order = order;
 	}
 
-	@Override
-	public Serializable getId() {
-		return odid;
-	}
+//	@Override
+//	public Serializable getId() {
+//		return odid;
+//	}
 
 	@Override
 	public Integer getVersion() {

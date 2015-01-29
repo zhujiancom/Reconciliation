@@ -2,7 +2,11 @@ package com.rci.bean.entity.account;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.rci.bean.entity.BaseEntity;
@@ -27,6 +31,9 @@ public class TradeType extends BaseEntity{
 	/* 类型名称 */
 	private String typeName;
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator
+	@Column(name="ttid", nullable=false,updatable=false)
 	public Long getTtid() {
 		return ttid;
 	}
@@ -35,6 +42,7 @@ public class TradeType extends BaseEntity{
 		this.ttid = ttid;
 	}
 
+	@Column(name="typename")
 	public String getTypeName() {
 		return typeName;
 	}
@@ -43,10 +51,10 @@ public class TradeType extends BaseEntity{
 		this.typeName = typeName;
 	}
 
-	@Override
-	public Serializable getId() {
-		return ttid;
-	}
+//	@Override
+//	public Serializable getId() {
+//		return ttid;
+//	}
 
 	@Override
 	public Integer getVersion() {

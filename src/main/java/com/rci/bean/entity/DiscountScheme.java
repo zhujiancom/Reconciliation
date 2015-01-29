@@ -98,10 +98,10 @@ public class DiscountScheme extends BaseEntity{
 		this.remark = remark;
 	}
 
-	@Override
-	public Serializable getId() {
-		return sid;
-	}
+//	@Override
+//	public Serializable getId() {
+//		return sid;
+//	}
 
 	@Override
 	@Version

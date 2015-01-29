@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * @Description
  * @author zj
- * @Date 2014å¹?æœ?1æ—?
+ * @Date 2014ï¿½?ï¿½?1ï¿½?
  *	
  */
 public abstract class BaseEntity implements Serializable, Cloneable{
@@ -18,7 +18,7 @@ public abstract class BaseEntity implements Serializable, Cloneable{
 	 */
 	private static final long serialVersionUID = -8132124731461162085L;
 
-	public abstract Serializable getId();
+//	public abstract Serializable getId();
 
 	public abstract Integer getVersion();
 

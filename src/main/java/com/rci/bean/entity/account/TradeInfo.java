@@ -2,7 +2,7 @@ package com.rci.bean.entity.account;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -37,7 +37,7 @@ public class TradeInfo extends BaseEntity{
 	private Long tid;
 	
 	/* 交易时间  */
-	private Timestamp tradeTime;
+	private Date tradeTime;
 	
 	/* 交易金额  */
 	private BigDecimal tradeAmount;
@@ -63,11 +63,11 @@ public class TradeInfo extends BaseEntity{
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="trade_time")
-	public Timestamp getTradeTime() {
+	public Date getTradeTime() {
 		return tradeTime;
 	}
 
-	public void setTradeTime(Timestamp tradeTime) {
+	public void setTradeTime(Date tradeTime) {
 		this.tradeTime = tradeTime;
 	}
 
@@ -109,10 +109,10 @@ public class TradeInfo extends BaseEntity{
 		this.account = account;
 	}
 
-	@Override
-	public Serializable getId() {
-		return tid;
-	}
+//	@Override
+//	public Serializable getId() {
+//		return tid;
+//	}
 
 	@Override
 	public Integer getVersion() {
