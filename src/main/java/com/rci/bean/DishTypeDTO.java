@@ -1,6 +1,7 @@
 package com.rci.bean;
 
-import java.sql.Timestamp;
+import com.rci.annotation.ColumnName;
+
 
 public class DishTypeDTO {
 	/* 类型编号  */
@@ -9,13 +10,11 @@ public class DishTypeDTO {
 	/* 类型名称  */
 	private String dtName;
 	
-	/* 类型创建时间  */
-	private Timestamp createTime;
-
 	public String getDtNo() {
 		return dtNo;
 	}
 
+	@ColumnName("ch_typeno")
 	public void setDtNo(String dtNo) {
 		this.dtNo = dtNo;
 	}
@@ -24,15 +23,8 @@ public class DishTypeDTO {
 		return dtName;
 	}
 
+	@ColumnName("vch_typename")
 	public void setDtName(String dtName) {
 		this.dtName = dtName;
-	}
-
-	public Timestamp getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Timestamp createTime) {
-		this.createTime = createTime;
 	}
 }

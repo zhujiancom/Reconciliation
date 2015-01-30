@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+http://dozer.sourceforge.net/schema/beanmapping.xsd">
+	<mapping map-null="false" map-empty-string="false">
+		<class-a>com.rci.bean.entity.Dish</class-a>
+		<class-b>com.rci.bean.DishDTO</class-b>
+		<field-exclude>
+			<a>dishType</a>
+			<b>dishType</b>
+		</field-exclude>
+	</mapping>
+	<mapping map-null="false" map-empty-string="false">
+		<class-a>com.rci.bean.entity.DishType</class-a>
+		<class-b>com.rci.bean.DishTypeDTO</class-b>
+	</mapping>
+</mappings>

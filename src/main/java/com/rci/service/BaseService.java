@@ -35,6 +35,10 @@ public abstract class BaseService<T extends BaseEntity, PK extends Serializable>
 	public void rwCreate(T entity){
 		baseDAO.save(entity);
 	}
+	
+	public void rwCreate(T[] entities){
+		baseDAO.save(entities);
+	}
 
 	public void rwUpdate(T entity){
 		baseDAO.update(entity);

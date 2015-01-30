@@ -13,18 +13,17 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.rci.annotation.ColumnName;
 
-@Deprecated
-@SuppressWarnings("rawtypes")
-public class BeanRowMapper implements RowMapper{
-	private Class<?> clazz;
+public class BeanRowMappers<T> implements RowMapper<T> {
+	private Class<T> clazz;
 
-	public BeanRowMapper(Class<?> clazz) {
+	public BeanRowMappers(Class<T> clazz) {
 		this.clazz = clazz;
 	}
-
+	
+	
 	@Override
-	public Object mapRow(ResultSet result, int index) throws SQLException {
-		Object obj = null;
+	public T mapRow(ResultSet rs, int rowNum) throws SQLException {
+		T obj = null;
 		try {
 			obj = clazz.newInstance();
 			PropertyDescriptor[] pdrs = BeanUtils.getPropertyDescriptors(clazz);
@@ -37,24 +36,23 @@ public class BeanRowMapper implements RowMapper{
 				Class<?> ptype = method.getParameterTypes()[0];
 				if (columnName != null) {
 					if (ptype == String.class) {
-						method.invoke(obj, result.getString(columnName.value()));
+						method.invoke(obj, rs.getString(columnName.value()));
 					}
 					if(ptype == Long.class){
-						method.invoke(obj, result.getLong(columnName.value()));
+						method.invoke(obj, rs.getLong(columnName.value()));
 					}
 					if(ptype == BigDecimal.class){
-						method.invoke(obj, result.getBigDecimal(columnName.value()));
+						method.invoke(obj, rs.getBigDecimal(columnName.value()));
 					}
 					if(ptype == Timestamp.class){
-						method.invoke(obj, result.getTimestamp(columnName.value()));
+						method.invoke(obj, rs.getTimestamp(columnName.value()));
 					}
 					if(ptype == Integer.class){
-						method.invoke(obj, result.getInt(columnName.value()));
+						method.invoke(obj, rs.getInt(columnName.value()));
 					}
 				}
 			}
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} 
 		return obj;

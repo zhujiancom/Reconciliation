@@ -25,7 +25,7 @@ public class DishDTO {
 		return dishNo;
 	}
 
-	@ColumnName("")
+	@ColumnName("ch_dishno")
 	public void setDishNo(String dishNo) {
 		this.dishNo = dishNo;
 	}
@@ -34,7 +34,7 @@ public class DishDTO {
 		return dishName;
 	}
 
-	@ColumnName("")
+	@ColumnName("vch_dishname")
 	public void setDishName(String dishName) {
 		this.dishName = dishName;
 	}
@@ -43,7 +43,7 @@ public class DishDTO {
 		return dishPrice;
 	}
 
-	@ColumnName("")
+	@ColumnName("num_price1")
 	public void setDishPrice(BigDecimal dishPrice) {
 		this.dishPrice = dishPrice;
 	}
@@ -52,16 +52,16 @@ public class DishDTO {
 		return createTime;
 	}
 
-	@ColumnName("")
+	@ColumnName("dt_build")
 	public void setCreateTime(Timestamp createTime) {
 		this.createTime = createTime;
 	}
 
-	@ColumnName("")
 	public String getDishType() {
 		return dishType;
 	}
 
+	@ColumnName("ch_typeno")
 	public void setDishType(String dishType) {
 		this.dishType = dishType;
 	}

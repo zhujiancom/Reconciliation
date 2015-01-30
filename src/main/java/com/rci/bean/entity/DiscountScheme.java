@@ -1,6 +1,5 @@
 package com.rci.bean.entity;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 import javax.persistence.Column;

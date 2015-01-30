@@ -9,22 +9,21 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.ResultSetExtractor;
 
 import com.rci.annotation.ColumnName;
 
-@Deprecated
-@SuppressWarnings("rawtypes")
-public class BeanRowMapper implements RowMapper{
-	private Class<?> clazz;
-
-	public BeanRowMapper(Class<?> clazz) {
+public class ResultSetExtractorImpl<T> implements ResultSetExtractor<T> {
+	private Class<T> clazz;
+	
+	public ResultSetExtractorImpl(Class<T> clazz){
 		this.clazz = clazz;
 	}
-
+	
 	@Override
-	public Object mapRow(ResultSet result, int index) throws SQLException {
-		Object obj = null;
+	public T extractData(ResultSet rs) throws SQLException, DataAccessException {
+		T obj = null;
 		try {
 			obj = clazz.newInstance();
 			PropertyDescriptor[] pdrs = BeanUtils.getPropertyDescriptors(clazz);
@@ -37,19 +36,19 @@ public class BeanRowMapper implements RowMapper{
 				Class<?> ptype = method.getParameterTypes()[0];
 				if (columnName != null) {
 					if (ptype == String.class) {
-						method.invoke(obj, result.getString(columnName.value()));
+						method.invoke(obj, rs.getString(columnName.value()));
 					}
 					if(ptype == Long.class){
-						method.invoke(obj, result.getLong(columnName.value()));
+						method.invoke(obj, rs.getLong(columnName.value()));
 					}
 					if(ptype == BigDecimal.class){
-						method.invoke(obj, result.getBigDecimal(columnName.value()));
+						method.invoke(obj, rs.getBigDecimal(columnName.value()));
 					}
 					if(ptype == Timestamp.class){
-						method.invoke(obj, result.getTimestamp(columnName.value()));
+						method.invoke(obj, rs.getTimestamp(columnName.value()));
 					}
 					if(ptype == Integer.class){
-						method.invoke(obj, result.getInt(columnName.value()));
+						method.invoke(obj, rs.getInt(columnName.value()));
 					}
 				}
 			}
@@ -59,5 +58,4 @@ public class BeanRowMapper implements RowMapper{
 		} 
 		return obj;
 	}
-
 }

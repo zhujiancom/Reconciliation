@@ -38,7 +38,7 @@
 		<property name="partitionCount" value="3" />
 		<property name="acquireIncrement" value="5" />
 		<property name="maxConnectionsPerPartition" value="50" />
-		<property name="poolName" value="frypanPool" />
+		<property name="poolName" value="rciPool4MySQL" />
 		<property name="closeConnectionWatch" value="true" />
 		<property name="logStatementsEnabled" value="true" />
 		<property name="initSQL" value="SELECT 1 FROM DUAL"></property>
@@ -53,10 +53,9 @@
 		<property name="partitionCount" value="3" />
 		<property name="acquireIncrement" value="5" />
 		<property name="maxConnectionsPerPartition" value="50" />
-		<property name="poolName" value="frypanPool" />
+		<property name="poolName" value="rciPool4SQLServer" />
 		<property name="closeConnectionWatch" value="true" />
 		<property name="logStatementsEnabled" value="true" />
-		<property name="initSQL" value="SELECT 1 FROM DUAL"></property>
 	</bean>
 	
 	<!-- sessionFactory -->

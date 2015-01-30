@@ -9,6 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import com.rci.bean.DishDTO;
+import com.rci.bean.DishTypeDTO;
 
 @ContextConfiguration({"classpath:spring/spring-db.xml"})
 public class DataFetchTest extends AbstractJUnit4SpringContextTests{
@@ -23,4 +24,11 @@ public class DataFetchTest extends AbstractJUnit4SpringContextTests{
 		}
 	}
 
+	@Test
+	public void testFetchDishType() {
+		List<DishTypeDTO> types = datafetch.fetchDishType();
+		for(DishTypeDTO type:types){
+			System.out.println(type.getDtNo()+" - "+type.getDtName());
+		}
+	}
 }
