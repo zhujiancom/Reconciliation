@@ -1,6 +1,5 @@
 package com.rci.bean.entity;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -38,6 +37,9 @@ public class Order extends BaseEntity{
 	
 	/* 订单编号   */
 	private String orderNo;
+	
+	/* 付费编号 */
+	private String payNo;
 	
 	/* 开桌时间  */
 	private Date openDeskTime;
@@ -84,6 +86,14 @@ public class Order extends BaseEntity{
 
 	public void setOrderNo(String orderNo) {
 		this.orderNo = orderNo;
+	}
+
+	public String getPayNo() {
+		return payNo;
+	}
+
+	public void setPayNo(String payNo) {
+		this.payNo = payNo;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)

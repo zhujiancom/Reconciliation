@@ -1,6 +1,5 @@
 package com.rci.bean.entity;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -38,8 +37,11 @@ public class OrderItem extends BaseEntity{
 	/* 折扣率 */
 	private BigDecimal discountRate;
 	
-	/* 数量  */
+	/* 点菜数量  */
 	private Integer count;
+	
+	/* 退菜数量 */
+	private Integer countback;
 	
 	/* 折扣金额  */
 	private BigDecimal discountAmount;
@@ -47,7 +49,7 @@ public class OrderItem extends BaseEntity{
 	/* 实际金额   */
 	private BigDecimal actualAmount;
 	
-	/* 消费时间  */
+	/* 点菜时间  */
 	private Date consumeTime;
 	
 	/* 对应票据  */
@@ -90,6 +92,14 @@ public class OrderItem extends BaseEntity{
 
 	public void setCount(Integer count) {
 		this.count = count;
+	}
+
+	public Integer getCountback() {
+		return countback;
+	}
+
+	public void setCountback(Integer countback) {
+		this.countback = countback;
 	}
 
 	@Column(name="item_discount_amount")

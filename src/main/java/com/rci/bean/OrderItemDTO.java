@@ -3,15 +3,26 @@ package com.rci.bean;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
+import com.rci.annotation.ColumnName;
+
 public class OrderItemDTO {
+	/* 订单编号 */
+	private String billNo;
+	
+	/* 付费编号*/
+	private String payNo;
+	
 	/* 菜品编号 */
 	private String dishNo;
 	
 	/* 折扣率 */
 	private BigDecimal discountRate;
 	
-	/* 数量  */
+	/* 点菜数量  */
 	private Integer count;
+	
+	/* 退菜数量 */
+	private Integer countback;
 	
 	/* 折扣金额  */
 	private BigDecimal discountAmount;
@@ -22,10 +33,29 @@ public class OrderItemDTO {
 	/* 消费时间  */
 	private Timestamp consumeTime;
 
+	public String getBillNo() {
+		return billNo;
+	}
+
+	@ColumnName("billno")
+	public void setBillNo(String billNo) {
+		this.billNo = billNo;
+	}
+
+	public String getPayNo() {
+		return payNo;
+	}
+
+	@ColumnName("payno")
+	public void setPayNo(String payNo) {
+		this.payNo = payNo;
+	}
+
 	public String getDishNo() {
 		return dishNo;
 	}
 
+	@ColumnName("dishno")
 	public void setDishNo(String dishNo) {
 		this.dishNo = dishNo;
 	}
@@ -34,16 +64,28 @@ public class OrderItemDTO {
 		return discountRate;
 	}
 
+	@ColumnName("discount")
 	public void setDiscountRate(BigDecimal discountRate) {
 		this.discountRate = discountRate;
 	}
 
+	
 	public Integer getCount() {
 		return count;
 	}
 
+	@ColumnName("count")
 	public void setCount(Integer count) {
 		this.count = count;
+	}
+
+	public Integer getCountback() {
+		return countback;
+	}
+
+	@ColumnName("countback")
+	public void setCountback(Integer countback) {
+		this.countback = countback;
 	}
 
 	public BigDecimal getDiscountAmount() {
@@ -66,6 +108,7 @@ public class OrderItemDTO {
 		return consumeTime;
 	}
 
+	@ColumnName("consumeTime")
 	public void setConsumeTime(Timestamp consumeTime) {
 		this.consumeTime = consumeTime;
 	}
