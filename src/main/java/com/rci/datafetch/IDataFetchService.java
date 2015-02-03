@@ -1,5 +1,6 @@
 package com.rci.datafetch;
 
+import java.util.Date;
 import java.util.List;
 
 import com.rci.bean.DishDTO;
@@ -11,7 +12,7 @@ import com.rci.bean.entity.DiscountScheme;
 public interface IDataFetchService {
 	OrderDTO fetchOrderByNo(String orderNo);
 	
-	List<OrderDTO> fetchAllDayOrders();
+	List<OrderDTO> fetchAllDayOrders(Date sdate);
 	
 	List<OrderItemDTO> fetchOrderItemsByOrder(String orderNo);
 	

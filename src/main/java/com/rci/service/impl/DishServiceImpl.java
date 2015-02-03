@@ -21,16 +21,6 @@ public class DishServiceImpl extends BaseService<Dish, Long> implements
 	
 	@Override
 	public void rwSaveDish(Dish dish) {
-//		List<DishDTO> dishDTOs = dataFetch.fetchDish();
-//		Dish[] dishes = new Dish[dishDTOs.size()];
-//		for(int i=0;i<dishDTOs.size();i++){
-//			Dish dish = beanMapper.map(dishDTOs.get(i), Dish.class);
-//			DishTypeDTO typeDTO = dataFetch.fetchDishyTypeByNo(dishDTOs.get(i).getDishType());
-//			DishType type = beanMapper.map(typeDTO, DishType.class);
-//			dish.setDishType(type);
-//			System.out.println(dish);
-//			dishes[i] = dish;
-//		}
 		super.rwCreate(dish);
 	}
 

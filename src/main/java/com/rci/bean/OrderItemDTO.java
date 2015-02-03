@@ -30,7 +30,7 @@ public class OrderItemDTO {
 	/* 实际金额   */
 	private BigDecimal actualAmount;
 	
-	/* 消费时间  */
+	/* 点菜时间  */
 	private Timestamp consumeTime;
 
 	public String getBillNo() {

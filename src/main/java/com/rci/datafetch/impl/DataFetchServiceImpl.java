@@ -2,6 +2,8 @@ package com.rci.datafetch.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -17,7 +19,6 @@ import com.rci.bean.OrderItemDTO;
 import com.rci.bean.entity.DiscountScheme;
 import com.rci.datafetch.IDataFetchService;
 import com.rci.datafetch.SQLGen;
-import com.rci.mapper.BeanRowMapper;
 import com.rci.mapper.BeanRowMappers;
 import com.rci.mapper.ResultSetExtractorImpl;
 
@@ -33,21 +34,24 @@ public class DataFetchServiceImpl implements IDataFetchService {
 	}
 
 	@Override
-	public List<OrderDTO> fetchAllDayOrders() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<OrderDTO> fetchAllDayOrders(Date sdate) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(sdate);
+		c.add(Calendar.DAY_OF_MONTH, 1);
+		Date edate = c.getTime();
+		List<OrderDTO> orders = sqlServerJdbcTemplate.query(SQLGen.QUERY_ORDER,new Object[]{sdate,edate}, new BeanRowMappers<OrderDTO>(OrderDTO.class));
+		return orders;
 	}
 
 	@Override
 	public List<OrderItemDTO> fetchOrderItemsByOrder(String orderNo) {
-		// TODO Auto-generated method stub
-		return null;
+		List<OrderItemDTO> items = sqlServerJdbcTemplate.query(SQLGen.QUERY_ORDERITEM,new Object[]{orderNo},new BeanRowMappers<OrderItemDTO>(OrderItemDTO.class));
+		return items;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<DishDTO> fetchDish() {
-		List<DishDTO> dishes = sqlServerJdbcTemplate.query(SQLGen.QUERY_DISH, new BeanRowMapper(DishDTO.class));
+		List<DishDTO> dishes = sqlServerJdbcTemplate.query(SQLGen.QUERY_DISH, new BeanRowMappers<DishDTO>(DishDTO.class));
 		return dishes;
 	}
 
@@ -78,6 +82,7 @@ public class DataFetchServiceImpl implements IDataFetchService {
 				discount.setsNo(rs.getString("ch_projectno"));
 				discount.setsName(rs.getString("vch_projectname"));
 				discount.setRate(rs.getBigDecimal("int_discount"));
+				discount.setRemark("现金");
 				return discount;
 			}
 		});
