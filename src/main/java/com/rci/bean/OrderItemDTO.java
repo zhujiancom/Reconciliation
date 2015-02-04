@@ -15,6 +15,12 @@ public class OrderItemDTO {
 	/* 菜品编号 */
 	private String dishNo;
 	
+	/* 套餐编号 */
+	private String suitNo;
+	
+	/* 是否套餐 */
+	private String suitFlag;
+	
 	/* 折扣率 */
 	private BigDecimal discountRate;
 	
@@ -58,6 +64,24 @@ public class OrderItemDTO {
 	@ColumnName("dishno")
 	public void setDishNo(String dishNo) {
 		this.dishNo = dishNo;
+	}
+
+	public String getSuitNo() {
+		return suitNo;
+	}
+
+	@ColumnName("suitno")
+	public void setSuitNo(String suitNo) {
+		this.suitNo = suitNo;
+	}
+
+	public String getSuitFlag() {
+		return suitFlag;
+	}
+
+	@ColumnName("suitflag")
+	public void setSuitFlag(String suitFlag) {
+		this.suitFlag = suitFlag;
 	}
 
 	public BigDecimal getDiscountRate() {

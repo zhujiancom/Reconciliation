@@ -4,6 +4,7 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
            					http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
 							http://www.springframework.org/schema/context
@@ -11,9 +12,18 @@
 							http://www.springframework.org/schema/tx 
 							http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
 							http://www.springframework.org/schema/aop
-							http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+							http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+							http://www.springframework.org/schema/util
+							http://www.springframework.org/schema/util/spring-util-4.0.xsd">
 	<bean id="beanMapper" class="org.dozer.spring.DozerBeanMapperFactoryBean"
 		scope="singleton">
 		<property name="mappingFiles" value="classpath*:/dozer/*Mapping.xml" />
 	</bean>
+	
+	<util:list id="calculators" list-class="java.util.ArrayList" value-type="com.rci.service.MoneyCalculateStrategy">
+		<bean class="com.rci.service.calculator.DiscountStrategy"></bean>
+		<bean class="com.rci.service.calculator.MTChitStrategy"></bean>
+		<bean class="com.rci.service.calculator.DPTGChitStrategy"></bean>
+		<bean class="com.rci.service.calculator.DPSHChitStrategy"></bean>
+	</util:list>
 </beans>

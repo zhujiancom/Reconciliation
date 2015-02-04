@@ -34,6 +34,12 @@ public class OrderItem extends BaseEntity{
 	/* 菜品  */
 	private Dish dish;
 	
+	/* 是否套餐 */
+	private String suitFlag;
+	
+	/* 套餐编号 */
+	private String suitNo;
+	
 	/* 折扣率 */
 	private BigDecimal discountRate;
 	
@@ -74,6 +80,22 @@ public class OrderItem extends BaseEntity{
 
 	public void setDish(Dish dish) {
 		this.dish = dish;
+	}
+
+	public String getSuitFlag() {
+		return suitFlag;
+	}
+
+	public void setSuitFlag(String suitFlag) {
+		this.suitFlag = suitFlag;
+	}
+
+	public String getSuitNo() {
+		return suitNo;
+	}
+
+	public void setSuitNo(String suitNo) {
+		this.suitNo = suitNo;
 	}
 
 	@Column(name="item_discount_rate")
@@ -130,7 +152,7 @@ public class OrderItem extends BaseEntity{
 	}
 
 	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="order_item_id")
+	@JoinColumn(name="order_id")
 	public Order getOrder() {
 		return order;
 	}

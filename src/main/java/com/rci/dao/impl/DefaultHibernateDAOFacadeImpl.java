@@ -267,4 +267,21 @@ public class DefaultHibernateDAOFacadeImpl<T extends BaseEntity,PK extends Seria
 		}
 		return results;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public T queryUniqueByCriteria(DetachedCriteria dc){
+		List<T> results = Collections.emptyList();
+		CriteriaImpl criteria = (CriteriaImpl) dc.getExecutableCriteria(getCurrentSession());
+		results = criteria.list();
+		T t = results.get(0);
+		return t;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public T queryUniqueByHQL(String hql){
+		List<T> result = getCurrentSession().createQuery(hql).list();
+		return result.get(0);
+	}
 }

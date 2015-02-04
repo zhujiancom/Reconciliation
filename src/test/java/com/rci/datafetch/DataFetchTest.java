@@ -43,7 +43,7 @@ public class DataFetchTest extends AbstractJUnit4SpringContextTests{
 		List<OrderDTO> orders = datafetch.fetchAllDayOrders(sdate);
 		int count = 0;
 		for(OrderDTO order:orders){
-			System.out.println((++count)+"-"+order.getOrderNo()+"-"+order.getPayNo()+"-"+order.getScheme()+"-"+order.getReceivableAmount()+"-"+order.getActualAmount());
+			System.out.println((++count)+"-"+order.getOrderNo()+"-"+order.getPayNo()+"-"+order.getPaymode()+"-"+order.getReceivableAmount()+"-"+order.getActualAmount());
 			List<OrderItemDTO> items = datafetch.fetchOrderItemsByOrder(order.getOrderNo());
 			for(OrderItemDTO item:items){
 				System.out.println("\t\t\t"+item.getDishNo()+"-"+item.getCount()+"-"+item.getCountback()+"-"+item.getActualAmount());

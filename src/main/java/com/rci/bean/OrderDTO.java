@@ -19,8 +19,11 @@ public class OrderDTO {
 	/* 票据应收金额    */
 	private BigDecimal receivableAmount;
 
-	/* 折扣方案  */
-	private String scheme;  //代金券或者是打折
+	/* 支付方式  */
+	private String paymode;  //现金或代金券
+	
+	/* 优惠活动  */
+	private String project;  //8折优惠，无折扣
 	
 //	/* 临时折扣方案  */
 //	private BigDecimal tempDiscountRate; //解决收银员自己手动输入打折率
@@ -76,13 +79,22 @@ public class OrderDTO {
 		this.receivableAmount = receivableAmount;
 	}
 
-	public String getScheme() {
-		return scheme;
+	public String getPaymode() {
+		return paymode;
 	}
 
 	@ColumnName("paymode")
-	public void setScheme(String scheme) {
-		this.scheme = scheme;
+	public void setPaymode(String paymode) {
+		this.paymode = paymode;
+	}
+
+	public String getProject() {
+		return project;
+	}
+
+	@ColumnName("project")
+	public void setProject(String project) {
+		this.project = project;
 	}
 
 	public Boolean getIsTempDiscount() {

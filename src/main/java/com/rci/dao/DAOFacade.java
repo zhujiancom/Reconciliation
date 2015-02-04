@@ -12,7 +12,7 @@ import org.hibernate.criterion.DetachedCriteria;
 /**
  * @Description
  * @author zj
- * @Date 2014å¹?0æœ?7æ—?
+ * @Date 2014ï¿½?0ï¿½?7ï¿½?
  *	
  */
 public interface DAOFacade<T,PK extends Serializable>{
@@ -33,5 +33,9 @@ public interface DAOFacade<T,PK extends Serializable>{
 	public List<Map<String,Object>> queryListBySQL(String sql);
 
 	public List<T> queryListByCriteria(DetachedCriteria dc);
+	
+	public T queryUniqueByHQL(String hql);
+	
+	public T queryUniqueByCriteria(DetachedCriteria dc);
 
 }
