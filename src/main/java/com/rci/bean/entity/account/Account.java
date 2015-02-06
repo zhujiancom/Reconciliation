@@ -1,6 +1,5 @@
 package com.rci.bean.entity.account;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +35,9 @@ public class Account extends BaseEntity{
 	
 	private Long aid;
 	
+	/* 账户编号 */
+	private String accNo;
+	
 	/* 账户名称  */
 	private String accountName;
 	
@@ -69,6 +71,15 @@ public class Account extends BaseEntity{
 
 	public void setAid(Long aid) {
 		this.aid = aid;
+	}
+
+	@Column(name="acc_no")
+	public String getAccNo() {
+		return accNo;
+	}
+
+	public void setAccNo(String accNo) {
+		this.accNo = accNo;
 	}
 
 	@Column(name="acc_name")

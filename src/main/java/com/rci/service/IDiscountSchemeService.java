@@ -7,4 +7,6 @@ public interface IDiscountSchemeService {
 	void rwSaveDiscountSchemes(DiscountScheme[] schemes);
 	
 	DiscountScheme getSchemeByNo(String sno);
+	
+	DiscountScheme getSchemeByName(String name);
 }

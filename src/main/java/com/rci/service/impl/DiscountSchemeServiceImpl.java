@@ -24,4 +24,12 @@ public class DiscountSchemeServiceImpl extends
 		DiscountScheme scheme = baseDAO.queryUniqueByCriteria(dc);
 		return scheme;
 	}
+
+	@Override
+	public DiscountScheme getSchemeByName(String name) {
+		DetachedCriteria dc = DetachedCriteria.forClass(DiscountScheme.class);
+		dc.add(Restrictions.eq("sName", name));
+		DiscountScheme scheme = baseDAO.queryUniqueByCriteria(dc);
+		return scheme;
+	}
 }

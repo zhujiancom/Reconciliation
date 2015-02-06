@@ -11,16 +11,16 @@ import com.rci.bean.entity.PostOrderAccount;
 import com.rci.service.MoneyCalculateStrategy;
 
 /**
- * 大众点评闪惠
+ * 大众点评团购
  * @author zj
  *
  */
-@Component("DPSHChitStrategy")
-public class DPSHChitStrategy extends AbstractStrategy {
+@Component("DPTGChitStragegy")
+public class DPTGChitStrategy extends AbstractStrategy {
 
 	@Override
 	public Boolean support(DiscountScheme scheme) {
-		if("97".equals(scheme.getsNo())){
+		if("98".equals(scheme.getsNo())){
 			return true;
 		}
 		return false;
@@ -28,11 +28,12 @@ public class DPSHChitStrategy extends AbstractStrategy {
 
 	@Override
 	public PostOrderAccount calculate(List<OrderItemDTO> items) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public BigDecimal algorithm(BigDecimal price, BigDecimal count,
+	protected BigDecimal algorithm(BigDecimal price, BigDecimal count,
 			BigDecimal backcount) {
 		// TODO Auto-generated method stub
 		return null;

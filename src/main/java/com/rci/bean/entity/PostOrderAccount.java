@@ -1,6 +1,5 @@
 package com.rci.bean.entity;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -79,7 +78,7 @@ public class PostOrderAccount extends BaseEntity{
 	}
 
 	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="order_post_account_id")
+	@JoinColumn(name="order_id")
 	public Order getOrder() {
 		return order;
 	}

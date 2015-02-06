@@ -1,7 +1,6 @@
 package com.rci.bean.entity;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -47,9 +44,6 @@ public class Dish extends BaseEntity{
 	
 	/* 产品价格  */
 	private BigDecimal dishPrice;
-	
-	/* 产品添加时间   */
-	private Date createTime;
 	
 	/* 产品类型  */
 	private DishType dishType;
@@ -93,17 +87,6 @@ public class Dish extends BaseEntity{
 	@ColumnName("num_price1")
 	public void setDishPrice(BigDecimal dishPrice) {
 		this.dishPrice = dishPrice;
-	}
-
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="create_time")
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	@ColumnName("dt_build")
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
 	}
 
 	@ManyToOne(cascade=CascadeType.ALL)

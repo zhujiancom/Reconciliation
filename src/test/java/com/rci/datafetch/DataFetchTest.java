@@ -1,5 +1,6 @@
 package com.rci.datafetch;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -49,16 +50,5 @@ public class DataFetchTest extends AbstractJUnit4SpringContextTests{
 				System.out.println("\t\t\t"+item.getDishNo()+"-"+item.getCount()+"-"+item.getCountback()+"-"+item.getActualAmount());
 			}
 		}
-	}
-	
-	@Test
-	public void testCalendar(){
-		Calendar c = Calendar.getInstance();
-		c.setTime(new Date());
-		c.set(Calendar.HOUR_OF_DAY, 0);
-		c.set(Calendar.MINUTE, 0);
-		c.set(Calendar.SECOND, 0);
-		c.set(Calendar.MILLISECOND, 0);
-		System.out.println(c.getTime());
 	}
 }

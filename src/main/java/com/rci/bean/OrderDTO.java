@@ -109,7 +109,6 @@ public class OrderDTO {
 		return actualAmount;
 	}
 
-	@ColumnName("realamount")
 	public void setActualAmount(BigDecimal actualAmount) {
 		this.actualAmount = actualAmount;
 	}

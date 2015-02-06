@@ -1,7 +1,6 @@
 package com.rci.bean;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 
 import com.rci.annotation.ColumnName;
 
@@ -14,9 +13,6 @@ public class DishDTO {
 	
 	/* 产品价格  */
 	private BigDecimal dishPrice;
-	
-	/* 产品添加时间   */
-	private Timestamp createTime;
 	
 	/* 产品类型  */
 	private String dishType;
@@ -46,15 +42,6 @@ public class DishDTO {
 	@ColumnName("num_price1")
 	public void setDishPrice(BigDecimal dishPrice) {
 		this.dishPrice = dishPrice;
-	}
-
-	public Timestamp getCreateTime() {
-		return createTime;
-	}
-
-	@ColumnName("dt_build")
-	public void setCreateTime(Timestamp createTime) {
-		this.createTime = createTime;
 	}
 
 	public String getDishType() {

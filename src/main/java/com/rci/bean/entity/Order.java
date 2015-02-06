@@ -126,7 +126,7 @@ public class Order extends BaseEntity{
 	}
 
 	@OneToOne
-	@JoinColumn(name="discount_scheme_id")
+	@JoinColumn(name="scheme_id")
 	public DiscountScheme getScheme() {
 		return scheme;
 	}

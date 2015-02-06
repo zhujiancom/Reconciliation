@@ -25,10 +25,13 @@ public class OrderItemDTO {
 	private BigDecimal discountRate;
 	
 	/* 点菜数量  */
-	private Integer count;
+	private BigDecimal count;
 	
 	/* 退菜数量 */
-	private Integer countback;
+	private BigDecimal countback;
+	
+	/* 菜品单价 */
+	private BigDecimal price;
 	
 	/* 折扣金额  */
 	private BigDecimal discountAmount;
@@ -94,21 +97,30 @@ public class OrderItemDTO {
 	}
 
 	
-	public Integer getCount() {
+	public BigDecimal getCount() {
 		return count;
 	}
 
 	@ColumnName("count")
-	public void setCount(Integer count) {
+	public void setCount(BigDecimal count) {
 		this.count = count;
 	}
 
-	public Integer getCountback() {
+	public BigDecimal getPrice() {
+		return price;
+	}
+
+	@ColumnName("price")
+	public void setPrice(BigDecimal price) {
+		this.price = price;
+	}
+
+	public BigDecimal getCountback() {
 		return countback;
 	}
 
 	@ColumnName("countback")
-	public void setCountback(Integer countback) {
+	public void setCountback(BigDecimal countback) {
 		this.countback = countback;
 	}
 
