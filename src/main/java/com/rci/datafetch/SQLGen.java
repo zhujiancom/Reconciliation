@@ -30,5 +30,7 @@ public class SQLGen {
 											+ "on master.ch_billno=cmaster.ch_billno"
 											+ "where cmaster.dt_operdate between ? and ?";
 	
+	public static final String QUERY_SCHEME_DISHTYPE_REF="select ch_typeno from dbo.cybr_bt_project_detail where ch_projectno=?";
+	
 	
 }

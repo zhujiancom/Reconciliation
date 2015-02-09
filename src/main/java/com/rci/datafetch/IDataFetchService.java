@@ -25,4 +25,6 @@ public interface IDataFetchService {
 	public DishTypeDTO fetchDishyTypeByNo(String typeno);
 	
 	List<DiscountScheme> fetchDiscountInfo();
+	
+	List<String> fetchSchemeDishTypeNoRef(String schemeNo);
 }

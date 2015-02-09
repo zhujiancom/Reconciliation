@@ -1,12 +1,17 @@
 package com.rci.bean.entity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -40,6 +45,8 @@ public class DiscountScheme extends BaseEntity{
 	private BigDecimal commission;
 	
 	private String remark;
+	
+	private List<DishType> dishTypes;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator
@@ -101,6 +108,16 @@ public class DiscountScheme extends BaseEntity{
 //	public Serializable getId() {
 //		return sid;
 //	}
+
+	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+	@JoinColumn(name="scheme_id")
+	public List<DishType> getDishTypes() {
+		return dishTypes;
+	}
+
+	public void setDishTypes(List<DishType> dishTypes) {
+		this.dishTypes = dishTypes;
+	}
 
 	@Override
 	@Version

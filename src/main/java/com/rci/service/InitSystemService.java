@@ -50,7 +50,13 @@ public class InitSystemService {
 		
 		//初始化折扣信息
 		List<DiscountScheme> schemes = dataFetch.fetchDiscountInfo();
+		for(DiscountScheme scheme:schemes){
+			List<String> dishTypeNos = dataFetch.fetchSchemeDishTypeNoRef(scheme.getsNo());
+			List<DishType> dishTypes = dishTypeService.findDishTypesByNo(dishTypeNos);
+			scheme.setDishTypes(dishTypes);
+		}
 		schemeService.rwSaveDiscountSchemes(schemes.toArray(new DiscountScheme[0]));
+		
 	}
 	
 }

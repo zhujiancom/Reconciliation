@@ -76,7 +76,8 @@ public class DataFetchServiceImpl implements IDataFetchService {
 			@Override
 			public DiscountScheme mapRow(ResultSet rs, int rowNum) throws SQLException {
 				DiscountScheme discount = new DiscountScheme();
-				discount.setsNo(rs.getString("ch_projectno"));
+				String schemeNo = rs.getString("ch_projectno");
+				discount.setsNo(schemeNo);
 				discount.setsName(rs.getString("vch_projectname"));
 				discount.setRate(rs.getBigDecimal("int_discount"));
 				discount.setRemark("现金");
@@ -97,5 +98,18 @@ public class DataFetchServiceImpl implements IDataFetchService {
 		schemes.addAll(schemes1);
 		return schemes;
 	}
+	
+	@Override
+	public List<String> fetchSchemeDishTypeNoRef(String schemeNo){
+		List<String> dishTypes =  sqlServerJdbcTemplate.query(SQLGen.QUERY_SCHEME_DISHTYPE_REF,new Object[]{schemeNo},new RowMapper<String>(){
 
+			@Override
+			public String mapRow(ResultSet rs, int rowNum)
+					throws SQLException {
+				return rs.getString("ch_typeno");
+			}
+			
+		});
+		return dishTypes;
+	}
 }

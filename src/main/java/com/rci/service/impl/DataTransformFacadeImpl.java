@@ -1,5 +1,6 @@
 package com.rci.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -47,11 +48,16 @@ public class DataTransformFacadeImpl implements DataTransformFacade {
 				String orderNo = orderDTO.getOrderNo();
 				String paymode = orderDTO.getPaymode();
 				String project = orderDTO.getProject();
-				if(container.contains(orderNo)){
+				BigDecimal realamount = orderDTO.getActualAmount();
+				BigDecimal originamount = orderDTO.getReceivableAmount();
+				if(container.contains(orderNo)||"XX".equals(paymode)){
 					continue;
 				}
 				DiscountScheme scheme = null;
-				if(project == null){ //使用代金券
+				if("无折扣".equals(project)&&"00".equals(paymode)&&!realamount.equals(originamount)){
+					continue;
+				}
+				if(project == null || ("无折扣".equals(project)&&!"00".equals(paymode))){ //使用代金券
 					scheme = schemeService.getSchemeByNo(paymode);
 				}else{//获取折扣方案
 					scheme = schemeService.getSchemeByName(project);
