@@ -1,5 +1,7 @@
 package com.rci.service.impl;
 
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Service;
 
 import com.rci.bean.entity.account.Account;
@@ -14,33 +16,35 @@ public class AccountServiceImpl extends BaseService<Account, Long>  implements I
 	}
 	
 	@Override
+	public Account getAccountByNo(String no){
+		DetachedCriteria dc = DetachedCriteria.forClass(Account.class);
+		dc.add(Restrictions.eq("accNo", no));
+		Account account = baseDAO.queryUniqueByCriteria(dc);
+		return account;
+	}
+	
+	@Override
 	public Account getPOSAccount() {
-		
-		return null;
+		return getAccountByNo("SYJ");
 	}
 
 	@Override
 	public Account getDPTGAccount() {
-		// TODO Auto-generated method stub
-		return null;
+		return getAccountByNo("DPTG");
 	}
 
 	@Override
 	public Account getDPSHAccount() {
-		// TODO Auto-generated method stub
-		return null;
+		return getAccountByNo("DPSH");
 	}
 
 	@Override
 	public Account getMTAccount() {
-		// TODO Auto-generated method stub
-		return null;
+		return getAccountByNo("MT");
 	}
 
 	@Override
 	public Account getELEAccount() {
-		// TODO Auto-generated method stub
-		return null;
+		return getAccountByNo("ELE");
 	}
-
 }

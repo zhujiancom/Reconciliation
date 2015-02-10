@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 
 /**
@@ -47,6 +48,8 @@ public class DiscountScheme extends BaseEntity{
 	private String remark;
 	
 	private List<DishType> dishTypes;
+	/* 代金券金额  */
+	private BigDecimal chitAmount;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator
@@ -117,6 +120,15 @@ public class DiscountScheme extends BaseEntity{
 
 	public void setDishTypes(List<DishType> dishTypes) {
 		this.dishTypes = dishTypes;
+	}
+
+	@Transient
+	public BigDecimal getChitAmount() {
+		return chitAmount;
+	}
+
+	public void setChitAmount(BigDecimal chitAmount) {
+		this.chitAmount = chitAmount;
 	}
 
 	@Override

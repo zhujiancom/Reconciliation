@@ -5,6 +5,8 @@ import com.rci.bean.entity.account.Account;
 public interface IAccountService {
 	public void rwCreateAccout(Account acc);
 	
+	public Account getAccountByNo(String no);
+	
 	public Account getPOSAccount();
 	
 	public Account getDPTGAccount();

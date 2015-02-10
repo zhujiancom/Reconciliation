@@ -1,7 +1,10 @@
 package com.rci.service.calculator;
 
 import java.math.BigDecimal;
+import java.util.LinkedList;
 import java.util.List;
+
+import javax.annotation.Resource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -11,62 +14,70 @@ import com.rci.bean.OrderItemDTO;
 import com.rci.bean.entity.DiscountScheme;
 import com.rci.bean.entity.PostOrderAccount;
 import com.rci.bean.entity.account.Account;
-import com.rci.dao.impl.DefaultHibernateDAOFacadeImpl;
+import com.rci.service.IAccountService;
+import com.rci.service.MoneyCalculateStrategy;
 
 /**
  * 店内折扣算法
+ * 
  * @author zj
- *
+ * 
  */
 @Component("DiscountStrategy")
-public class DiscountStrategy extends AbstractStrategy {
+public class DiscountStrategy implements MoneyCalculateStrategy {
 	private transient Log logger = LogFactory.getLog(DiscountStrategy.class);
-	
-	protected Log logger(){
-		if(logger == null){
+
+	protected Log logger() {
+		if (logger == null) {
 			return LogFactory.getLog(DiscountStrategy.class);
-		}else{
+		} else {
 			return logger;
 		}
 	}
-	
+
+	protected DiscountScheme scheme;
+
+	@Resource(name = "AccountService")
+	protected IAccountService accService;
+
 	@Override
-	public PostOrderAccount calculate(List<OrderItemDTO> items) {
+	public List<PostOrderAccount> calculate(List<OrderItemDTO> items) {
+		List<PostOrderAccount> poas = new LinkedList<PostOrderAccount>();
 		Account account = accService.getPOSAccount();
 		PostOrderAccount poa = new PostOrderAccount();
 		BigDecimal postAmount = BigDecimal.ZERO;
-//		Set<String> discountDishNoContainer = new HashSet<String>();
-//		List<DishType> dishTypes = scheme.getDishTypes();
-//		for(DishType dishType:dishTypes){
-//			List<Dish> dishes = dishType.getDishes();
-//			for(Dish dish:dishes){
-//				discountDishNoContainer.add(dish.getDishNo());
-//			}
-//		}
-		for(OrderItemDTO itemDTO:items){
+		for (OrderItemDTO itemDTO : items) {
 			BigDecimal price = itemDTO.getPrice();
 			BigDecimal count = itemDTO.getCount();
 			BigDecimal backcount = itemDTO.getCountback();
-			logger().debug("Billno["+itemDTO.getBillNo()+"],"+"orderItem["+itemDTO.getDishNo()+"]"+" - price:"+price+",");
-			postAmount = postAmount.add(algorithm(price,count,backcount));
+			BigDecimal rate = itemDTO.getDiscountRate();
+			logger().debug(
+					"Billno[" + itemDTO.getBillNo() + "]," + "orderItem["
+							+ itemDTO.getDishNo() + "]" + " - price:" + price
+							+ ",");
+			postAmount = postAmount.add(algorithm(price, rate, count, backcount));
 		}
 		poa.setAccountId(account.getAid());
 		poa.setPostAmount(postAmount);
-		return poa;
+		poas.add(poa);
+		return poas;
 	}
 
 	@Override
 	public Boolean support(DiscountScheme scheme) {
-		super.scheme = scheme;
-		if("01".equals(scheme.getsNo()) || "02".equals(scheme.getsNo())){
+		this.scheme = scheme;
+		if ("01".equals(scheme.getsNo().trim()) || "02".equals(scheme.getsNo().trim())) {
 			return true;
 		}
 		return false;
 	}
-	
-	@Override
-	protected BigDecimal algorithm(BigDecimal price, BigDecimal count,BigDecimal backcount){
-		BigDecimal result = price.multiply(count).subtract(price.multiply(backcount)).multiply(scheme.getRate().divide(new BigDecimal(100))).setScale(0, BigDecimal.ROUND_CEILING);
+
+	private BigDecimal algorithm(BigDecimal price,BigDecimal rate, BigDecimal count,
+			BigDecimal backcount) {
+		if(rate == null){
+			rate = new BigDecimal(100);
+		}
+		BigDecimal result = price.multiply(count).subtract(price.multiply(backcount)).multiply(rate.divide(new BigDecimal(100))).setScale(0, BigDecimal.ROUND_CEILING);
 		return result;
 	}
 }

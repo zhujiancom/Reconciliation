@@ -26,13 +26,16 @@ public class DefaultTest {
 //		System.out.println("BigDecimal scale : "+new BigDecimal("2.1").setScale(0, BigDecimal.ROUND_HALF_UP));
 //		System.out.println("BigDecimal scale : "+new BigDecimal("2.6").setScale(0, BigDecimal.ROUND_CEILING));
 		
-		BigDecimal price = new BigDecimal("38.0");
-		BigDecimal count = new BigDecimal("2");
-		BigDecimal backcount = new BigDecimal("1");
+//		BigDecimal price = new BigDecimal("38.0");
+//		BigDecimal count = new BigDecimal("2");
+//		BigDecimal backcount = new BigDecimal("1");
+//		
+//		BigDecimal result = price.multiply(count).subtract(price.multiply(backcount)).multiply(new BigDecimal("80").divide(new BigDecimal(100))).setScale(0, BigDecimal.ROUND_CEILING);
+//		System.out.println(result);
+//		price = price.add(result);
+//		System.out.println(price);
 		
-		BigDecimal result = price.multiply(count).subtract(price.multiply(backcount)).multiply(new BigDecimal("80").divide(new BigDecimal(100))).setScale(0, BigDecimal.ROUND_CEILING);
-		System.out.println(result);
-		price = price.add(result);
-		System.out.println(price);
+//		BigDecimal bd = new BigDecimal(100);
+//		System.out.println(bd.intValue() == 100);
 	}
 }

@@ -28,19 +28,22 @@ public class PostAccountCalculator{
 	private IDishService dishService;
 	
 	public Order calculate(Order order,List<OrderItemDTO> itemDTOs) {
-		List<PostOrderAccount> accounts = new LinkedList<PostOrderAccount>();
+//		List<PostOrderAccount> accounts = new LinkedList<PostOrderAccount>();
 		List<OrderItem> items = new LinkedList<OrderItem>();
 		BigDecimal actualAmount = BigDecimal.ZERO;
 		for(MoneyCalculateStrategy calculator:calculators){
 			if(calculator.support(order.getScheme())){
-				PostOrderAccount account = calculator.calculate(itemDTOs);
-				account.setOrder(order);
-				actualAmount.add(account.getPostAmount());
-				accounts.add(account);
+				List<PostOrderAccount> accounts = calculator.calculate(itemDTOs);
+				//设置order金额入账的账户
+				order.setPostOrderAccounts(accounts);
+				for(PostOrderAccount account:accounts){
+					account.setOrder(order);
+					actualAmount = actualAmount.add(account.getPostAmount());
+				}
+				break;
 			}
 		}
-		//设置order金额入账的账户
-		order.setPostOrderAccounts(accounts);
+		
 		for(OrderItemDTO itemDTO:itemDTOs){
 			OrderItem item = beanMapper.map(itemDTO, OrderItem.class);
 			item.setOrder(order);

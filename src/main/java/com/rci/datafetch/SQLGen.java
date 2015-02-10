@@ -20,14 +20,14 @@ public class SQLGen {
 	public static final String QUERY_ORDER="select tab.ch_billno 'billno',tab.ch_payno 'payno',detail.ch_paymodeno 'paymode', \n"
 											+"cmaster.num_cost 'originamount',tab.dt_service_begin 'opendesktime',\n"
 											+ "cmaster.dt_operdate 'checkouttime',detail.num_realamount 'realamount', \n"
-											+ "master.vch_disproject 'project'"
+											+ "master.vch_disproject 'project' \n"
 											+ "from dbo.v_u_table tab \n"
 											+ "join dbo.v_u_checkout_master cmaster \n"
 											+ "on tab.ch_billno=cmaster.ch_billno \n"
 											+ "join dbo.v_u_checkout_detail detail \n"
 											+ "on cmaster.ch_payno = detail.ch_payno \n"
 											+ "join dbo.v_u_master master \n"
-											+ "on master.ch_billno=cmaster.ch_billno"
+											+ "on master.ch_billno=cmaster.ch_billno \n"
 											+ "where cmaster.dt_operdate between ? and ?";
 	
 	public static final String QUERY_SCHEME_DISHTYPE_REF="select ch_typeno from dbo.cybr_bt_project_detail where ch_projectno=?";

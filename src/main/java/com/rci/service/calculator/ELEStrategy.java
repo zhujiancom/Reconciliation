@@ -1,18 +1,24 @@
 package com.rci.service.calculator;
 
 import java.math.BigDecimal;
-import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+
+import javax.annotation.Resource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Component;
 
 import com.rci.bean.OrderItemDTO;
 import com.rci.bean.entity.DiscountScheme;
 import com.rci.bean.entity.PostOrderAccount;
 import com.rci.bean.entity.account.Account;
+import com.rci.service.IAccountService;
+import com.rci.service.MoneyCalculateStrategy;
 
-public class ELEStrategy extends AbstractStrategy {
+@Component("ELEStrategy")
+public class ELEStrategy implements MoneyCalculateStrategy {
 	private transient Log logger = LogFactory.getLog(ELEStrategy.class);
 
 	protected Log logger() {
@@ -23,28 +29,37 @@ public class ELEStrategy extends AbstractStrategy {
 		}
 	}
 
+	protected DiscountScheme scheme;
+
+	@Resource(name = "AccountService")
+	protected IAccountService accService;
+
 	@Override
 	public Boolean support(DiscountScheme scheme) {
-		super.scheme = scheme;
-		if ("11".equals(scheme.getsNo())) {
+		this.scheme = scheme;
+		if ("11".equals(scheme.getsNo().trim())) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	@Override
 	public List<PostOrderAccount> calculate(List<OrderItemDTO> items) {
 		logger().debug("---- 饿了么在线支付  -------");
-		List<PostOrderAccount> poas = Collections.emptyList();
+		List<PostOrderAccount> poas = new LinkedList<PostOrderAccount>();
 		Account eleAccount = accService.getELEAccount();
 		PostOrderAccount elePoa = new PostOrderAccount();
 		BigDecimal postAmount = BigDecimal.ZERO;
-		for(OrderItemDTO itemDTO:items){
+		for (OrderItemDTO itemDTO : items) {
 			BigDecimal price = itemDTO.getPrice();
 			BigDecimal count = itemDTO.getCount();
 			BigDecimal backcount = itemDTO.getCountback();
-			logger().debug("Billno["+itemDTO.getBillNo()+"],"+"orderItem["+itemDTO.getDishNo()+"]"+" - price:"+price+",");
-			BigDecimal itemPrice = price.multiply(count).subtract(price.multiply(backcount));
+			logger().debug(
+					"Billno[" + itemDTO.getBillNo() + "]," + "orderItem["
+							+ itemDTO.getDishNo() + "]" + " - price:" + price
+							+ ",");
+			BigDecimal itemPrice = price.multiply(count).subtract(
+					price.multiply(backcount));
 			postAmount = postAmount.add(itemPrice);
 		}
 		elePoa.setAccountId(eleAccount.getAid());

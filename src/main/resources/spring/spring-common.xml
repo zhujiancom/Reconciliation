@@ -25,5 +25,6 @@
 		<bean class="com.rci.service.calculator.MTChitStrategy"></bean>
 		<bean class="com.rci.service.calculator.DPTGChitStrategy"></bean>
 		<bean class="com.rci.service.calculator.DPSHChitStrategy"></bean>
+		<bean class="com.rci.service.calculator.ELEStrategy"></bean>
 	</util:list>
 </beans>

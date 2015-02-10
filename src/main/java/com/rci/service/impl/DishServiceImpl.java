@@ -3,6 +3,8 @@ package com.rci.service.impl;
 import javax.annotation.Resource;
 
 import org.dozer.Mapper;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +28,10 @@ public class DishServiceImpl extends BaseService<Dish, Long> implements
 
 	@Override
 	public Dish findDishByNo(String no) {
-		// TODO Auto-generated method stub
-		return null;
+		DetachedCriteria dc = DetachedCriteria.forClass(Dish.class);
+		dc.add(Restrictions.eq("dishNo", no));
+		Dish dish = baseDAO.queryUniqueByCriteria(dc);
+		return dish;
 	}
 
 	@Override
