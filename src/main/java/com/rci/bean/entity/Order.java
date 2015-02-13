@@ -47,6 +47,8 @@ public class Order extends BaseEntity{
 	/* 结账时间  */
 	private Date checkoutTime;
 	
+	private String day;
+	
 	/* 票据应收金额    */
 	private BigDecimal receivableAmount;
 
@@ -114,6 +116,15 @@ public class Order extends BaseEntity{
 
 	public void setCheckoutTime(Date checkoutTime) {
 		this.checkoutTime = checkoutTime;
+	}
+
+	@Column(name="day")
+	public String getDay() {
+		return day;
+	}
+
+	public void setDay(String day) {
+		this.day = day;
 	}
 
 	@Column(name="order_receivable_amount")

@@ -225,4 +225,5 @@ public class DateUtil extends DateUtils{
 		c.set(Calendar.MILLISECOND, 0);
 		return c.getTime();
 	}
+	
 }

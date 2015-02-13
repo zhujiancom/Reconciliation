@@ -26,7 +26,7 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<dependencies>
 		<!-- Spring jar -->
 		<dependency>
@@ -79,7 +79,7 @@
 			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
@@ -96,20 +96,20 @@
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.7.7</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.8</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>net.sourceforge.jtds</groupId>
 			<artifactId>jtds</artifactId>
 			<version>1.2.4</version>
 		</dependency>
-		
+
 		<!-- Apache Commons jar -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -147,20 +147,20 @@
 			<artifactId>commons-configuration</artifactId>
 			<version>1.10</version>
 		</dependency>
-		
+
 		<!-- Connection pool -->
 		<dependency>
 			<groupId>com.jolbox</groupId>
 			<artifactId>bonecp</artifactId>
 			<version>0.8.0.RELEASE</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.30</version>
 		</dependency>
-		
+
 		<!-- Hibernate4 -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -177,7 +177,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<!-- AspectJ -->
 		<dependency>
 			<groupId>org.aspectj</groupId>
@@ -189,7 +189,7 @@
 			<artifactId>aspectjweaver</artifactId>
 			<version>1.8.0</version>
 		</dependency>
-		
+
 		<!-- Dozer -->
 		<dependency>
 			<groupId>net.sf.dozer</groupId>
@@ -201,7 +201,6 @@
 			<artifactId>dozer-spring</artifactId>
 			<version>5.5.1</version>
 		</dependency>
-		
-		
+
 	</dependencies>
 </project>

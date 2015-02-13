@@ -1,12 +1,12 @@
 package com.rci.service;
 
-import java.util.Date;
-
 import javax.annotation.Resource;
 
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
+
+import com.rci.tools.DateUtil;
 
 @ContextConfiguration({"classpath:spring/spring-db.xml","classpath:spring/spring-common.xml"})
 public class DataTransformFacadeTest extends AbstractJUnit4SpringContextTests{
@@ -15,7 +15,7 @@ public class DataTransformFacadeTest extends AbstractJUnit4SpringContextTests{
 	
 	@Test
 	public void testAccquireOrderInfo() {
-		dtf.accquireOrderInfo(new Date());
+		dtf.accquireOrderInfo(DateUtil.str2Date("2015-02-07"));
 	}
 
 }

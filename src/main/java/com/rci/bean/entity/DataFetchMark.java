@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 
 @Entity
@@ -66,6 +67,7 @@ public class DataFetchMark extends BaseEntity{
 		this.version = version;
 	}
 	
+	@Transient
 	public Boolean isMarked(){
 		if(mark==null || mark==0){
 			return false;
