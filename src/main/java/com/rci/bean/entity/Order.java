@@ -3,6 +3,7 @@ package com.rci.bean.entity;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -164,7 +165,7 @@ public class Order extends BaseEntity{
 		this.actualAmount = actualAmount;
 	}
 
-	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER,mappedBy="order")
+	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY,mappedBy="order")
 	public List<PostOrderAccount> getPostOrderAccounts() {
 		return postOrderAccounts;
 	}
@@ -173,7 +174,7 @@ public class Order extends BaseEntity{
 		this.postOrderAccounts = postOrderAccounts;
 	}
 
-	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER,mappedBy="order")
+	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY,mappedBy="order")
 	public List<OrderItem> getItems() {
 		return items;
 	}

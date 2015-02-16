@@ -1,8 +1,10 @@
 package com.rci.service.impl;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -34,22 +36,29 @@ public class PostAccountCalculator{
 		for(MoneyCalculateStrategy calculator:calculators){
 			if(calculator.support(order.getScheme())){
 				List<PostOrderAccount> accounts = calculator.calculate(itemDTOs);
-				//设置order金额入账的账户
-				order.setPostOrderAccounts(accounts);
+				
+				Set<PostOrderAccount> accountss = new HashSet<PostOrderAccount>();
+				
+				
 				for(PostOrderAccount account:accounts){
 					account.setOrder(order);
 					actualAmount = actualAmount.add(account.getPostAmount());
+					accountss.add(account);
 				}
+				//设置order金额入账的账户
+				order.setPostOrderAccounts(accounts);
 				break;
 			}
 		}
 		
+		Set<OrderItem> itemss = new HashSet<OrderItem>();
 		for(OrderItemDTO itemDTO:itemDTOs){
 			OrderItem item = beanMapper.map(itemDTO, OrderItem.class);
 			item.setOrder(order);
 			Dish dish = dishService.findDishByNo(itemDTO.getDishNo());
 			item.setDish(dish);
 			items.add(item);
+			itemss.add(item);
 		}
 		//设置order关联的item
 		order.setItems(items);

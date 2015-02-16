@@ -6,7 +6,7 @@ import java.util.Date;
 public class OrderVO {
 	private Long orderId;
 	
-	private String payno;
+	private String payNo;
 	
 	private BigDecimal originAmount;
 	
@@ -40,12 +40,13 @@ public class OrderVO {
 		this.orderId = orderId;
 	}
 
-	public String getPayno() {
-		return payno;
+
+	public String getPayNo() {
+		return payNo;
 	}
 
-	public void setPayno(String payno) {
-		this.payno = payno;
+	public void setPayNo(String payNo) {
+		this.payNo = payNo;
 	}
 
 	public BigDecimal getOriginAmount() {
@@ -141,8 +142,12 @@ public class OrderVO {
 	}
 
 	public void setTotalAmount(BigDecimal totalAmount) {
-		this.totalAmount = this.posAmount.add(this.mtAmount)
-							.add(this.dptgAmount).add(this.dpshAmount)
-							.add(this.tddAmount).add(this.eleAmount);
+//		if(this.posAmount != null){
+//			this.totalAmount = this.totalAmount.add(this.posAmount);
+//		}
+//		if(this.mtAmount != null){
+//			this.totalAmount = this.totalAmount.add(this.mtAmount);
+//		}
+		this.totalAmount = totalAmount;
 	}
 }

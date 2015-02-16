@@ -14,4 +14,17 @@ http://dozer.sourceforge.net/schema/beanmapping.xsd">
 		<class-a>com.rci.bean.entity.DishType</class-a>
 		<class-b>com.rci.bean.DishTypeDTO</class-b>
 	</mapping>
+	
+	<mapping map-null="false" map-empty-string="false">
+		<class-a>com.rci.bean.entity.Order</class-a>
+		<class-b>com.rci.ui.vo.OrderVO</class-b>
+		<field>
+			<a>oid</a>
+			<b>orderId</b>
+		</field>
+		<field>
+			<a>receivableAmount</a>
+			<b>originAmount</b>
+		</field>
+	</mapping>
 </mappings>

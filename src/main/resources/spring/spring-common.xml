@@ -27,4 +27,6 @@
 		<bean class="com.rci.service.calculator.DPSHChitStrategy"></bean>
 		<bean class="com.rci.service.calculator.ELEStrategy"></bean>
 	</util:list>
+	
+	<bean id="springcontext" class="com.rci.tools.SpringUtils"></bean>
 </beans>
