@@ -28,8 +28,13 @@ public class InitSystemService {
 	private IDishTypeService dishTypeService;
 	@Resource(name="DiscountSchemeService")
 	private IDiscountSchemeService schemeService;
+	@Resource(name="FetchMarkService")
+	private IFetchMarkService markService;
 	
 	public void init(){
+		if(markService.isSystemInit()){
+			return;
+		}
 		//初始化菜品
 		List<DishTypeDTO> typeDTOs = dataFetch.fetchDishType();
 		DishType[] types = new DishType[typeDTOs.size()];
@@ -56,7 +61,7 @@ public class InitSystemService {
 			scheme.setDishTypes(dishTypes);
 		}
 		schemeService.rwSaveDiscountSchemes(schemes.toArray(new DiscountScheme[0]));
-		
+		markService.rwSystemInit();
 	}
 	
 }

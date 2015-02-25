@@ -2,12 +2,16 @@ package com.rci.bean.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.Version;
+
+import com.rci.constants.enums.MarkType;
 
 @Entity
 @Table(name="tb_datafetch_mark")
@@ -20,11 +24,19 @@ public class DataFetchMark extends BaseEntity{
 	private Long markId;
 	private Integer version;
 	
+	private MarkType type;
+	
 	/* 对账日期  */
 	private String rciDate;
 	
 	/* 标记 */
 	private Integer mark;
+	
+	public DataFetchMark(){}
+	
+	public DataFetchMark(MarkType type){
+		this.type = type;
+	}
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator
@@ -35,6 +47,16 @@ public class DataFetchMark extends BaseEntity{
 
 	public void setMarkId(Long markId) {
 		this.markId = markId;
+	}
+
+	@Enumerated(EnumType.STRING)
+	@Column(name="type")
+	public MarkType getType() {
+		return type;
+	}
+
+	public void setType(MarkType type) {
+		this.type = type;
 	}
 
 	@Column(name="rci_date")
@@ -57,7 +79,6 @@ public class DataFetchMark extends BaseEntity{
 
 	@Override
 	public Integer getVersion() {
-		// TODO Auto-generated method stub
 		return version;
 	}
 

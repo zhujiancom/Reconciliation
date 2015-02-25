@@ -24,7 +24,7 @@ public class OrderTableModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-		return 14;
+		return 13;
 	}
 
 	@Override

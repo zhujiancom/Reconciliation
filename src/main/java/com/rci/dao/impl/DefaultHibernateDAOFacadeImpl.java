@@ -274,6 +274,9 @@ public class DefaultHibernateDAOFacadeImpl<T extends BaseEntity,PK extends Seria
 		List<T> results = Collections.emptyList();
 		CriteriaImpl criteria = (CriteriaImpl) dc.getExecutableCriteria(getCurrentSession());
 		results = criteria.list();
+		if(CollectionUtils.isEmpty(results)){
+			return null;
+		}
 		T t = results.get(0);
 		return t;
 	}
@@ -281,7 +284,10 @@ public class DefaultHibernateDAOFacadeImpl<T extends BaseEntity,PK extends Seria
 	@SuppressWarnings("unchecked")
 	@Override
 	public T queryUniqueByHQL(String hql){
-		List<T> result = getCurrentSession().createQuery(hql).list();
-		return result.get(0);
+		List<T> results = getCurrentSession().createQuery(hql).list();
+		if(CollectionUtils.isEmpty(results)){
+			return null;
+		}
+		return results.get(0);
 	}
 }

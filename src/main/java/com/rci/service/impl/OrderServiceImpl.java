@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.dozer.Mapper;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
@@ -11,10 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.rci.bean.entity.DataFetchMark;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.PostOrderAccount;
 import com.rci.service.BaseService;
+import com.rci.service.DataTransformFacade;
+import com.rci.service.IFetchMarkService;
 import com.rci.service.IOrderService;
+import com.rci.tools.DateUtil;
 import com.rci.tools.StringUtility;
 import com.rci.ui.vo.OrderVO;
 
@@ -23,6 +29,10 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 		IOrderService {
 	@Autowired
 	private Mapper beanMapper;
+	@Resource(name="FetchMarkService")
+	private IFetchMarkService markService;
+	@Resource(name="DataTransformFacade")
+	private DataTransformFacade dataTransform;
 
 	@Override
 	public Order getOrder(Long pk) {
@@ -53,6 +63,11 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 
 	@Override
 	public List<OrderVO> queryOrderVOsByDay(String day) {
+		DataFetchMark mark = markService.getMarkRecordByDay(day);
+		if(mark == null || !mark.isMarked()){
+			dataTransform.accquireOrderInfo(DateUtil.str2Date(day));
+			markService.rwOrderMark(day);
+		}
 		List<Order> orders = queryOrdersByDay(day);
 		List<OrderVO> vos = new LinkedList<OrderVO>();
 		if(!CollectionUtils.isEmpty(orders)){
