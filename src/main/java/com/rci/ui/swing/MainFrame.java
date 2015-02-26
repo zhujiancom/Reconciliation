@@ -12,6 +12,9 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -27,6 +30,7 @@ import com.rci.service.InitSystemService;
 import com.rci.tools.SpringUtils;
 import com.rci.tools.properties.PropertyUtils;
 import com.rci.ui.model.OrderTableModel;
+import com.rci.ui.swing.handle.SystemInitHandler;
 import com.rci.ui.vo.OrderVO;
 
 public class MainFrame extends JFrame {
@@ -69,6 +73,7 @@ public class MainFrame extends JFrame {
 				cm.getColumn(10).setHeaderValue("饿了么入账");
 				cm.getColumn(11).setHeaderValue("淘点点入账");
 				cm.getColumn(12).setHeaderValue("总金额");
+				cm.getColumn(13).setHeaderValue("");
 				table.setColumnModel(cm);
 				table.setBorder(BorderFactory.createLineBorder(Color.GREEN));
 				table.setPreferredScrollableViewportSize(new Dimension(500,330));
@@ -101,6 +106,18 @@ public class MainFrame extends JFrame {
 		this.setContentPane(containerPanel);
 		BorderLayout layout = new BorderLayout(0, 10);
 		containerPanel.setLayout(layout);
+		
+		JMenuBar menubar = new JMenuBar();
+		this.setJMenuBar(menubar);
+		JMenu sysMenu = new JMenu("系统");
+		JMenu helpMenu = new JMenu("帮助");
+		menubar.add(sysMenu);
+		menubar.add(helpMenu);
+		JMenuItem sysInit = new JMenuItem("系统初始化");
+		JMenuItem helpInfo = new JMenuItem("帮助信息");
+		sysMenu.add(sysInit);
+		helpMenu.add(helpInfo);
+		sysInit.addActionListener(new SystemInitHandler());
 		
 		formPanel = new JPanel();
 		initBtn = new JButton("系统初始化");

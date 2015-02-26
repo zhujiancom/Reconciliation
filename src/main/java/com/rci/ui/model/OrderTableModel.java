@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import com.rci.tools.DateUtil;
 import com.rci.ui.vo.OrderVO;
 
 public class OrderTableModel extends AbstractTableModel {
@@ -24,7 +25,7 @@ public class OrderTableModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-		return 13;
+		return 14;
 	}
 
 	@Override
@@ -42,7 +43,7 @@ public class OrderTableModel extends AbstractTableModel {
 		case 4:
 			return order.getSchemeName();
 		case 5:
-			return order.getCheckoutTime();
+			return DateUtil.time2Str(order.getCheckoutTime());
 		case 6:
 			return order.getPosAmount();
 		case 7:
@@ -57,6 +58,8 @@ public class OrderTableModel extends AbstractTableModel {
 			return order.getTddAmount();
 		case 12:
 			return order.getTotalAmount();
+		case 13:
+			return "详细";
 		default:
 			break;
 		}
