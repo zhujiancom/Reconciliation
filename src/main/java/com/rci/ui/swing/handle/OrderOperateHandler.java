@@ -1,20 +1,35 @@
 package com.rci.ui.swing.handle;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.swing.JTable;
 import javax.swing.table.TableColumnModel;
 
+import org.springframework.util.CollectionUtils;
+
+import com.rci.constants.enums.PaymodeType;
 import com.rci.service.IOrderService;
 import com.rci.tools.SpringUtils;
 import com.rci.ui.model.OrderTableModel;
 import com.rci.ui.vo.OrderVO;
 
 public class OrderOperateHandler{
-	public static JTable loadData(String time) {
-		IOrderService orderService = (IOrderService) SpringUtils.getBean("OrderService");
+	private IOrderService orderService;
+	private List<OrderVO> orders;
+	
+	public OrderOperateHandler(){
+		orderService = (IOrderService) SpringUtils.getBean("OrderService");
+	}
+	
+	public List<OrderVO> getOrders(){
+		return orders;
+	}
+	
+	public JTable loadData(String time) {
 		JTable table = new JTable();
-		List<OrderVO> orders = orderService.queryOrderVOsByDay(time);
+		List<OrderVO> ordervos = orderService.queryOrderVOsByDay(time);
+		this.orders = ordervos;
 		OrderTableModel otm = new OrderTableModel(orders);
 		table.setModel(otm);
 		TableColumnModel cm = table.getColumnModel();
@@ -50,8 +65,56 @@ public class OrderOperateHandler{
 		
 		table.setRowHeight(20);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-//		table.setPreferredScrollableViewportSize(new Dimension(1210,800));
 		return table;
 	}
-
+	
+	public BigDecimal getTotalAmount(PaymodeType paymode){
+		BigDecimal totalAmount = BigDecimal.ZERO;
+		if(CollectionUtils.isEmpty(orders)){
+			return totalAmount;
+		}
+		if(PaymodeType.MT.equals(paymode)){
+			for(OrderVO order:orders){
+				if(order.getMtAmount() != null){
+					totalAmount = totalAmount.add(order.getMtAmount());
+				}
+			}
+		}
+		if(PaymodeType.POS.equals(paymode)){
+			for(OrderVO order:orders){
+				if(order.getPosAmount() != null){
+					totalAmount = totalAmount.add(order.getPosAmount());
+				}
+			}
+		}
+		if(PaymodeType.DPTG.equals(paymode)){
+			for(OrderVO order:orders){
+				if(order.getDptgAmount() != null){
+					totalAmount = totalAmount.add(order.getDptgAmount());
+				}
+			}
+		}
+		if(PaymodeType.DPSH.equals(paymode)){
+			for(OrderVO order:orders){
+				if(order.getDpshAmount() != null){
+					totalAmount = totalAmount.add(order.getDpshAmount());
+				}
+			}
+		}
+		if(PaymodeType.ELE.equals(paymode)){
+			for(OrderVO order:orders){
+				if(order.getEleAmount() != null){
+					totalAmount = totalAmount.add(order.getEleAmount());
+				}
+			}
+		}
+		if(PaymodeType.TDD.equals(paymode)){
+			for(OrderVO order:orders){
+				if(order.getTddAmount() != null){
+					totalAmount = totalAmount.add(order.getTddAmount());
+				}
+			}
+		}
+		return totalAmount;
+	}
 }
