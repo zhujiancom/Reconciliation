@@ -25,7 +25,7 @@ public class OrderTableModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-		return 14;
+		return 13;
 	}
 
 	@Override
@@ -58,8 +58,6 @@ public class OrderTableModel extends AbstractTableModel {
 			return order.getTddAmount();
 		case 12:
 			return order.getTotalAmount();
-		case 13:
-			return "详细";
 		default:
 			break;
 		}

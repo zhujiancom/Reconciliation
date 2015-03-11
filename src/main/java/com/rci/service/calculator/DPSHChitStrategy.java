@@ -82,7 +82,7 @@ public class DPSHChitStrategy implements MoneyCalculateStrategy {
 		BigDecimal result = BigDecimal.ZERO;
 		result = totalAmount.subtract(new BigDecimal(30)).multiply(
 				BigDecimal.ONE.subtract(scheme.getCommission()).divide(
-						new BigDecimal(100)));
+						new BigDecimal(100))).setScale(2,BigDecimal.ROUND_HALF_DOWN);
 		return result;
 	}
 

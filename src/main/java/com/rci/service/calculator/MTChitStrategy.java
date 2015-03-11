@@ -88,35 +88,39 @@ public class MTChitStrategy implements MoneyCalculateStrategy {
 		BigDecimal[] result = new BigDecimal[2];
 		BigDecimal cashamount = BigDecimal.ZERO;
 		BigDecimal virtualamount = BigDecimal.ZERO;
+		cashamount = postAmount.subtract(chitamount).setScale(2, BigDecimal.ROUND_HALF_DOWN);
+		if (cashamount.intValue() <= 0) {
+			cashamount = BigDecimal.ZERO;
+		}
 		/* 使用50代金券 */
 		if (chitamount.intValue() == 50) {
-			cashamount = postAmount.subtract(chitamount);
-			if (cashamount.intValue() <= 0) {
-				cashamount = BigDecimal.ZERO;
-			}
-			virtualamount = new BigDecimal(35).multiply(BigDecimal.ONE
+//			cashamount = postAmount.subtract(chitamount);
+//			if (cashamount.intValue() <= 0) {
+//				cashamount = BigDecimal.ZERO;
+//			}
+			virtualamount = new BigDecimal(37.5).multiply(BigDecimal.ONE
 					.subtract(scheme.getCommission().divide(
-							new BigDecimal(100)))).subtract(new BigDecimal(0.05));
+							new BigDecimal(100))))
+					.subtract(new BigDecimal(0.05))
+					.setScale(2,BigDecimal.ROUND_HALF_DOWN);
 		}
 		/* 使用100代金券 */
 		if (chitamount.intValue() == 100) {
-			cashamount = postAmount.subtract(chitamount);
-			if (cashamount.intValue() <= 0) {
-				cashamount = BigDecimal.ZERO;
-			}
-			virtualamount = new BigDecimal(70).multiply(BigDecimal.ONE
+//			cashamount = postAmount.subtract(chitamount);
+//			if (cashamount.intValue() <= 0) {
+//				cashamount = BigDecimal.ZERO;
+//			}
+			virtualamount = new BigDecimal(75).multiply(BigDecimal.ONE
 					.subtract(scheme.getCommission().divide(
-							new BigDecimal(100))));
+							new BigDecimal(100))))
+					.setScale(2,BigDecimal.ROUND_HALF_DOWN);;
 		}
 		/* 使用88套餐代金券 */
 		if (chitamount.intValue() == 88) {
-			cashamount = postAmount.subtract(chitamount);
-			if (cashamount.intValue() <= 0) {
-				cashamount = BigDecimal.ZERO;
-			}
 			virtualamount = new BigDecimal(88).multiply(BigDecimal.ONE
 					.subtract(scheme.getCommission().divide(
-							new BigDecimal(100))));
+							new BigDecimal(100))))
+					.setScale(2,BigDecimal.ROUND_HALF_DOWN);;
 		}
 		result[0] = cashamount;
 		result[1] = virtualamount;

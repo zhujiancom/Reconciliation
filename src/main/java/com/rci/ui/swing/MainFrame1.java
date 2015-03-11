@@ -45,10 +45,26 @@ public class MainFrame1 {
 		// int y = dimension.height/2-HEIGHT/2;
 		// jf.setLocation(new Point(x,y));
 
+//		try {
+//			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+//		} catch (ClassNotFoundException | InstantiationException
+//				| IllegalAccessException | UnsupportedLookAndFeelException e) {
+//			e.printStackTrace();
+//		}
+		
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-		} catch (ClassNotFoundException | InstantiationException
-				| IllegalAccessException | UnsupportedLookAndFeelException e) {
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

@@ -52,7 +52,7 @@ public class ResultSetExtractorImpl<T> implements ResultSetExtractor<T> {
 					}
 				}
 			}
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} 

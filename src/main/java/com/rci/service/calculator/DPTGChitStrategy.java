@@ -1,6 +1,8 @@
 package com.rci.service.calculator;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -87,33 +89,34 @@ public class DPTGChitStrategy implements MoneyCalculateStrategy {
 		BigDecimal[] result = new BigDecimal[2];
 		BigDecimal cashamount = BigDecimal.ZERO;
 		BigDecimal virtualamount = BigDecimal.ZERO;
+		cashamount = postAmount.subtract(chitamount).setScale(2,BigDecimal.ROUND_HALF_DOWN);
+		if (cashamount.intValue() <= 0) {
+			cashamount = BigDecimal.ZERO;
+		}
 		/* 使用50代金券 */
 		if (chitamount.intValue() == 50) {
-			cashamount = postAmount.subtract(chitamount);
-			if (cashamount.intValue() <= 0) {
-				cashamount = BigDecimal.ZERO;
-			}
-			virtualamount = new BigDecimal(35).multiply(BigDecimal.ONE
+			virtualamount = new BigDecimal(37.5).multiply(BigDecimal.ONE
 					.subtract(scheme.getCommission().divide(
-							new BigDecimal(100))));
+							new BigDecimal(100)))).setScale(2, BigDecimal.ROUND_HALF_UP);
 		}
 		/* 使用100代金券 */
 		if (chitamount.intValue() == 100) {
-			cashamount = postAmount.subtract(chitamount);
-			if (cashamount.intValue() <= 0) {
-				cashamount = BigDecimal.ZERO;
-			}
-			virtualamount = new BigDecimal(75).multiply(BigDecimal.ONE.subtract(scheme.getCommission().divide(new BigDecimal(100)))).subtract(new BigDecimal(0.05));
+//			cashamount = postAmount.subtract(chitamount).setScale(2,BigDecimal.ROUND_HALF_DOWN);
+//			if (cashamount.intValue() <= 0) {
+//				cashamount = BigDecimal.ZERO;
+//			}
+			virtualamount = new BigDecimal(75).multiply(BigDecimal.ONE.subtract(scheme.getCommission().divide(new BigDecimal(100)))).
+								subtract(new BigDecimal(0.05)).setScale(2, BigDecimal.ROUND_HALF_UP);
 		}
 		/* 使用88套餐代金券 */
 		if (chitamount.intValue()  == 88) {
-			cashamount = postAmount.subtract(chitamount);
-			if (cashamount.intValue() <= 0) {
-				cashamount = BigDecimal.ZERO;
-			}
+//			cashamount = postAmount.subtract(chitamount).setScale(2,BigDecimal.ROUND_HALF_DOWN);
+//			if (cashamount.intValue() <= 0) {
+//				cashamount = BigDecimal.ZERO;
+//			}
 			virtualamount = new BigDecimal(88).multiply(BigDecimal.ONE
 					.subtract(scheme.getCommission().divide(
-							new BigDecimal(100))));
+							new BigDecimal(100)))).setScale(2, BigDecimal.ROUND_HALF_UP);
 		}
 		result[0] = cashamount;
 		result[1] = virtualamount;

@@ -10,11 +10,8 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -25,48 +22,41 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import com.rci.constants.PropertyConstants;
 import com.rci.constants.enums.PaymodeType;
-import com.rci.service.InitSystemService;
-import com.rci.tools.SpringUtils;
 import com.rci.tools.properties.PropertyUtils;
 import com.rci.ui.swing.handle.OrderOperateHandler;
+import com.rci.ui.swing.handle.SelectionListener;
 import com.rci.ui.swing.handle.SystemInitHandler;
 
-public class MainFrame extends JFrame {
+public class MainFrame3 extends JFrame {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4254277479150685575L;
-	public static final int WIDTH = 950;
-	public static final int HEIGHT = 640;
-	private static JPanel containerPanel;
-	private JComponent formPanel;
+	private static final long serialVersionUID = -8216786708977859424L;
+	
+	private JPanel containerPanel;
 	private JButton queryBtn;
-	private JButton initBtn;
 	private JTextField timeInput;
 	private JScrollPane mainScrollPane;
 	private JScrollPane subScrollPane;
+	private JTable mainTable; //展示order 列表
+	private JTable itemTable; //展示 orderItem 列表
+	
 	private JLabel posValue;
 	private JLabel mtValue;
 	private JLabel tgValue;
 	private JLabel shValue;
 	private JLabel eleValue;
 	private JLabel tddValue;
-	private JTable mainTable;
-	private ListSelectionModel selectionModel;
-
-	public MainFrame(){
+	
+	public MainFrame3(){
 		initComponent();
 		queryBtn.registerKeyboardAction(new ActionListener() {
 			
@@ -75,14 +65,15 @@ public class MainFrame extends JFrame {
 				String time = timeInput.getText();
 				OrderOperateHandler handler = new OrderOperateHandler(mainTable);
 				mainTable = handler.loadOrderData(time);
-				mainTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 				posValue.setText(handler.getTotalAmount(PaymodeType.POS).toString());
 				mtValue.setText(handler.getTotalAmount(PaymodeType.MT).toString());
 				tgValue.setText(handler.getTotalAmount(PaymodeType.DPTG).toString());
 				shValue.setText(handler.getTotalAmount(PaymodeType.DPSH).toString());
 				eleValue.setText(handler.getTotalAmount(PaymodeType.ELE).toString());
 				tddValue.setText(handler.getTotalAmount(PaymodeType.TDD).toString());
-				mainScrollPane.setViewportView(mainTable);
+				mainTable.setRowSelectionAllowed(true);
+				mainTable.setRowSelectionInterval(0, 0);
+				mainTable.getSelectionModel().addListSelectionListener(new SelectionListener(mainTable, itemTable));
 			}
 		}, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 		queryBtn.addActionListener(new ActionListener() {
@@ -99,16 +90,9 @@ public class MainFrame extends JFrame {
 				eleValue.setText(handler.getTotalAmount(PaymodeType.ELE).toString());
 				tddValue.setText(handler.getTotalAmount(PaymodeType.TDD).toString());
 				mainScrollPane.setViewportView(mainTable);
-			}
-		});
-		
-		initBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				InitSystemService initService = (InitSystemService) SpringUtils.getBean("InitSystemService");
-				initService.init();
-				JOptionPane.showMessageDialog(null, "初始化成功");
+				
+				mainTable.setRowSelectionAllowed(true);
+				mainTable.setRowSelectionInterval(0, 0);
 			}
 		});
 		
@@ -125,8 +109,7 @@ public class MainFrame extends JFrame {
 			e.printStackTrace();
 		} 
 	}
-	
-	private void initComponent(){
+	private void initComponent() {
 		this.setTitle((String) PropertyUtils.getProperties(PropertyConstants.SYSNAME));
 		containerPanel = new JPanel();
 		this.setContentPane(containerPanel);
@@ -142,17 +125,26 @@ public class MainFrame extends JFrame {
 		JMenu helpMenu = new JMenu("帮助");
 		menubar.add(sysMenu);
 		menubar.add(helpMenu);
-		JMenuItem sysInit = new JMenuItem("系统初始化");
+		JMenuItem dataInit = new JMenuItem("数据初始化");
+		JMenuItem settings = new JMenuItem("参数设置");
 		JMenuItem helpInfo = new JMenuItem("帮助信息");
-		sysMenu.add(sysInit);
+		sysMenu.add(dataInit);
+		sysMenu.add(settings);
 		helpMenu.add(helpInfo);
+		SystemInitHandler handler = new SystemInitHandler();
+		dataInit.addActionListener(handler.dataInit());
+		settings.addActionListener(handler.settings());
+		helpMenu.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "帮助信息。。。。。");
+			}
+		});
 		
-		formPanel = new JPanel();
-		initBtn = new JButton("系统初始化");
+		JPanel formPanel = new JPanel();
 		JLabel rciTime = new JLabel("日期");
 		timeInput = new JTextField(10);
 		queryBtn = new JButton("查询");
-		formPanel.add(initBtn);
 		formPanel.add(rciTime);
 		formPanel.add(timeInput);
 		formPanel.add(queryBtn);
@@ -160,21 +152,21 @@ public class MainFrame extends JFrame {
 		formPanel.setSize(500, 300);
 		formPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		containerPanel.add(formPanel, BorderLayout.NORTH);
-		//data display panel
-		mainScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
-		mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-//		Dimension dim = new Dimension(containerPanel.getPreferredSize().width/2,containerPanel.getPreferredSize().height);
-//		mainScrollPane.setMinimumSize(dim);
-		subScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
-		subScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-//		subScrollPane.setMinimumSize(dim);
 		
 		JPanel dataPanel = new JPanel();
 		dataPanel.setLayout(new GridLayout(1, 2));
+		mainScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
+		mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		mainTable = new JTable();
+		mainScrollPane.setViewportView(mainTable);
+		subScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
+		subScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		itemTable = new JTable();
+		subScrollPane.setViewportView(itemTable);
 		dataPanel.add(mainScrollPane);
 		dataPanel.add(subScrollPane);
 		containerPanel.add(dataPanel, BorderLayout.CENTER);
-		//
+		
 		JPanel conclusionPanel = new JPanel();
 		this.add(conclusionPanel, BorderLayout.SOUTH);
 		GridBagLayout lay = new GridBagLayout();

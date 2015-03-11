@@ -58,9 +58,8 @@ public class ELEStrategy implements MoneyCalculateStrategy {
 					"Billno[" + itemDTO.getBillNo() + "]," + "orderItem["
 							+ itemDTO.getDishNo() + "]" + " - price:" + price
 							+ ",");
-			BigDecimal itemPrice = price.multiply(count).subtract(
-					price.multiply(backcount));
-			postAmount = postAmount.add(itemPrice);
+			BigDecimal itemPrice = price.multiply(count.subtract(backcount));
+			postAmount = postAmount.add(itemPrice).setScale(2, BigDecimal.ROUND_HALF_DOWN);
 		}
 		elePoa.setAccountId(eleAccount.getAid());
 		elePoa.setPostAmount(postAmount);

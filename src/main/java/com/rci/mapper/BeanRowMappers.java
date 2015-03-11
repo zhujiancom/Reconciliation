@@ -52,7 +52,7 @@ public class BeanRowMappers<T> implements RowMapper<T> {
 					}
 				}
 			}
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+		} catch (Exception e1) {
 			e1.printStackTrace();
 		} 
 		return obj;
