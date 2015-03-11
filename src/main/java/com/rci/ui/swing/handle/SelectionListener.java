@@ -25,11 +25,13 @@ public class SelectionListener implements ListSelectionListener {
 	
 	@Override
 	public void valueChanged(ListSelectionEvent event) {
-		if(event.getSource() == mainTable.getColumnModel().getSelectionModel()
-				&& mainTable.getColumnSelectionAllowed()){
+		System.out.println("--- coming listener ---");
+		if(event.getSource() == mainTable.getSelectionModel()
+				&& mainTable.getRowSelectionAllowed()){
+			System.out.println("--- coming listener2 ---");
 			int row = mainTable.getSelectedRow();
 			if(row != -1){
-				String payno = (String) mainTable.getValueAt(row, 2);
+				String payno = (String) mainTable.getValueAt(row, 1);
 				loadItemData(payno);
 			}
 		}
