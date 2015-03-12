@@ -11,7 +11,7 @@
 
 	<appender name="COMMONLOG" class="org.apache.log4j.FileAppender">
 		<!-- 设置File参数：日志输出文件名 -->
-		<param name="File" value="${rci.root}/logs/common.log" />
+		<param name="File" value="${user.dir}/logs/common.log" />
 		<!-- 设置是否在重新启动服务时，在原有日志的基础添加新日志 -->
 		<param name="Append" value="true" />
 		<param name="ImmediateFlush" value="true" />
@@ -27,7 +27,7 @@
 
 	<appender name="RECONCILIATIONLOG" class="org.apache.log4j.FileAppender">
 		<!-- 设置File参数：日志输出文件名 -->
-		<param name="File" value="${rci.root}/logs/rci.log" />
+		<param name="File" value="${user.dir}/logs/rci.log" />
 		<!-- 设置是否在重新启动服务时，在原有日志的基础添加新日志 -->
 		<param name="Append" value="true" />
 		<param name="ImmediateFlush" value="true" />
@@ -44,7 +44,7 @@
 	<!-- logPath 通过 java -DlogPath 设置 -->
 	<appender name="SQLLOG" class="org.apache.log4j.FileAppender">
 		<!-- 设置File参数：日志输出文件名 -->
-		<param name="File" value="${rci.root}/logs/sql.log" />
+		<param name="File" value="${user.dir}/logs/sql.log" />
 		<!-- 设置是否在重新启动服务时，在原有日志的基础添加新日志 -->
 		<param name="Append" value="true" />
 		<param name="ImmediateFlush" value="true" />
@@ -60,7 +60,7 @@
 
 	<appender name="SPRINGLOG" class="org.apache.log4j.FileAppender">
 		<!-- 设置File参数：日志输出文件名 -->
-		<param name="File" value="${rci.root}/logs/spring.log" />
+		<param name="File" value="${user.dir}/logs/spring.log" />
 		<!-- 设置是否在重新启动服务时，在原有日志的基础添加新日志 -->
 		<param name="Append" value="true" />
 		<param name="ImmediateFlush" value="true" />
@@ -72,7 +72,7 @@
 
 	<appender name="HIBERNATELOG" class="org.apache.log4j.FileAppender">
 		<!-- 设置File参数：日志输出文件名 -->
-		<param name="File" value="${rci.root}/logs/hibernate.log" />
+		<param name="File" value="${user.dir}/logs/hibernate.log" />
 		<!-- 设置是否在重新启动服务时，在原有日志的基础添加新日志 -->
 		<param name="Append" value="true" />
 		<param name="ImmediateFlush" value="true" />

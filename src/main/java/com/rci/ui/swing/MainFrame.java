@@ -2,11 +2,10 @@ package com.rci.ui.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -22,6 +21,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
@@ -38,7 +38,6 @@ public class MainFrame extends JFrame {
 	 */
 	private static final long serialVersionUID = -8216786708977859424L;
 	
-	private JPanel containerPanel;
 	private JButton queryBtn;
 	private JTextField timeInput;
 	private JScrollPane mainScrollPane;
@@ -81,11 +80,7 @@ public class MainFrame extends JFrame {
 	}
 	private void initComponent() {
 		this.setTitle((String) PropertyUtils.getProperties(PropertyConstants.SYSNAME));
-		containerPanel = new JPanel();
-		this.setContentPane(containerPanel);
-		Toolkit tool = Toolkit.getDefaultToolkit();
-		Dimension fullScreen = tool.getScreenSize();
-		containerPanel.setPreferredSize(fullScreen);
+		Container containerPanel = this.getContentPane();
 		BorderLayout layout = new BorderLayout(0, 10);
 		containerPanel.setLayout(layout);
 		
@@ -123,9 +118,13 @@ public class MainFrame extends JFrame {
 		formPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		containerPanel.add(formPanel, BorderLayout.NORTH);
 		
-		JPanel dataPanel = new JPanel();
-		dataPanel.setLayout(new GridLayout(1, 2));
+//		JPanel dataPanel = new JPanel();
+		JSplitPane dataPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
+		containerPanel.add(dataPanel, BorderLayout.CENTER);
+		dataPanel.setDividerLocation(1150);
+		dataPanel.setDividerSize(5);
 		mainScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
+		mainScrollPane.setMaximumSize(new Dimension(1000,800));
 		mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		mainTable = new JTable();
 		mainScrollPane.setViewportView(mainTable);
@@ -135,74 +134,58 @@ public class MainFrame extends JFrame {
 		subScrollPane.setViewportView(itemTable);
 		dataPanel.add(mainScrollPane);
 		dataPanel.add(subScrollPane);
-		containerPanel.add(dataPanel, BorderLayout.CENTER);
 		
 		JPanel conclusionPanel = new JPanel();
-		this.add(conclusionPanel, BorderLayout.SOUTH);
-		GridBagLayout lay = new GridBagLayout();
-		conclusionPanel.setLayout(lay);
+		containerPanel.add(conclusionPanel, BorderLayout.SOUTH);
+		conclusionPanel.setLayout(new GridLayout(6, 1));
 		
 		JLabel pos = new JLabel("收银机入账总额：");
 		posValue = new JLabel();
 		posValue.setForeground(Color.RED);
+		JPanel posPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		posPanel.add(pos);
+		posPanel.add(posValue);
 		
 		JLabel mt = new JLabel("美团入账总额：");
 		mtValue = new JLabel();
 		mtValue.setForeground(Color.RED);
+		JPanel mtPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		mtPanel.add(mt);
+		mtPanel.add(mtValue);
 		
 		JLabel tg = new JLabel("大众点评团购入账总额：");
 		tgValue = new JLabel();
 		tgValue.setForeground(Color.RED);
+		JPanel tgPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		tgPanel.add(tg);
+		tgPanel.add(tgValue);
 		
 		JLabel sh = new JLabel("大众点评闪惠入账总额：");
 		shValue = new JLabel();
 		shValue.setForeground(Color.RED);
+		JPanel shPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		shPanel.add(sh);
+		shPanel.add(shValue);
 		
 		JLabel ele = new JLabel("饿了么入账总额：");
 		eleValue = new JLabel();
 		eleValue.setForeground(Color.RED);
+		JPanel elePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		elePanel.add(ele);
+		elePanel.add(eleValue);
 		
 		JLabel tdd = new JLabel("淘点点入账总额：");
 		tddValue = new JLabel();
 		tddValue.setForeground(Color.RED);
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.NONE;
-		constraints.anchor = GridBagConstraints.WEST;
-		constraints.weightx=2;
-		constraints.weighty=7;
-		add(lay,pos,constraints,0,1,1,1);
-		add(lay,mt,constraints,0,2,1,1);
-		add(lay,tg,constraints,0,3,1,1);
-		add(lay,sh,constraints,0,4,1,1);
-		add(lay,ele,constraints,0,5,1,1);
-		add(lay,tdd,constraints,0,6,1,1);
+		JPanel tddPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		tddPanel.add(tdd);
+		tddPanel.add(tddValue);
 		
-		add(lay,posValue,constraints,2,1,1,1);
-		add(lay,mtValue,constraints,2,2,1,1);
-		add(lay,tgValue,constraints,2,3,1,1);
-		add(lay,shValue,constraints,2,4,1,1);
-		add(lay,eleValue,constraints,2,5,1,1);
-		add(lay,tddValue,constraints,2,6,1,1);
-		
-		conclusionPanel.add(pos);
-		conclusionPanel.add(posValue);
-		conclusionPanel.add(mt);
-		conclusionPanel.add(mtValue);
-		conclusionPanel.add(tg);
-		conclusionPanel.add(tgValue);
-		conclusionPanel.add(sh);
-		conclusionPanel.add(shValue);
-		conclusionPanel.add(ele);
-		conclusionPanel.add(eleValue);
-		conclusionPanel.add(tdd);
-		conclusionPanel.add(tddValue);
-	}
-	
-	private void add(GridBagLayout layout,JComponent c,GridBagConstraints constraints,int x,int y,int w,int h){
-		constraints.gridx = x;
-		constraints.gridy = y;
-		constraints.gridwidth = w;
-		constraints.gridheight = h;
-		layout.setConstraints(c, constraints);
+		conclusionPanel.add(posPanel);
+		conclusionPanel.add(mtPanel);
+		conclusionPanel.add(tgPanel);
+		conclusionPanel.add(shPanel);
+		conclusionPanel.add(elePanel);
+		conclusionPanel.add(tddPanel);
 	}
 }
