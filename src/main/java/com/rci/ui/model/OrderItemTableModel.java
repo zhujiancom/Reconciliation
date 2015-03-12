@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import com.rci.tools.DateUtil;
 import com.rci.ui.vo.OrderItemVO;
 
 public class OrderItemTableModel extends AbstractTableModel {
@@ -25,7 +26,7 @@ public class OrderItemTableModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-		return 6;
+		return 7;
 	}
 
 	@Override
@@ -39,11 +40,13 @@ public class OrderItemTableModel extends AbstractTableModel {
 		case 2:
 			return item.getCountback();
 		case 3:
-			return item.getActualAmount();
+			return item.getPrice();
 		case 4:
-			return item.getDiscountRate();
+			return item.getActualAmount();
 		case 5:
-			return item.getConsumeTime();
+			return item.getDiscountRate();
+		case 6:
+			return DateUtil.time2Str(item.getConsumeTime());
 		default:
 			break;
 		}

@@ -55,7 +55,6 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 	@Override
 	public List<Order> queryOrdersByDay(String day) {
 		if(!StringUtility.isDateFormated(day)){
-			System.out.println("日期格式不正确");
 			return null;
 		}
 		DetachedCriteria dc = DetachedCriteria.forClass(Order.class);
@@ -67,12 +66,15 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 	@Override
 	public List<OrderVO> queryOrderVOsByDay(String day) {
 		List<OrderVO> vos = new LinkedList<OrderVO>();
+		if(!StringUtility.isDateFormated(day)){
+			return vos;
+		}
 		try{
 			DataFetchMark mark = markService.getMarkRecordByDay(day);
 			if(mark == null || !mark.isMarked()){
 				dataTransform.accquireOrderInfo(DateUtil.str2Date(day));
+				markService.rwOrderMark(day);
 			}
-			markService.rwOrderMark(day);
 			List<Order> orders = queryOrdersByDay(day);
 			if(!CollectionUtils.isEmpty(orders)){
 				for(Order order:orders){
@@ -139,6 +141,7 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 			for(OrderItem item:items){
 				OrderItemVO vo = beanMapper.map(item, OrderItemVO.class);
 				vo.setDishName(item.getDish().getDishName());
+				vos.add(vo);
 			}
 		}
 		return vos;

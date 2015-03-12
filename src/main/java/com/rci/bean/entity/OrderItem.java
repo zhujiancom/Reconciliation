@@ -40,6 +40,9 @@ public class OrderItem extends BaseEntity{
 	/* 套餐编号 */
 	private String suitNo;
 	
+	/* 原价 */
+	private BigDecimal price;
+	
 	/* 折扣率 */
 	private BigDecimal discountRate;
 	
@@ -116,12 +119,22 @@ public class OrderItem extends BaseEntity{
 		this.count = count;
 	}
 
+	@Column(name="item_count_back")
 	public Integer getCountback() {
 		return countback;
 	}
 
 	public void setCountback(Integer countback) {
 		this.countback = countback;
+	}
+
+	@Column(name="origin_price")
+	public BigDecimal getPrice() {
+		return price;
+	}
+
+	public void setPrice(BigDecimal price) {
+		this.price = price;
 	}
 
 	@Column(name="item_discount_amount")

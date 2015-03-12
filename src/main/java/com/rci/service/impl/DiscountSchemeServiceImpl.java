@@ -16,6 +16,11 @@ public class DiscountSchemeServiceImpl extends
 	public void rwSaveDiscountSchemes(DiscountScheme[] schemes) {
 		super.rwCreate(schemes);
 	}
+	
+	@Override
+	public void rwUpdateDiscountSchemes(DiscountScheme[] schemes) {
+		super.rwUpdate(schemes);
+	}
 
 	@Override
 	public DiscountScheme getSchemeByNo(String sno) {

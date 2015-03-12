@@ -1,13 +1,22 @@
 package com.rci.ui.swing.handle;
 
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.math.BigDecimal;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRootPane;
+import javax.swing.JTextField;
 
+import com.rci.bean.entity.DiscountScheme;
+import com.rci.service.IDiscountSchemeService;
 import com.rci.service.InitSystemService;
 import com.rci.tools.SpringUtils;
 
@@ -18,9 +27,11 @@ public class SystemInitHandler extends JFrame {
 	 */
 	private static final long serialVersionUID = -4393899033664657099L;
 	private InitSystemService service;
+	private IDiscountSchemeService schemeService;
 	
 	public SystemInitHandler(){
 		service = (InitSystemService) SpringUtils.getBean("InitSystemService");
+		schemeService = (IDiscountSchemeService) SpringUtils.getBean("DiscountSchemeService");
 	}
 
 	
@@ -37,11 +48,60 @@ public class SystemInitHandler extends JFrame {
 	
 	public ActionListener settings(){
 		return new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				final DiscountScheme dzdpscheme = schemeService.getSchemeByNo("97");
+				final DiscountScheme dzdpshscheme = schemeService.getSchemeByNo("98");
+				final DiscountScheme mtscheme = schemeService.getSchemeByNo("99");
 				JFrame frame = new JFrame("参数设置");
-				frame.setSize(600,480);
+				JRootPane panel = frame.getRootPane();
+				JLabel dzdp = new JLabel("大众点评");
+				final JTextField dzdpInput = new JTextField(10);
+				if(dzdpscheme.getCommission() != null){
+					dzdpInput.setText(dzdpscheme.getCommission().toString());
+				}
+				
+				JLabel unit1 = new JLabel("%");
+				JLabel unit2 = new JLabel("%");
+				JLabel mt = new JLabel("美团");
+				final JTextField mtInput = new JTextField(10);
+				if(mtscheme.getCommission() != null){
+					mtInput.setText(mtscheme.getCommission().toString());
+				}
+				FlowLayout layout = new FlowLayout(FlowLayout.CENTER,10,5);
+				panel.setLayout(layout);
+				JPanel p1 = new JPanel();
+				JPanel p2 = new JPanel();
+				panel.add(p1);
+				panel.add(p2);
+				p1.add(dzdp);
+				p1.add(dzdpInput);
+				p1.add(unit1);
+				p2.add(mt);
+				p2.add(mtInput);
+				p2.add(unit2);
+				JButton save = new JButton("返点率设置");
+				panel.add(save);
+				
+				save.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						String dzdpValue = dzdpInput.getText();
+						String mtValue = mtInput.getText();
+						dzdpscheme.setCommission(new BigDecimal(dzdpValue));
+						dzdpshscheme.setCommission(new BigDecimal(dzdpValue));
+						mtscheme.setCommission(new BigDecimal(mtValue));
+						DiscountScheme[] schemes = new DiscountScheme[3];
+						schemes[0] = dzdpscheme;
+						schemes[1] = dzdpshscheme;
+						schemes[2] = mtscheme;
+						schemeService.rwUpdateDiscountSchemes(schemes);
+						JOptionPane.showMessageDialog(null, "设置成功");
+					}
+				});
+				
+				frame.pack();
 				frame.addWindowListener(new WindowAdapter() {
 					@Override
 					public void windowClosed(WindowEvent e) {

@@ -55,7 +55,8 @@ public class DiscountStrategy implements MoneyCalculateStrategy {
 					"Billno[" + itemDTO.getBillNo() + "]," + "orderItem["
 							+ itemDTO.getDishNo() + "]" + " - price:" + price
 							+ ",");
-			postAmount = postAmount.add(algorithm(price, rate, count, backcount));
+			BigDecimal actualAmount = algorithm(price, rate, count, backcount);
+			postAmount = postAmount.add(actualAmount);
 		}
 		poa.setAccountId(account.getAid());
 		poa.setPostAmount(postAmount);

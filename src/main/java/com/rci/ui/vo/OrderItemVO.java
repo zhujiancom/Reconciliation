@@ -9,6 +9,8 @@ public class OrderItemVO {
 	/* 折扣率 */
 	private BigDecimal discountRate;
 	
+	private BigDecimal price;
+	
 	/* 点菜数量  */
 	private Integer count;
 	
@@ -30,6 +32,14 @@ public class OrderItemVO {
 
 	public void setDishName(String dishName) {
 		this.dishName = dishName;
+	}
+
+	public BigDecimal getPrice() {
+		return price;
+	}
+
+	public void setPrice(BigDecimal price) {
+		this.price = price;
 	}
 
 	public BigDecimal getDiscountRate() {

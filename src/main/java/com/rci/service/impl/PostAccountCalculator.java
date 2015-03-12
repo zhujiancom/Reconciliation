@@ -51,14 +51,20 @@ public class PostAccountCalculator{
 			}
 		}
 		
-		Set<OrderItem> itemss = new HashSet<OrderItem>();
+//		Set<OrderItem> itemss = new HashSet<OrderItem>();
 		for(OrderItemDTO itemDTO:itemDTOs){
 			OrderItem item = beanMapper.map(itemDTO, OrderItem.class);
 			item.setOrder(order);
 			Dish dish = dishService.findDishByNo(itemDTO.getDishNo());
 			item.setDish(dish);
+			BigDecimal price = itemDTO.getPrice();
+			BigDecimal count = itemDTO.getCount();
+			BigDecimal backcount = itemDTO.getCountback();
+			BigDecimal rate = itemDTO.getDiscountRate();
+			BigDecimal itemActualAmount = price.multiply(count).subtract(price.multiply(backcount)).multiply(rate.divide(new BigDecimal(100))).setScale(0, BigDecimal.ROUND_CEILING);
+			item.setActualAmount(itemActualAmount);
 			items.add(item);
-			itemss.add(item);
+//			itemss.add(item);
 		}
 		//设置order关联的item
 		order.setItems(items);

@@ -43,6 +43,10 @@ public abstract class BaseService<T extends BaseEntity, PK extends Serializable>
 	public void rwUpdate(T entity){
 		baseDAO.update(entity);
 	}
+	
+	public void rwUpdate(T[] entity){
+		baseDAO.update(entity);
+	}
 
 	public void rwDelete(PK pk){
 		baseDAO.delete(pk);
