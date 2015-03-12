@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -21,6 +22,7 @@ import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.exceptions.ExceptionManage;
 import com.rci.exceptions.ServiceException;
 import com.rci.service.IOrderService;
+import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
 import com.rci.tools.StringUtility;
 import com.rci.ui.model.OrderItemTableModel;
@@ -114,6 +116,13 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	public void loadOrderData(String time) throws ServiceException{
 		if(!StringUtility.isDateFormated(time)){
 			ExceptionManage.throwServiceException(SERVICE.TIME_FORMAT, "日期格式错误");
+		}
+		Calendar queryDay = Calendar.getInstance();
+		queryDay.setTime(DateUtil.str2Date(time));
+		Calendar currentDay = Calendar.getInstance();
+		currentDay.setTime(DateUtil.getCurrentDate());
+		if(queryDay.after(currentDay)){
+			ExceptionManage.throwServiceException(SERVICE.TIME_FORMAT, "查询时间不能晚于当前时间");
 		}
 		List<OrderVO> ordervos = orderService.queryOrderVOsByDay(time);
 		this.orders = ordervos;

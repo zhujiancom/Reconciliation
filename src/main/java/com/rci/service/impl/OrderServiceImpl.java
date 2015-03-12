@@ -66,9 +66,6 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 	@Override
 	public List<OrderVO> queryOrderVOsByDay(String day) {
 		List<OrderVO> vos = new LinkedList<OrderVO>();
-		if(!StringUtility.isDateFormated(day)){
-			return vos;
-		}
 		try{
 			DataFetchMark mark = markService.getMarkRecordByDay(day);
 			if(mark == null || !mark.isMarked()){
