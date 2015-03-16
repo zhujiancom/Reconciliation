@@ -2,12 +2,18 @@ package com.rci.service.impl;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +32,16 @@ import com.rci.tools.DateUtil;
 
 @Service("DataTransformFacade")
 public class DataTransformFacadeImpl implements DataTransformFacade {
+	private transient Log logger = LogFactory.getLog(DataTransformFacadeImpl.class);
+
+	protected Log logger() {
+		if (logger == null) {
+			return LogFactory.getLog(DataTransformFacadeImpl.class);
+		} else {
+			return logger;
+		}
+	}
+	
 	@Resource(name="DataFetchService")
 	private IDataFetchService dataFetch;
 	@Autowired
@@ -102,6 +118,51 @@ public class DataTransformFacadeImpl implements DataTransformFacade {
 			chitamount = new BigDecimal(100);
 		}
 		return chitamount;
+	}
+
+	@Override
+	public void accquireOrderInfo2(Date date) {
+		//1. 根据日期获取当日的所有订单
+		List<OrderDTO> orderDTOs = dataFetch.fetchAllDayOrders(DateUtil.wipeoutHMS(date));
+		Map<String,Order> container = mergerOrder(orderDTOs);
+		//2. 迭代order,获取对应的item信息
+		for(Iterator<Entry<String,Order>> it = container.entrySet().iterator();it.hasNext();){
+			Entry<String,Order> entry = it.next();
+			String key = entry.getKey();
+			Order value = entry.getValue();
+			value.setDay(DateUtil.date2Str(date, "yyyyMMdd"));
+			List<OrderItemDTO> itemDTOs = dataFetch.fetchOrderItemsByOrder(key);
+			Order order = postCalculator.calculate(value, itemDTOs);
+			orderService.rwInsertOrder(order);
+		}
+	}
+	
+	/**
+	 * 合并订单
+	 * @param orderDTOs
+	 * @return
+	 */
+	private Map<String,Order> mergerOrder(List<OrderDTO> orderDTOs){
+		Map<String,Order> container = new HashMap<String,Order>();
+		if(!CollectionUtils.isEmpty(orderDTOs)){
+			for(OrderDTO orderDTO:orderDTOs){
+				Order order = null;
+				String orderNo = orderDTO.getOrderNo();
+				String paymode = orderDTO.getPaymode();
+				logger.debug("orderno: "+ orderNo +" -> paymode "+paymode);
+				//2.1 如果容器中存在订单号重复，记录当前订单的支付方式合并到第一条订单中
+				if(container.containsKey(orderNo)){
+					order = container.get(orderNo);
+					order.addPayMode(paymode);
+					continue;
+				}
+				//2.2 如果容器中不存在，则初始化设置订单信息，将其加入容器
+				order = beanMapper.map(orderDTO, Order.class);
+				order.addPayMode(paymode);
+				container.put(orderNo, order);
+			}
+		}
+		return container;
 	}
 
 }

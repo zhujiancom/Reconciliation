@@ -17,12 +17,15 @@ public class OrderDTO {
 	private Timestamp checkoutTime;
 	
 	/* 票据应收金额    */
+	@Deprecated
 	private BigDecimal receivableAmount;
+	private BigDecimal originAmount;
 
 	/* 支付方式  */
 	private String paymode;  //现金或代金券
 	
 	/* 优惠活动  */
+	@Deprecated
 	private String project;  //8折优惠，无折扣
 	
 //	/* 临时折扣方案  */
@@ -78,6 +81,15 @@ public class OrderDTO {
 	public void setReceivableAmount(BigDecimal receivableAmount) {
 		this.receivableAmount = receivableAmount;
 	}
+	
+	public BigDecimal getOriginAmount() {
+		return originAmount;
+	}
+
+	@ColumnName("originamount")
+	public void setOriginAmount(BigDecimal originAmount) {
+		this.originAmount = originAmount;
+	}
 
 	public String getPaymode() {
 		return paymode;
@@ -92,7 +104,7 @@ public class OrderDTO {
 		return project;
 	}
 
-	@ColumnName("project")
+//	@ColumnName("project")
 	public void setProject(String project) {
 		this.project = project;
 	}

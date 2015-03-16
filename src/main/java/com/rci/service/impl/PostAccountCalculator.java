@@ -1,10 +1,9 @@
 package com.rci.service.impl;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -37,13 +36,9 @@ public class PostAccountCalculator{
 			if(calculator.support(order.getScheme())){
 				List<PostOrderAccount> accounts = calculator.calculate(itemDTOs);
 				
-				Set<PostOrderAccount> accountss = new HashSet<PostOrderAccount>();
-				
-				
 				for(PostOrderAccount account:accounts){
 					account.setOrder(order);
 					actualAmount = actualAmount.add(account.getPostAmount());
-					accountss.add(account);
 				}
 				//设置order金额入账的账户
 				order.setPostOrderAccounts(accounts);
@@ -51,7 +46,6 @@ public class PostAccountCalculator{
 			}
 		}
 		
-//		Set<OrderItem> itemss = new HashSet<OrderItem>();
 		for(OrderItemDTO itemDTO:itemDTOs){
 			OrderItem item = beanMapper.map(itemDTO, OrderItem.class);
 			item.setOrder(order);
@@ -64,12 +58,36 @@ public class PostAccountCalculator{
 			BigDecimal itemActualAmount = price.multiply(count).subtract(price.multiply(backcount)).multiply(rate.divide(new BigDecimal(100))).setScale(0, BigDecimal.ROUND_CEILING);
 			item.setActualAmount(itemActualAmount);
 			items.add(item);
-//			itemss.add(item);
 		}
 		//设置order关联的item
 		order.setItems(items);
 		order.setActualAmount(actualAmount);
 		return order;
+	}
+	
+	public Order calculate2(Order order,List<OrderItemDTO> itemDTOs) {
+		List<OrderItem> items = new ArrayList<OrderItem>();
+		for(OrderItemDTO itemDTO:itemDTOs){
+			OrderItem item = beanMapper.map(itemDTO, OrderItem.class);
+			item.setOrder(order);
+			Dish dish = dishService.findDishByNo(itemDTO.getDishNo());
+			item.setDish(dish);
+			//如果是套餐
+			if(item.isSuit()){
+				
+			}
+			
+			
+			BigDecimal price = itemDTO.getPrice();
+			BigDecimal count = itemDTO.getCount();
+			BigDecimal backcount = itemDTO.getCountback();
+			BigDecimal rate = itemDTO.getDiscountRate();
+			BigDecimal itemActualAmount = price.multiply(count).subtract(price.multiply(backcount)).multiply(rate.divide(new BigDecimal(100))).setScale(0, BigDecimal.ROUND_CEILING);
+			item.setActualAmount(itemActualAmount);
+			items.add(item);
+		}
+		
+		return null;
 	}
 
 }

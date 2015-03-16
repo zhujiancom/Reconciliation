@@ -38,6 +38,8 @@ public class DishType extends BaseEntity{
 	private String dtName;
 	
 	private List<Dish> dishes;
+	
+	private String nodiscount;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator
@@ -77,6 +79,15 @@ public class DishType extends BaseEntity{
 
 	public void setDishes(List<Dish> dishes) {
 		this.dishes = dishes;
+	}
+
+	@Column(name="no_discount")
+	public String getNodiscount() {
+		return nodiscount;
+	}
+
+	public void setNodiscount(String nodiscount) {
+		this.nodiscount = nodiscount;
 	}
 
 	@Override

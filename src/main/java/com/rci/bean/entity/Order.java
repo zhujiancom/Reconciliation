@@ -1,6 +1,7 @@
 package com.rci.bean.entity;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 /**
  * 票据类，每一笔生意生成一个票据，每日和收银机数据同步
@@ -49,22 +51,36 @@ public class Order extends BaseEntity{
 	
 	private String day;
 	
-	/* 票据应收金额    */
+	/* 订单原价   */
+	@Deprecated
 	private BigDecimal receivableAmount;
+	private BigDecimal originPrice;
+	
+	/* 订单支付方式 */
+	private List<String> paymodeList = new ArrayList<String>();
 
 	/* 折扣方案  */
+	@Deprecated
 	private DiscountScheme scheme;  //代金券或者是打折
+	private String schemeName;
 	
 //	/* 临时折扣方案  */
 //	private BigDecimal tempDiscountRate; //解决收银员自己手动输入打折率
 	
 	/* 是否有临时折扣方案  */
+	@Deprecated
 	private Boolean isTempDiscount;
+	/* 是否具有单品折扣  */
+	private Boolean singleDiscount;
 	
 	/* 实收金额   */
+	@Deprecated
 	private BigDecimal actualAmount;
+	private BigDecimal realAmount;
+	/* 虚收金额  */
+	private BigDecimal virtualAmount;
 	
-	/* 实际入账金额  */
+	/* 入账金额  */
 	private List<PostOrderAccount> postOrderAccounts;
 	
 	/* 具体菜单明细  */
@@ -195,5 +211,63 @@ public class Order extends BaseEntity{
 	@Override
 	public void setVersion(Integer version) {
 		this.version = version;
+	}
+
+	@Column(name="origin_price")
+	public BigDecimal getOriginPrice() {
+		return originPrice;
+	}
+
+	public void setOriginPrice(BigDecimal originPrice) {
+		this.originPrice = originPrice;
+	}
+
+	@Column(name="scheme_name")
+	public String getSchemeName() {
+		return schemeName;
+	}
+
+	public void setSchemeName(String schemeName) {
+		this.schemeName = schemeName;
+	}
+
+	@Column(name="single_discount")
+	public Boolean getSingleDiscount() {
+		return singleDiscount;
+	}
+
+	public void setSingleDiscount(Boolean singleDiscount) {
+		this.singleDiscount = singleDiscount;
+	}
+
+	@Column(name="real_amount")
+	public BigDecimal getRealAmount() {
+		return realAmount;
+	}
+
+	public void setRealAmount(BigDecimal realAmount) {
+		this.realAmount = realAmount;
+	}
+
+	@Column(name="virtual_amount")
+	public BigDecimal getVirtualAmount() {
+		return virtualAmount;
+	}
+
+	public void setVirtualAmount(BigDecimal virtualAmount) {
+		this.virtualAmount = virtualAmount;
+	}
+
+	@Transient
+	public List<String> getPaymodeList() {
+		return paymodeList;
+	}
+
+	public void setPaymodeList(List<String> paymodeList) {
+		this.paymodeList = paymodeList;
+	}
+	
+	public void addPayMode(String paymodeNo){
+		paymodeList.add(paymodeNo);
 	}
 }

@@ -188,4 +188,12 @@ public class OrderItem extends BaseEntity{
 	public void setVersion(Integer version) {
 		this.version = version;
 	}
+	
+	/**
+	 * 判断是否是属于套餐
+	 * @return
+	 */
+	public Boolean isSuit(){
+		return "Y".equalsIgnoreCase(suitFlag);
+	}
 }
