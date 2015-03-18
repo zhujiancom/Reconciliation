@@ -28,5 +28,11 @@
 		<bean class="com.rci.service.calculator.ELEStrategy"></bean>
 	</util:list>
 	
+	<util:list id="filters" list-class="java.util.ArrayList" value-type="com.rci.service.filter.CalculateFilter">
+		<bean class="com.rci.service.filter.DPTGFilter"></bean>
+		<bean class="com.rci.service.filter.DPSHFilter"></bean>
+		<bean class="com.rci.service.filter.CashFilter"></bean>
+	</util:list>
+	
 	<bean id="springcontext" class="com.rci.tools.SpringUtils"></bean>
 </beans>

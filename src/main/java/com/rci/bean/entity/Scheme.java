@@ -4,10 +4,14 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.rci.constants.enums.SchemeType;
 
 /**
  * 打折或代金券方案
@@ -26,6 +30,8 @@ public class Scheme extends BaseEntity {
 	private Integer version;
 
 	private Long sid;
+	
+	private SchemeType type;
 	
 	/* 活动或代金券名称 */
 	private String name;
@@ -57,6 +63,15 @@ public class Scheme extends BaseEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@Enumerated(EnumType.STRING)
+	public SchemeType getType() {
+		return type;
+	}
+
+	public void setType(SchemeType type) {
+		this.type = type;
 	}
 
 	@Column(name="post_price")

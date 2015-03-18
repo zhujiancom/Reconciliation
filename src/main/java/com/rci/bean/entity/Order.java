@@ -1,9 +1,10 @@
 package com.rci.bean.entity;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,6 +20,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+
+import com.rci.bean.scheme.PairKey;
+import com.rci.bean.scheme.SchemeWrapper;
+import com.rci.constants.enums.SchemeType;
 
 /**
  * 票据类，每一笔生意生成一个票据，每日和收银机数据同步
@@ -57,7 +62,8 @@ public class Order extends BaseEntity{
 	private BigDecimal originPrice;
 	
 	/* 订单支付方式 */
-	private List<String> paymodeList = new ArrayList<String>();
+//	private List<String> paymodeList = new ArrayList<String>();
+	private Map<String,BigDecimal> paymodeMapping = new HashMap<String,BigDecimal>();
 
 	/* 折扣方案  */
 	@Deprecated
@@ -77,14 +83,21 @@ public class Order extends BaseEntity{
 	@Deprecated
 	private BigDecimal actualAmount;
 	private BigDecimal realAmount;
-	/* 虚收金额  */
-	private BigDecimal virtualAmount;
 	
 	/* 入账金额  */
 	private List<PostOrderAccount> postOrderAccounts;
 	
 	/* 具体菜单明细  */
 	private List<OrderItem> items;
+	
+	/* 记录该订单使用的方案 */
+	private Map<PairKey<SchemeType,String>,SchemeWrapper> schemes;
+	
+	/* 该单有异常 */
+	private Integer unusual = 0;
+	
+	/* 不可打折金额   */
+	private BigDecimal nodiscountAmount;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator
@@ -249,25 +262,43 @@ public class Order extends BaseEntity{
 		this.realAmount = realAmount;
 	}
 
-	@Column(name="virtual_amount")
-	public BigDecimal getVirtualAmount() {
-		return virtualAmount;
+	@Column(name="unusual")
+	public Integer getUnusual() {
+		return unusual;
 	}
 
-	public void setVirtualAmount(BigDecimal virtualAmount) {
-		this.virtualAmount = virtualAmount;
+	public void setUnusual(Integer unusual) {
+		this.unusual = unusual;
+	}
+
+	@Column(name="nodiscount_amount")
+	public BigDecimal getNodiscountAmount() {
+		return nodiscountAmount;
+	}
+
+	public void setNodiscountAmount(BigDecimal nodiscountAmount) {
+		this.nodiscountAmount = nodiscountAmount;
 	}
 
 	@Transient
-	public List<String> getPaymodeList() {
-		return paymodeList;
+	public Map<String, BigDecimal> getPaymodeMapping() {
+		return paymodeMapping;
 	}
 
-	public void setPaymodeList(List<String> paymodeList) {
-		this.paymodeList = paymodeList;
+	public void setPaymodeMapping(Map<String, BigDecimal> paymodeMapping) {
+		this.paymodeMapping = paymodeMapping;
 	}
-	
-	public void addPayMode(String paymodeNo){
-		paymodeList.add(paymodeNo);
+
+
+	public void addPayMode(String paymodeNo,BigDecimal amount){
+		paymodeMapping.put(paymodeNo, amount);
+	}
+
+	public Map<PairKey<SchemeType, String>, SchemeWrapper> getSchemes() {
+		return schemes;
+	}
+
+	public void setSchemes(Map<PairKey<SchemeType, String>, SchemeWrapper> schemes) {
+		this.schemes = schemes;
 	}
 }

@@ -149,16 +149,18 @@ public class DataTransformFacadeImpl implements DataTransformFacade {
 				Order order = null;
 				String orderNo = orderDTO.getOrderNo();
 				String paymode = orderDTO.getPaymode();
+				BigDecimal realAmount = orderDTO.getActualAmount();
 				logger.debug("orderno: "+ orderNo +" -> paymode "+paymode);
 				//2.1 如果容器中存在订单号重复，记录当前订单的支付方式合并到第一条订单中
 				if(container.containsKey(orderNo)){
 					order = container.get(orderNo);
-					order.addPayMode(paymode);
+					order.addPayMode(paymode,realAmount);
 					continue;
 				}
 				//2.2 如果容器中不存在，则初始化设置订单信息，将其加入容器
 				order = beanMapper.map(orderDTO, Order.class);
-				order.addPayMode(paymode);
+				order.setOriginPrice(orderDTO.getOriginAmount());
+				order.addPayMode(paymode,realAmount);
 				container.put(orderNo, order);
 			}
 		}

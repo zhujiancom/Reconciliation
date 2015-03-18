@@ -32,7 +32,7 @@ public class SQLGen {
 	
 	public static final String QUERY_ORDER="select tab.ch_billno 'billno',tab.ch_payno 'payno',detail.ch_paymodeno 'paymode', \n"
 			+"cmaster.num_cost 'originamount',tab.dt_service_begin 'opendesktime',\n"
-			+ "cmaster.dt_operdate 'checkouttime',detail.num_realamount 'realamount', \n"
+			+ "cmaster.dt_operdate 'checkouttime',detail.num_realamount 'realamount' \n"
 			+ "from dbo.v_u_table tab \n"
 			+ "join dbo.v_u_checkout_master cmaster \n"
 			+ "on tab.ch_billno=cmaster.ch_billno \n"

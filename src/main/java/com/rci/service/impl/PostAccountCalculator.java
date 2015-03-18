@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -16,8 +17,13 @@ import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.bean.entity.PostOrderAccount;
+import com.rci.bean.scheme.PairKey;
+import com.rci.bean.scheme.SchemeWrapper;
+import com.rci.constants.enums.SchemeType;
 import com.rci.service.IDishService;
 import com.rci.service.MoneyCalculateStrategy;
+import com.rci.service.filter.CalculateFilter;
+import com.rci.service.filter.FilterChain;
 
 @Component("PostAccountCalculator")
 public class PostAccountCalculator{
@@ -27,6 +33,10 @@ public class PostAccountCalculator{
 	private Mapper beanMapper;
 	@Resource(name="DishService")
 	private IDishService dishService;
+	
+	@Autowired
+	private List<CalculateFilter> filters;
+	private FilterChain chain;
 	
 	public Order calculate(Order order,List<OrderItemDTO> itemDTOs) {
 //		List<PostOrderAccount> accounts = new LinkedList<PostOrderAccount>();
@@ -65,27 +75,14 @@ public class PostAccountCalculator{
 		return order;
 	}
 	
+	public void init(){
+		chain = new FilterChain();
+		chain.addFilters(filters);
+	}
+	
 	public Order calculate2(Order order,List<OrderItemDTO> itemDTOs) {
-		List<OrderItem> items = new ArrayList<OrderItem>();
-		for(OrderItemDTO itemDTO:itemDTOs){
-			OrderItem item = beanMapper.map(itemDTO, OrderItem.class);
-			item.setOrder(order);
-			Dish dish = dishService.findDishByNo(itemDTO.getDishNo());
-			item.setDish(dish);
-			//如果是套餐
-			if(item.isSuit()){
-				
-			}
-			
-			
-			BigDecimal price = itemDTO.getPrice();
-			BigDecimal count = itemDTO.getCount();
-			BigDecimal backcount = itemDTO.getCountback();
-			BigDecimal rate = itemDTO.getDiscountRate();
-			BigDecimal itemActualAmount = price.multiply(count).subtract(price.multiply(backcount)).multiply(rate.divide(new BigDecimal(100))).setScale(0, BigDecimal.ROUND_CEILING);
-			item.setActualAmount(itemActualAmount);
-			items.add(item);
-		}
+		chain.doFilter(order, itemDTOs, chain);
+		Map<PairKey<SchemeType,String>,SchemeWrapper> schemewrappers = order.getSchemes();
 		
 		return null;
 	}

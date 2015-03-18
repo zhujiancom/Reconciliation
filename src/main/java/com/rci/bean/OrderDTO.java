@@ -20,7 +20,7 @@ public class OrderDTO {
 	@Deprecated
 	private BigDecimal receivableAmount;
 	private BigDecimal originAmount;
-
+	
 	/* 支付方式  */
 	private String paymode;  //现金或代金券
 	

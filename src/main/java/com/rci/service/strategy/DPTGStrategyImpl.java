@@ -29,6 +29,13 @@ public class DPTGStrategyImpl implements CalculateStrategy{
 		BigDecimal nodiscountAmount = BigDecimal.ZERO;
 		/* 正常菜品，可以使用代金券的总金额  */
 		BigDecimal chitAmount = BigDecimal.ZERO;
+		for(OrderItemDTO item:items){
+			String dishNo = item.getDishNo();
+			BigDecimal originPrice = item.getPrice();
+			if(isNodiscount(dishNo)){
+				nodiscountAmount = nodiscountAmount.add(originPrice);
+			}
+		}
 		return null;
 	}
 	
