@@ -85,6 +85,7 @@ public class OrderItem extends BaseEntity{
 		this.dish = dish;
 	}
 
+	@Column(name="suit_flag")
 	public String getSuitFlag() {
 		return suitFlag;
 	}
@@ -93,6 +94,7 @@ public class OrderItem extends BaseEntity{
 		this.suitFlag = suitFlag;
 	}
 
+	@Column(name="suit_no")
 	public String getSuitNo() {
 		return suitNo;
 	}
@@ -187,13 +189,5 @@ public class OrderItem extends BaseEntity{
 	@Override
 	public void setVersion(Integer version) {
 		this.version = version;
-	}
-	
-	/**
-	 * 判断是否是属于套餐
-	 * @return
-	 */
-	public Boolean isSuit(){
-		return "Y".equalsIgnoreCase(suitFlag);
 	}
 }

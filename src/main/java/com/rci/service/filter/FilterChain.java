@@ -39,4 +39,9 @@ public class FilterChain implements CalculateFilter {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
+	public String getChit() {
+		throw new UnsupportedOperationException();
+	}
+
 }

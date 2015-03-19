@@ -4,6 +4,7 @@ import com.rci.bean.entity.account.Account;
 
 public interface IAccountService {
 	public void rwCreateAccout(Account acc);
+	public void rwCreateAccout(Account[] accs);
 	
 	public Account getAccountByNo(String no);
 	
@@ -16,4 +17,5 @@ public interface IAccountService {
 	public Account getMTAccount();
 	
 	public Account getELEAccount();
+	
 }

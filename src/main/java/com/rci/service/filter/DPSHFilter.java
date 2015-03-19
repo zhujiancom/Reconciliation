@@ -21,4 +21,9 @@ public class DPSHFilter implements CalculateFilter {
 
 	}
 
+	@Override
+	public String getChit() {
+		return "大众点评闪惠";
+	}
+
 }

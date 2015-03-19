@@ -41,6 +41,12 @@ public class PostOrderAccount extends BaseEntity{
 	
 	/* 对应票据  */
 	private Order order;
+	
+	public PostOrderAccount(){}
+	
+	public PostOrderAccount(Long accountId){
+		this.accountId = accountId;
+	}
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator

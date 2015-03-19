@@ -61,6 +61,12 @@ public class Account extends BaseEntity{
 	
 	/* 最后交易时间 */
 	private Date lastOperateTime;
+	
+	public Account(){}
+	public Account(String accNo){
+		this.accNo = accNo;
+	}
+	
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator

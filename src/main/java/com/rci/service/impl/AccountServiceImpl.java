@@ -14,6 +14,10 @@ public class AccountServiceImpl extends BaseService<Account, Long>  implements I
 	public void rwCreateAccout(Account acc) {
 		super.rwCreate(acc);
 	}
+	@Override
+	public void rwCreateAccout(Account[] accs) {
+		super.rwCreate(accs);
+	}
 	
 	@Override
 	public Account getAccountByNo(String no){
@@ -47,4 +51,5 @@ public class AccountServiceImpl extends BaseService<Account, Long>  implements I
 	public Account getELEAccount() {
 		return getAccountByNo("ELE");
 	}
+
 }

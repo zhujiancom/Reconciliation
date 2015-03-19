@@ -39,4 +39,9 @@ public class PayModeServiceImpl extends BaseService<Paymode, Long> implements
 		return schemes.get(0);
 	}
 
+	@Override
+	public void rwCreatePayMode(Paymode[] modes) {
+		rwCreate(modes);
+	}
+
 }

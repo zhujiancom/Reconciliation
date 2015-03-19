@@ -45,6 +45,16 @@ public class Scheme extends BaseEntity {
 	/* 打折率或抽成  */
 	private BigDecimal commission;
 	
+	/* 差价 */
+	private BigDecimal spread;
+	
+	public Scheme(){}
+	
+	public Scheme(SchemeType type,String name){
+		this.type = type;
+		this.name = name;
+	}
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator
 	@Column(name="sid", nullable=false,updatable=false)
@@ -99,6 +109,15 @@ public class Scheme extends BaseEntity {
 
 	public void setCommission(BigDecimal commission) {
 		this.commission = commission;
+	}
+
+	@Column(name="spread")
+	public BigDecimal getSpread() {
+		return spread;
+	}
+
+	public void setSpread(BigDecimal spread) {
+		this.spread = spread;
 	}
 
 	@Override

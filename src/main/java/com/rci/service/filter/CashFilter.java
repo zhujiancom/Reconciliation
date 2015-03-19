@@ -16,6 +16,7 @@ import com.rci.bean.scheme.SchemeWrapper;
 import com.rci.constants.enums.SchemeType;
 import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.exceptions.ExceptionManage;
+import com.rci.tools.DigitUtil;
 
 @Component
 public class CashFilter extends AbstractFilter {
@@ -39,10 +40,11 @@ public class CashFilter extends AbstractFilter {
 			BigDecimal singlePrice = item.getPrice();
 			BigDecimal count = item.getCount();
 			BigDecimal countback = item.getCountback();
-			BigDecimal rate = item.getDiscountRate();
-			BigDecimal price = singlePrice.multiply(count.subtract(countback)).multiply(rate.divide(new BigDecimal(100))).setScale(0, BigDecimal.ROUND_CEILING);
+			BigDecimal ratepercent = item.getDiscountRate();
+			BigDecimal rate = BigDecimal.ONE.subtract(DigitUtil.precentDown(ratepercent, new BigDecimal(100)));
+			BigDecimal price = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(singlePrice, count.subtract(countback)),rate).setScale(0, BigDecimal.ROUND_CEILING);
 			actualAmount = actualAmount.add(price);
-			if(isSingleDiscount(rate) &&!order.getSingleDiscount()){
+			if(isSingleDiscount(ratepercent) &&!order.getSingleDiscount()){
 				order.setSingleDiscount(true);
 			}
 		}
@@ -55,7 +57,7 @@ public class CashFilter extends AbstractFilter {
 				logger.debug("[--- CashFilter ---]:#8折优惠# 收银机显示金额："+cashAmount+" , 应该显示金额： "+actualAmount);
 			}
 			Scheme scheme = paymodeService.getScheme(SchemeType.EIGHTDISCOUNT,CASH_NO);
-			wrapper = new SchemeWrapper(scheme);
+			wrapper = new SchemeWrapper(getChit(),scheme);
 			wrapper.setTotalAmount(actualAmount);
 			PairKey<SchemeType,String> key = new PairKey<SchemeType,String>(SchemeType.EIGHTDISCOUNT,CASH_NO);
 			schemes.put(key, wrapper);
@@ -71,11 +73,16 @@ public class CashFilter extends AbstractFilter {
 				logger.debug("[--- CashFilter ---]:#无折扣# 收银机显示金额："+cashAmount+" , 应该显示金额： "+actualAmount);
 			}
 			Scheme scheme = paymodeService.getScheme(SchemeType.NODISCOUNT,CASH_NO);
-			wrapper = new SchemeWrapper(scheme);
+			wrapper = new SchemeWrapper(getChit(),scheme);
 			wrapper.setTotalAmount(actualAmount);
 			PairKey<SchemeType,String> key = new PairKey<SchemeType,String>(SchemeType.NODISCOUNT,CASH_NO);
 			schemes.put(key, wrapper);
 		}
+	}
+
+	@Override
+	public String getChit() {
+		return "现金";
 	}
 
 }

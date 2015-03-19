@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -23,24 +24,19 @@ import org.springframework.util.StringUtils;
 import com.rci.bean.OrderDTO;
 import com.rci.bean.OrderItemDTO;
 import com.rci.bean.entity.DiscountScheme;
+import com.rci.bean.entity.Dish;
 import com.rci.bean.entity.Order;
+import com.rci.bean.entity.OrderItem;
 import com.rci.datafetch.IDataFetchService;
 import com.rci.service.DataTransformFacade;
 import com.rci.service.IDiscountSchemeService;
+import com.rci.service.IDishService;
 import com.rci.service.IOrderService;
 import com.rci.tools.DateUtil;
 
 @Service("DataTransformFacade")
 public class DataTransformFacadeImpl implements DataTransformFacade {
-	private transient Log logger = LogFactory.getLog(DataTransformFacadeImpl.class);
-
-	protected Log logger() {
-		if (logger == null) {
-			return LogFactory.getLog(DataTransformFacadeImpl.class);
-		} else {
-			return logger;
-		}
-	}
+	private static final Log logger = LogFactory.getLog(DataTransformFacadeImpl.class);
 	
 	@Resource(name="DataFetchService")
 	private IDataFetchService dataFetch;
@@ -52,6 +48,8 @@ public class DataTransformFacadeImpl implements DataTransformFacade {
 	private PostAccountCalculator postCalculator;
 	@Resource(name="OrderService")
 	private IOrderService orderService;
+	@Resource(name="DishService")
+	private IDishService dishService;
 	
 	@Override
 	public void accquireOrderInfo(Date date) {
@@ -133,6 +131,22 @@ public class DataTransformFacadeImpl implements DataTransformFacade {
 			value.setDay(DateUtil.date2Str(date, "yyyyMMdd"));
 			List<OrderItemDTO> itemDTOs = dataFetch.fetchOrderItemsByOrder(key);
 			Order order = postCalculator.calculate(value, itemDTOs);
+			//设置关联的order Item
+			List<OrderItem> items = new LinkedList<OrderItem>();
+			for(OrderItemDTO itemDTO:itemDTOs){
+				OrderItem item = beanMapper.map(itemDTO, OrderItem.class);
+				item.setOrder(order);
+				Dish dish = dishService.findDishByNo(itemDTO.getDishNo());
+				item.setDish(dish);
+				BigDecimal price = itemDTO.getPrice();
+				BigDecimal count = itemDTO.getCount();
+				BigDecimal backcount = itemDTO.getCountback();
+				BigDecimal rate = itemDTO.getDiscountRate();
+				BigDecimal itemActualAmount = price.multiply(count).subtract(price.multiply(backcount)).multiply(rate.divide(new BigDecimal(100))).setScale(0, BigDecimal.ROUND_CEILING);
+				item.setActualAmount(itemActualAmount);
+				items.add(item);
+			}
+			order.setItems(items);
 			orderService.rwInsertOrder(order);
 		}
 	}

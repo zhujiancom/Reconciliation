@@ -2,9 +2,16 @@ package com.rci.bean.scheme;
 
 import java.math.BigDecimal;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.rci.bean.entity.Scheme;
+import com.rci.constants.enums.SchemeType;
+import com.rci.tools.DigitUtil;
 
 public class SchemeWrapper {
+	private static final Log logger = LogFactory.getLog(SchemeWrapper.class);
+	
 	private Scheme scheme;
 	
 	private Integer count;
@@ -69,7 +76,7 @@ public class SchemeWrapper {
 	public void setName(String name) {
 		this.name = this.prefixName;
 		if(scheme != null){
-			this.name += scheme.getName();
+			this.name = this.name+scheme.getName()+"【"+this.count+"】"+"张";
 		}
 	}
 	
@@ -83,6 +90,24 @@ public class SchemeWrapper {
 
 	public void add(Integer amount){
 		this.count += amount;
+	}
+	
+	public BigDecimal calculatePostAmount(){
+		BigDecimal postAmount = new BigDecimal(0);
+		if(scheme == null){
+			logger.debug("---  scheme is not exist --- prefix name is "+prefixName);
+			return null;
+		}else{
+			SchemeType stype = scheme.getType();
+			if(stype.equals(SchemeType.EIGHTDISCOUNT) || stype.equals(SchemeType.NODISCOUNT)){
+				//1.如果是现金支付
+				postAmount = totalAmount;
+				return postAmount;
+			}
+			BigDecimal rate = BigDecimal.ONE.subtract(DigitUtil.precentDown(scheme.getCommission(), new BigDecimal(100)));
+			postAmount = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(scheme.getPostPrice(), rate).add(scheme.getSpread()),new BigDecimal(count));
+		}
+		return postAmount;
 	}
 	
 	/*public static void main(String[] args){

@@ -15,6 +15,7 @@ import com.rci.bean.DishDTO;
 import com.rci.bean.DishTypeDTO;
 import com.rci.bean.OrderDTO;
 import com.rci.bean.OrderItemDTO;
+import com.rci.bean.PaymodeDTO;
 import com.rci.bean.entity.DiscountScheme;
 import com.rci.datafetch.IDataFetchService;
 import com.rci.datafetch.SQLGen;
@@ -112,4 +113,12 @@ public class DataFetchServiceImpl implements IDataFetchService {
 		});
 		return dishTypes;
 	}
+
+	@Override
+	public List<PaymodeDTO> fetchPaymodes() {
+		List<PaymodeDTO> paymodes = sqlServerJdbcTemplate.query(SQLGen.QUERY_PAYMODES, new BeanRowMappers<PaymodeDTO>(PaymodeDTO.class));
+		return paymodes;
+	}
+	
+	
 }

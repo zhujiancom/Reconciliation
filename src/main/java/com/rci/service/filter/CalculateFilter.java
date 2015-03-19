@@ -6,16 +6,17 @@ import java.util.Map;
 
 import com.rci.bean.OrderItemDTO;
 import com.rci.bean.entity.Order;
+import com.rci.constants.BusinessConstant;
 import com.rci.constants.PropertyConstants;
 import com.rci.tools.properties.PropertyUtils;
 
 public interface CalculateFilter {
-	public static final String CASH_NO=(String) PropertyUtils.getProperties(PropertyConstants.CASH);
-	public static final String DPTG_NO=(String) PropertyUtils.getProperties(PropertyConstants.DPTG);
-	public static final String DPSH_NO=(String) PropertyUtils.getProperties(PropertyConstants.DPSH);
-	public static final String MT_NO=(String) PropertyUtils.getProperties(PropertyConstants.MT);
-	public static final String ELE_NO=(String) PropertyUtils.getProperties(PropertyConstants.ELE);
-	public static final String TDD_NO=(String) PropertyUtils.getProperties(PropertyConstants.TDD);
+	public static final String CASH_NO=BusinessConstant.CASH_NO;
+	public static final String DPTG_NO=BusinessConstant.DPTG_NO;
+	public static final String DPSH_NO=BusinessConstant.DPSH_NO;
+	public static final String MT_NO=BusinessConstant.MT_NO;
+	public static final String ELE_NO=BusinessConstant.ELE_NO;
+	public static final String TDD_NO=BusinessConstant.TDD_NO;
 	
 	public static final Integer OLD_BIGSUIT_PRICE=(Integer)PropertyUtils.getProperties(PropertyConstants.BIGSUIT_1);
 	public static final Integer NEW_BIGSUIT_PRICE=(Integer)PropertyUtils.getProperties(PropertyConstants.BIGSUIT_2);
@@ -28,4 +29,6 @@ public interface CalculateFilter {
 	boolean support(Map<String,BigDecimal> paymodeMapping);
 	
 	void doFilter(Order order,List<OrderItemDTO> items,FilterChain chain);
+	
+	String getChit();
 }

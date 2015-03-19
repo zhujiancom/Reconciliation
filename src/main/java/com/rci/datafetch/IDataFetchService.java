@@ -7,6 +7,7 @@ import com.rci.bean.DishDTO;
 import com.rci.bean.DishTypeDTO;
 import com.rci.bean.OrderDTO;
 import com.rci.bean.OrderItemDTO;
+import com.rci.bean.PaymodeDTO;
 import com.rci.bean.entity.DiscountScheme;
 
 public interface IDataFetchService {
@@ -27,4 +28,6 @@ public interface IDataFetchService {
 	List<DiscountScheme> fetchDiscountInfo();
 	
 	List<String> fetchSchemeDishTypeNoRef(String schemeNo);
+	
+	List<PaymodeDTO> fetchPaymodes();
 }

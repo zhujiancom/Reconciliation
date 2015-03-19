@@ -42,5 +42,5 @@ public class SQLGen {
 	
 	public static final String QUERY_SCHEME_DISHTYPE_REF="select ch_typeno from dbo.cybr_bt_project_detail where ch_projectno=?";
 	
-	
+	public static final String QUERY_PAYMODES="select ch_paymodeno,vch_paymode,ch_incomeflag from dbo.v_bt_paymode";
 }

@@ -294,6 +294,7 @@ public class Order extends BaseEntity{
 		paymodeMapping.put(paymodeNo, amount);
 	}
 
+	@Transient
 	public Map<PairKey<SchemeType, String>, SchemeWrapper> getSchemes() {
 		return schemes;
 	}

@@ -41,4 +41,12 @@ public class PairKey<T,E> {
 		return true;
 	}
 	
+	public E getValue(){
+		return e;
+	}
+	
+	public T getKey(){
+		return t;
+	}
+	
 }

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.OrderItemDTO;
@@ -14,30 +13,16 @@ import com.rci.bean.scheme.PairKey;
 import com.rci.bean.scheme.SchemeWrapper;
 import com.rci.constants.enums.SchemeType;
 
-/**
- * 大众点评
- * 
- * @author zj
- * 
- */
-@Component
-public class DPTGFilter extends AbstractFilter {
-
-	/* 标记该订单中是否有套餐 */
-//	private boolean suitFlag = false;
-
-//	private Map<SchemeType, Integer> chitMap;
-
+public class MTFilter extends AbstractFilter {
 	@Override
 	public boolean support(Map<String, BigDecimal> paymodeMapping) {
-		return paymodeMapping.containsKey(DPTG_NO);
+		return paymodeMapping.containsKey(MT_NO);
 	}
 
 	@Override
 	public void doFilter(Order order, List<OrderItemDTO> items,
 			FilterChain chain) {
 		if (support(order.getPaymodeMapping())) {
-			// 1. 有大众点评券
 			/* 不能使用代金券的菜品总额 。 即酒水和配料 */
 			BigDecimal nodiscountAmount = BigDecimal.ZERO;
 			/* 正常菜品，条件满足使用代金券的总金额 */
@@ -97,17 +82,19 @@ public class DPTGFilter extends AbstractFilter {
 			if (CollectionUtils.isEmpty(schemes)) {
 				schemes = new HashMap<PairKey<SchemeType,String>,SchemeWrapper>();
 			}
-			BigDecimal chitAmount = order.getPaymodeMapping().get(DPTG_NO);
+			BigDecimal chitAmount = order.getPaymodeMapping().get(MT_NO);
 			if(bediscountAmount.compareTo(chitAmount) < 0){
 				//如果可打折金额小于代金券实际使用金额，则这单属于异常单
 				order.setUnusual(UNUSUAL);
 			}
-			schemes.putAll(createSchemes(chitAmount, DPTG_NO));
+			schemes.putAll(createSchemes(chitAmount, MT_NO));
 		}
+
 	}
 
 	@Override
 	public String getChit() {
-		return "大众点评团购";
+		return "美团";
 	}
+
 }
