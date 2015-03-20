@@ -16,7 +16,6 @@ import com.rci.bean.DishTypeDTO;
 import com.rci.bean.OrderDTO;
 import com.rci.bean.OrderItemDTO;
 import com.rci.bean.PaymodeDTO;
-import com.rci.bean.entity.DiscountScheme;
 import com.rci.datafetch.IDataFetchService;
 import com.rci.datafetch.SQLGen;
 import com.rci.mapper.BeanRowMappers;
@@ -55,8 +54,22 @@ public class DataFetchServiceImpl implements IDataFetchService {
 
 	@Override
 	public List<DishTypeDTO> fetchDishType() {
-		List<DishTypeDTO> dish_types = sqlServerJdbcTemplate.query(SQLGen.QUERY_DISH_TYPE, new BeanRowMappers<DishTypeDTO>(DishTypeDTO.class));
-		return dish_types;
+		List<DishTypeDTO> types = sqlServerJdbcTemplate.query(SQLGen.QUERY_DISH_TYPE, new BeanRowMappers<DishTypeDTO>(DishTypeDTO.class));
+		List<String> discountDishNos = sqlServerJdbcTemplate.query(SQLGen.QUERY_PROJECTDETAIL_DISHTYPE, new RowMapper<String>() {
+
+			@Override
+			public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return rs.getString(1);
+			}
+		});
+		for(DishTypeDTO type:types){
+			if(!discountDishNos.contains(type.getDtNo())){
+				type.setNodiscount("N");
+			}else{
+				type.setNodiscount("Y");
+			}
+		}
+		return types;
 	}
 	
 	public DishTypeDTO fetchDishyTypeByNo(String typeno){
@@ -68,36 +81,6 @@ public class DataFetchServiceImpl implements IDataFetchService {
 	public List<DishDTO> fetchDishByTypeNo(String typeno) {
 		List<DishDTO> dishes = sqlServerJdbcTemplate.query(SQLGen.QUERY_DISH_By_TYPENO,new Object[]{typeno},new BeanRowMappers<DishDTO>(DishDTO.class));
 		return dishes;
-	}
-	
-	@Override
-	public List<DiscountScheme> fetchDiscountInfo() {
-		List<DiscountScheme> schemes = sqlServerJdbcTemplate.query(SQLGen.QUERY_DISCOUNT_SCHEME, new RowMapper<DiscountScheme>() {
-
-			@Override
-			public DiscountScheme mapRow(ResultSet rs, int rowNum) throws SQLException {
-				DiscountScheme discount = new DiscountScheme();
-				String schemeNo = rs.getString("ch_projectno");
-				discount.setsNo(schemeNo);
-				discount.setsName(rs.getString("vch_projectname"));
-				discount.setRate(rs.getBigDecimal("int_discount"));
-				discount.setRemark("现金");
-				return discount;
-			}
-		});
-		List<DiscountScheme> schemes1 = sqlServerJdbcTemplate.query(SQLGen.QUERY_PAYMODE, new RowMapper<DiscountScheme>() {
-
-			@Override
-			public DiscountScheme mapRow(ResultSet rs, int rowNum) throws SQLException {
-				DiscountScheme discount = new DiscountScheme();
-				discount.setsNo(rs.getString("ch_paymodeno"));
-				discount.setsName(rs.getString("vch_paymode"));
-				discount.setRemark("代金券形式");
-				return discount;
-			}
-		});
-		schemes.addAll(schemes1);
-		return schemes;
 	}
 	
 	@Override

@@ -13,9 +13,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -57,8 +55,6 @@ public class Order extends BaseEntity{
 	private String day;
 	
 	/* 订单原价   */
-	@Deprecated
-	private BigDecimal receivableAmount;
 	private BigDecimal originPrice;
 	
 	/* 订单支付方式 */
@@ -66,22 +62,15 @@ public class Order extends BaseEntity{
 	private Map<String,BigDecimal> paymodeMapping = new HashMap<String,BigDecimal>();
 
 	/* 折扣方案  */
-	@Deprecated
-	private DiscountScheme scheme;  //代金券或者是打折
 	private String schemeName;
 	
 //	/* 临时折扣方案  */
 //	private BigDecimal tempDiscountRate; //解决收银员自己手动输入打折率
 	
-	/* 是否有临时折扣方案  */
-	@Deprecated
-	private Boolean isTempDiscount;
 	/* 是否具有单品折扣  */
 	private Boolean singleDiscount;
 	
 	/* 实收金额   */
-	@Deprecated
-	private BigDecimal actualAmount;
 	private BigDecimal realAmount;
 	
 	/* 入账金额  */
@@ -154,43 +143,6 @@ public class Order extends BaseEntity{
 
 	public void setDay(String day) {
 		this.day = day;
-	}
-
-	@Column(name="order_receivable_amount")
-	public BigDecimal getReceivableAmount() {
-		return receivableAmount;
-	}
-
-	public void setReceivableAmount(BigDecimal receivableAmount) {
-		this.receivableAmount = receivableAmount;
-	}
-
-	@OneToOne
-	@JoinColumn(name="scheme_id")
-	public DiscountScheme getScheme() {
-		return scheme;
-	}
-
-	public void setScheme(DiscountScheme scheme) {
-		this.scheme = scheme;
-	}
-
-	@Column(name="is_temp_discount")
-	public Boolean getIsTempDiscount() {
-		return isTempDiscount;
-	}
-
-	public void setIsTempDiscount(Boolean isTempDiscount) {
-		this.isTempDiscount = isTempDiscount;
-	}
-
-	@Column(name="order_actual_amount")
-	public BigDecimal getActualAmount() {
-		return actualAmount;
-	}
-
-	public void setActualAmount(BigDecimal actualAmount) {
-		this.actualAmount = actualAmount;
 	}
 
 	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY,mappedBy="order")

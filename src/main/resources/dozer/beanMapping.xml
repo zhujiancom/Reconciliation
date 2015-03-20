@@ -23,7 +23,7 @@ http://dozer.sourceforge.net/schema/beanmapping.xsd">
 			<b>orderId</b>
 		</field>
 		<field>
-			<a>receivableAmount</a>
+			<a>originPrice</a>
 			<b>originAmount</b>
 		</field>
 	</mapping>

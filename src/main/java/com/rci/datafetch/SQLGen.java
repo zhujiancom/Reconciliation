@@ -4,6 +4,7 @@ public class SQLGen {
 	public static final String QUERY_DISH="select ch_dishno,vch_dishname,ch_typeno,num_price1 from dbo.v_bt_dish";
 	public static final String QUERY_DISH_By_TYPENO="select ch_dishno,vch_dishname,ch_typeno,num_price1 from dbo.v_bt_dish where ch_typeno=?";
 	public static final String QUERY_DISH_TYPE="select ch_typeno,vch_typename from dbo.cybr_bt_dish_type";
+	public static final String QUERY_PROJECTDETAIL_DISHTYPE ="select ch_typeno from dbo.cybr_bt_project_detail";
 	public static final String QUERY_DISH_TYPE_BY_NO="select ch_typeno,vch_typename from dbo.cybr_bt_dish_type where ch_typeno=?";
 	public static final String QUERY_DISCOUNT_SCHEME="select distinct master.ch_projectno,master.vch_projectname,detail.int_discount \n"
 													+ "from dbo.cybr_bt_project master \n"

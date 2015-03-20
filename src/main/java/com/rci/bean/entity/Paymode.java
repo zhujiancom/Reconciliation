@@ -9,7 +9,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -77,8 +76,7 @@ public class Paymode extends BaseEntity {
 		this.remark = remark;
 	}
 
-	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
-	@JoinColumn(name="paymode_id")
+	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY,mappedBy = "paymode")
 	public List<Scheme> getSchemes() {
 		return schemes;
 	}

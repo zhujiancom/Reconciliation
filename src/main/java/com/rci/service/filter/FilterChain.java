@@ -5,9 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import com.rci.bean.OrderItemDTO;
 import com.rci.bean.entity.Order;
 
+@Component("FilterChain")
+@Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class FilterChain implements CalculateFilter {
 	List<CalculateFilter> filters = new ArrayList<CalculateFilter>();
 	int pos = 0;
@@ -42,6 +48,10 @@ public class FilterChain implements CalculateFilter {
 	@Override
 	public String getChit() {
 		throw new UnsupportedOperationException();
+	}
+	
+	public void reset(){
+		this.pos = 0;
 	}
 
 }

@@ -33,6 +33,9 @@ public class PostOrderAccount extends BaseEntity{
 	/* 入账账户  */
 	private Long accountId;
 	
+	/* 账户编号 */
+	private String accountNo;
+	
 	/* 实际入账金额  */
 	private BigDecimal postAmount;
 	
@@ -44,8 +47,8 @@ public class PostOrderAccount extends BaseEntity{
 	
 	public PostOrderAccount(){}
 	
-	public PostOrderAccount(Long accountId){
-		this.accountId = accountId;
+	public PostOrderAccount(String accountNo){
+		this.accountNo = accountNo;
 	}
 
 	@Id
@@ -59,6 +62,7 @@ public class PostOrderAccount extends BaseEntity{
 		this.poaid = poaid;
 	}
 
+	@Column(name="account_id")
 	public Long getAccountId() {
 		return accountId;
 	}
@@ -67,6 +71,16 @@ public class PostOrderAccount extends BaseEntity{
 		this.accountId = accountId;
 	}
 
+	@Column(name="account_no")
+	public String getAccountNo() {
+		return accountNo;
+	}
+
+	public void setAccountNo(String accountNo) {
+		this.accountNo = accountNo;
+	}
+
+	@Column(name="post_amount")
 	public BigDecimal getPostAmount() {
 		return postAmount;
 	}
@@ -75,6 +89,7 @@ public class PostOrderAccount extends BaseEntity{
 		this.postAmount = postAmount;
 	}
 
+	@Column(name="post_time")
 	public Date getPostTime() {
 		return postTime;
 	}

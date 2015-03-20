@@ -18,6 +18,7 @@ import com.rci.bean.entity.DataFetchMark;
 import com.rci.bean.entity.Order;
 import com.rci.bean.entity.OrderItem;
 import com.rci.bean.entity.PostOrderAccount;
+import com.rci.constants.BusinessConstant;
 import com.rci.service.BaseService;
 import com.rci.service.DataTransformFacade;
 import com.rci.service.IFetchMarkService;
@@ -79,44 +80,28 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 					List<PostOrderAccount> poas = order.getPostOrderAccounts();
 					BigDecimal totalAmount = BigDecimal.ZERO;
 					for(PostOrderAccount account:poas){
-						if(account.getAccountId() == 1){
-							vo.setPosAmount(account.getPostAmount());
+						BigDecimal postAmount = account.getPostAmount();
+						if(BusinessConstant.CASH_NO.equals(account.getAccountNo())){
+							vo.setPosAmount(postAmount);
 						}
-						if(account.getAccountId() == 2){
-							vo.setMtAmount(account.getPostAmount());
+						if(BusinessConstant.MT_NO.equals(account.getAccountNo())){
+							vo.setMtAmount(postAmount);
 						}
-						if(account.getAccountId() == 3){
-							vo.setDptgAmount(account.getPostAmount());
+						if(BusinessConstant.DPTG_NO.equals(account.getAccountNo())){
+							vo.setDptgAmount(postAmount);
 						}
-						if(account.getAccountId() == 4){
-							vo.setDpshAmount(account.getPostAmount());
+						if(BusinessConstant.DPSH_NO.equals(account.getAccountNo())){
+							vo.setDpshAmount(postAmount);
 						}
-						if(account.getAccountId() == 5){
-							vo.setEleAmount(account.getPostAmount());
+						if(BusinessConstant.ELE_NO.equals(account.getAccountNo())){
+							vo.setEleAmount(postAmount);
 						}
-						if(account.getAccountId() == 6){
-							vo.setTddAmount(account.getPostAmount());
+						if(BusinessConstant.TDD_NO.equals(account.getAccountNo())){
+							vo.setTddAmount(postAmount);
 						}
+						totalAmount = totalAmount.add(postAmount);
 					}
-					if(vo.getPosAmount() != null){
-						totalAmount = totalAmount.add(vo.getPosAmount());
-					}
-					if(vo.getMtAmount() != null){
-						totalAmount = totalAmount.add(vo.getMtAmount());
-					}
-					if(vo.getDptgAmount() != null){
-						totalAmount = totalAmount.add(vo.getDptgAmount());
-					}
-					if(vo.getDpshAmount() != null){
-						totalAmount = totalAmount.add(vo.getDpshAmount());
-					}
-					if(vo.getEleAmount() != null){
-						totalAmount = totalAmount.add(vo.getEleAmount());
-					}
-					if(vo.getTddAmount() != null){
-						totalAmount = totalAmount.add(vo.getTddAmount());
-					}
-					vo.setSchemeName(order.getScheme().getsName());
+					vo.setSchemeName(order.getSchemeName());
 					vo.setTotalAmount(totalAmount);
 					vos.add(vo);
 				}

@@ -10,6 +10,8 @@ public class DishTypeDTO {
 	/* 类型名称  */
 	private String dtName;
 	
+	private String nodiscount;
+	
 	public String getDtNo() {
 		return dtNo;
 	}
@@ -26,5 +28,13 @@ public class DishTypeDTO {
 	@ColumnName("vch_typename")
 	public void setDtName(String dtName) {
 		this.dtName = dtName;
+	}
+
+	public String getNodiscount() {
+		return nodiscount;
+	}
+
+	public void setNodiscount(String nodiscount) {
+		this.nodiscount = nodiscount;
 	}
 }

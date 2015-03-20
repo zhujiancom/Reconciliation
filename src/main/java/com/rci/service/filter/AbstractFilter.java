@@ -16,20 +16,23 @@ import com.rci.bean.scheme.PairKey;
 import com.rci.bean.scheme.SchemeWrapper;
 import com.rci.constants.enums.SchemeType;
 import com.rci.service.IDishService;
-import com.rci.service.IPayModeService;
+import com.rci.service.ISchemeService;
 
 public abstract class AbstractFilter implements CalculateFilter {
 	public static final Log logger = LogFactory.getLog(AbstractFilter.class);
 	/* 标记该订单中是否有套餐 */
 	protected boolean suitFlag = false;
 	
-	protected Map<SchemeType, Integer> chitMap;
+	protected Map<SchemeType, Integer> chitMap = new HashMap<SchemeType,Integer>();
 	
 	@Resource(name="DishService")
 	private IDishService dishService;
 	
-	@Resource(name = "PayModeService")
-	protected IPayModeService paymodeService;
+//	@Resource(name = "PayModeService")
+//	protected IPayModeService paymodeService;
+	
+	@Resource(name="SchemeService")
+	protected ISchemeService schemeService;
 	/**
 	 * 菜品是否可以打折
 	 * @param dishNo
@@ -45,10 +48,10 @@ public abstract class AbstractFilter implements CalculateFilter {
 	}
 	
 	protected Boolean isSingleDiscount(BigDecimal rate){
-		if(rate.compareTo(new BigDecimal(80)) < 0 || rate.compareTo(new BigDecimal(80))>0){
-			return true;
+		if(rate.compareTo(new BigDecimal(80)) == 0 || rate.compareTo(new BigDecimal(100)) == 0){
+			return false;
 		}
-		return false;
+		return true;
 	}
 	
 	/**
@@ -68,8 +71,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 			Integer little_count = chitMap.get(SchemeType.LITTLE_SUIT);
 			if (big_count != null && big_count != 0) {
 				// 1.1 如果有大份套餐
-				Scheme scheme = paymodeService.getScheme(SchemeType.BIG_SUIT,
-						paymodeno);
+				Scheme scheme = schemeService.getScheme(SchemeType.BIG_SUIT,paymodeno);
 				BigDecimal bigSuitPrice = scheme.getPrice();
 				bigSuitAmount = bigSuitAmount.add(bigSuitPrice
 						.multiply(new BigDecimal(big_count)));
@@ -84,7 +86,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 			}
 			if (little_count != null && little_count != 0) {
 				// 1.2 如果有小份套餐
-				Scheme scheme = paymodeService.getScheme(
+				Scheme scheme = schemeService.getScheme(
 						SchemeType.LITTLE_SUIT, paymodeno);
 				BigDecimal littleSuitPrice = scheme.getPrice();
 				littleSuitAmount = littleSuitAmount.add(littleSuitPrice
@@ -110,7 +112,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 		}
 		if (amount > 100) {
 			// 金额在大于100，使用100元代金券
-			Scheme scheme = paymodeService.getScheme(SchemeType.HUNDRED,paymodeno);
+			Scheme scheme = schemeService.getScheme(SchemeType.HUNDRED,paymodeno);
 			Integer count = chitMap.get(SchemeType.HUNDRED);
 			if(count != null && count != 0){
 				count++;
@@ -132,7 +134,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 		}
 		if (50 < amount && amount <= 100) {
 			// 金额在50-100之间，使用100元代金券
-			Scheme scheme = paymodeService.getScheme(SchemeType.HUNDRED,paymodeno);
+			Scheme scheme = schemeService.getScheme(SchemeType.HUNDRED,paymodeno);
 			Integer count = chitMap.get(SchemeType.HUNDRED);
 			if(count != null && count != 0){
 				count++;
@@ -152,7 +154,7 @@ public abstract class AbstractFilter implements CalculateFilter {
 		}
 		if(amount <= 50){
 			// 金额在小于，使用100元代金券
-			Scheme scheme = paymodeService.getScheme(SchemeType.FIFITY,paymodeno);
+			Scheme scheme = schemeService.getScheme(SchemeType.FIFITY,paymodeno);
 			Integer count = chitMap.get(SchemeType.FIFITY);
 			if(count != null && count != 0){
 				count++;

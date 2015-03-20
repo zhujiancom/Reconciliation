@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.OrderItemDTO;
@@ -13,6 +14,7 @@ import com.rci.bean.scheme.PairKey;
 import com.rci.bean.scheme.SchemeWrapper;
 import com.rci.constants.enums.SchemeType;
 
+@Component
 public class MTFilter extends AbstractFilter {
 	@Override
 	public boolean support(Map<String, BigDecimal> paymodeMapping) {
@@ -37,8 +39,8 @@ public class MTFilter extends AbstractFilter {
 						suitFlag = true;
 					}
 					// 如果是大份套餐，记录套餐数量
-					if (item.getPrice().equals(OLD_BIGSUIT_PRICE)
-							|| item.getPrice().equals(NEW_BIGSUIT_PRICE)) {
+					if (item.getPrice().intValue() == OLD_BIGSUIT_PRICE
+							|| item.getPrice().intValue() == NEW_BIGSUIT_PRICE) {
 						Integer count = chitMap.get(SchemeType.BIG_SUIT);
 						if (count != null) {
 							count++;
@@ -49,8 +51,8 @@ public class MTFilter extends AbstractFilter {
 						}
 					}
 					// 如果是小份套餐，记录套餐数量
-					if (item.getPrice().equals(OLD_SMALLSUIT_PRICE)
-							|| item.getPrice().equals(NEW_SMALLSUIT_PRICE)) {
+					if (item.getPrice().intValue() == OLD_SMALLSUIT_PRICE
+							|| item.getPrice().intValue() == NEW_SMALLSUIT_PRICE) {
 						Integer count = chitMap.get(SchemeType.LITTLE_SUIT);
 						if (count != null) {
 							count++;
@@ -63,7 +65,7 @@ public class MTFilter extends AbstractFilter {
 				}
 				String dishNo = item.getDishNo();
 				BigDecimal originPrice = item.getPrice();
-				if (isNodiscount(dishNo)) {
+				if (!suitFlag && isNodiscount(dishNo)) {
 					// 3. 饮料酒水配菜除外
 					nodiscountAmount = nodiscountAmount.add(originPrice);
 					continue;
@@ -81,6 +83,7 @@ public class MTFilter extends AbstractFilter {
 			Map<PairKey<SchemeType,String>,SchemeWrapper> schemes = order.getSchemes();
 			if (CollectionUtils.isEmpty(schemes)) {
 				schemes = new HashMap<PairKey<SchemeType,String>,SchemeWrapper>();
+				order.setSchemes(schemes);
 			}
 			BigDecimal chitAmount = order.getPaymodeMapping().get(MT_NO);
 			if(bediscountAmount.compareTo(chitAmount) < 0){
@@ -89,7 +92,7 @@ public class MTFilter extends AbstractFilter {
 			}
 			schemes.putAll(createSchemes(chitAmount, MT_NO));
 		}
-
+		chain.doFilter(order, items, chain);
 	}
 
 	@Override

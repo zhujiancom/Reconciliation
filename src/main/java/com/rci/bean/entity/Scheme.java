@@ -2,6 +2,7 @@ package com.rci.bean.entity;
 
 import java.math.BigDecimal;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -9,6 +10,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.rci.constants.enums.SchemeType;
@@ -47,6 +50,9 @@ public class Scheme extends BaseEntity {
 	
 	/* 差价 */
 	private BigDecimal spread;
+	
+	
+	private Paymode paymode;
 	
 	public Scheme(){}
 	
@@ -118,6 +124,16 @@ public class Scheme extends BaseEntity {
 
 	public void setSpread(BigDecimal spread) {
 		this.spread = spread;
+	}
+
+	@ManyToOne(cascade={CascadeType.REFRESH,CascadeType.MERGE},optional=true)
+	@JoinColumn(name="paymode_id")
+	public Paymode getPaymode() {
+		return paymode;
+	}
+
+	public void setPaymode(Paymode paymode) {
+		this.paymode = paymode;
 	}
 
 	@Override

@@ -7,8 +7,6 @@ import java.util.Map;
 import com.rci.bean.OrderItemDTO;
 import com.rci.bean.entity.Order;
 import com.rci.constants.BusinessConstant;
-import com.rci.constants.PropertyConstants;
-import com.rci.tools.properties.PropertyUtils;
 
 public interface CalculateFilter {
 	public static final String CASH_NO=BusinessConstant.CASH_NO;
@@ -18,10 +16,15 @@ public interface CalculateFilter {
 	public static final String ELE_NO=BusinessConstant.ELE_NO;
 	public static final String TDD_NO=BusinessConstant.TDD_NO;
 	
-	public static final Integer OLD_BIGSUIT_PRICE=(Integer)PropertyUtils.getProperties(PropertyConstants.BIGSUIT_1);
-	public static final Integer NEW_BIGSUIT_PRICE=(Integer)PropertyUtils.getProperties(PropertyConstants.BIGSUIT_2);
-	public static final Integer OLD_SMALLSUIT_PRICE=(Integer)PropertyUtils.getProperties(PropertyConstants.SMALLSUIT_1);
-	public static final Integer NEW_SMALLSUIT_PRICE=(Integer)PropertyUtils.getProperties(PropertyConstants.SMALLSUIT_2);
+//	public static final Integer OLD_BIGSUIT_PRICE=(Integer)PropertyUtils.getProperties(PropertyConstants.BIGSUIT_1);
+//	public static final Integer NEW_BIGSUIT_PRICE=(Integer)PropertyUtils.getProperties(PropertyConstants.BIGSUIT_2);
+//	public static final Integer OLD_SMALLSUIT_PRICE=(Integer)PropertyUtils.getProperties(PropertyConstants.SMALLSUIT_1);
+//	public static final Integer NEW_SMALLSUIT_PRICE=(Integer)PropertyUtils.getProperties(PropertyConstants.SMALLSUIT_2);
+	
+	public static final Integer OLD_BIGSUIT_PRICE=88;
+	public static final Integer NEW_BIGSUIT_PRICE=98;
+	public static final Integer OLD_SMALLSUIT_PRICE=40;
+	public static final Integer NEW_SMALLSUIT_PRICE=50;
 	
 	public static final Integer NORMAL=0;
 	public static final Integer UNUSUAL=1;

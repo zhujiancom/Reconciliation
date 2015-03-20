@@ -18,8 +18,6 @@ public class SchemeWrapper {
 	
 	private String prefixName;
 	
-	private String name;
-	
 	private BigDecimal totalAmount;
 	
 	public SchemeWrapper(){}
@@ -70,14 +68,15 @@ public class SchemeWrapper {
 	}
 
 	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = this.prefixName;
-		if(scheme != null){
-			this.name = this.name+scheme.getName()+"【"+this.count+"】"+"张";
+		StringBuffer name = new StringBuffer(this.prefixName);
+		SchemeType stype = scheme.getType();
+		if(SchemeType.EIGHTDISCOUNT.equals(stype) || SchemeType.NODISCOUNT.equals(stype)){
+			name.append(scheme.getName()).append(totalAmount);
+		}else{
+			name.append(scheme.getName()).append("【").append(+this.count).append("】张");
 		}
+		
+		return name.toString();
 	}
 	
 	public BigDecimal getTotalAmount() {
@@ -99,41 +98,21 @@ public class SchemeWrapper {
 			return null;
 		}else{
 			SchemeType stype = scheme.getType();
-			if(stype.equals(SchemeType.EIGHTDISCOUNT) || stype.equals(SchemeType.NODISCOUNT)){
-				//1.如果是现金支付
+			if(stype.equals(SchemeType.VIRTUALPAY) || stype.equals(SchemeType.EIGHTDISCOUNT) || stype.equals(SchemeType.NODISCOUNT)){
+				//1.如果是现金支付,饿了么，淘点点支付
 				postAmount = totalAmount;
-				return postAmount;
+			}else{
+				BigDecimal rate = BigDecimal.ONE.subtract(DigitUtil.precentDown(scheme.getCommission(), new BigDecimal(100)));
+				postAmount = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(scheme.getPostPrice(), rate).add(scheme.getSpread()),new BigDecimal(count));
 			}
-			BigDecimal rate = BigDecimal.ONE.subtract(DigitUtil.precentDown(scheme.getCommission(), new BigDecimal(100)));
-			postAmount = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(scheme.getPostPrice(), rate).add(scheme.getSpread()),new BigDecimal(count));
 		}
 		return postAmount;
 	}
 	
-	/*public static void main(String[] args){
-		Map<PairKey<SchemeType,String>,SchemeWrapper> map = new HashMap<PairKey<SchemeType,String>,SchemeWrapper>();
-		PairKey<SchemeType,String> p1 = new PairKey<SchemeType,String>(SchemeType.FIFITY,"98");
-		PairKey<SchemeType,String> p2 = new PairKey<SchemeType,String>(SchemeType.FIFITY,"99");
-		
-		Scheme s = new Scheme();
-		s.setType(SchemeType.FIFITY);
-		s.setName("50代金券");
-		s.setCommission(new BigDecimal(1));
-		s.setPrice(new BigDecimal(50));
-		s.setPostPrice(new BigDecimal(37.5));
-		
-		SchemeWrapper w1 = new SchemeWrapper("大众点评",s,3);
-		map.put(p1, w1);
-		SchemeWrapper w2 = new SchemeWrapper("美团",s,3);
-		map.put(p2, w2);
-		
-		Map<PairKey<SchemeType,String>,SchemeWrapper> map2 = new HashMap<PairKey<SchemeType,String>,SchemeWrapper>();
-		PairKey<SchemeType,String> p3 = new PairKey<SchemeType,String>(SchemeType.CASH,"00");
-		Scheme s1 = new Scheme();
-		s1.setType(SchemeType.CASH);
-		s1.setName("现金");
-		
-		
-	}*/
+//	public static void main(String[] args){
+//		StringBuffer sb = new StringBuffer("");
+//		sb.append("a");
+//		System.out.println(sb.toString());
+//	}
 	
 }
