@@ -15,6 +15,8 @@ public interface CalculateFilter {
 	public static final String MT_NO=BusinessConstant.MT_NO;
 	public static final String ELE_NO=BusinessConstant.ELE_NO;
 	public static final String TDD_NO=BusinessConstant.TDD_NO;
+	public static final String MTWM_NO=BusinessConstant.MTWM_NO;
+	public static final String LS_NO=BusinessConstant.LS_NO;
 	
 //	public static final Integer OLD_BIGSUIT_PRICE=(Integer)PropertyUtils.getProperties(PropertyConstants.BIGSUIT_1);
 //	public static final Integer NEW_BIGSUIT_PRICE=(Integer)PropertyUtils.getProperties(PropertyConstants.BIGSUIT_2);

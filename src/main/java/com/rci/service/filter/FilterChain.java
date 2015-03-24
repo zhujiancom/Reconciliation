@@ -1,31 +1,24 @@
 package com.rci.service.filter;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import com.rci.bean.OrderItemDTO;
 import com.rci.bean.entity.Order;
 
-@Component("FilterChain")
-@Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class FilterChain implements CalculateFilter {
-	List<CalculateFilter> filters = new ArrayList<CalculateFilter>();
+	LinkedList<CalculateFilter> filters = new LinkedList<CalculateFilter>();
 	int pos = 0;
+	BigDecimal balance = BigDecimal.ZERO;
 	
-	public FilterChain addFilter(CalculateFilter filter){
+	public void addFilter(CalculateFilter filter){
 		this.filters.add(filter);
-		return this;
 	}
 	
-	public FilterChain addFilters(List<CalculateFilter> filters){
+	public void addFilters(List<CalculateFilter> filters){
 		this.filters.addAll(filters);
-		return this;
 	}
 	
 	
@@ -52,6 +45,15 @@ public class FilterChain implements CalculateFilter {
 	
 	public void reset(){
 		this.pos = 0;
+		this.balance = BigDecimal.ZERO;
+	}
+
+	public BigDecimal getBalance() {
+		return balance;
+	}
+
+	public void setBalance(BigDecimal balance) {
+		this.balance = balance;
 	}
 
 }

@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -19,6 +21,7 @@ import com.rci.constants.enums.SchemeType;
 import com.rci.tools.DigitUtil;
 
 @Component
+@Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class ELEFilter extends AbstractFilter {
 	private static final Log logger = LogFactory.getLog(ELEFilter.class);
 
@@ -28,7 +31,7 @@ public class ELEFilter extends AbstractFilter {
 	}
 
 	@Override
-	public void doFilter(Order order, List<OrderItemDTO> items,
+	public void generateScheme(Order order, List<OrderItemDTO> items,
 			FilterChain chain) {
 		if(support(order.getPaymodeMapping())){
 			Map<PairKey<SchemeType,String>,SchemeWrapper> schemes = order.getSchemes();
@@ -54,10 +57,10 @@ public class ELEFilter extends AbstractFilter {
 				order.setUnusual(UNUSUAL);
 				logger.debug("[--- ELEFilter ---]: 收银机显示金额："+onlineAmount+" , 应该显示金额： "+actualAmount);
 			}
-			Scheme scheme = new Scheme(SchemeType.VIRTUALPAY,getChit());
+			Scheme scheme = new Scheme(SchemeType.ONLINEPAY,getChit());
 			SchemeWrapper wrapper = new SchemeWrapper(scheme);
 			wrapper.setTotalAmount(actualAmount);
-			PairKey<SchemeType,String> key = new PairKey<SchemeType,String>(SchemeType.VIRTUALPAY,ELE_NO);
+			PairKey<SchemeType,String> key = new PairKey<SchemeType,String>(SchemeType.ONLINEPAY,ELE_NO);
 			schemes.put(key, wrapper);
 		}
 		chain.doFilter(order, items, chain);
@@ -66,6 +69,12 @@ public class ELEFilter extends AbstractFilter {
 	@Override
 	public String getChit() {
 		return "饿了么";
+	}
+
+	@Override
+	protected Map<SchemeType, Integer> getChitMap() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -114,11 +114,11 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	 * @throws ServiceException
 	 */
 	public void loadOrderData(String time) throws ServiceException{
-		if(!StringUtility.isDateFormated(time)){
+		if(!StringUtility.isDateFormated(time,"\\d{8}")){
 			ExceptionManage.throwServiceException(SERVICE.TIME_FORMAT, "日期格式错误");
 		}
 		Calendar queryDay = Calendar.getInstance();
-		queryDay.setTime(DateUtil.str2Date(time));
+		queryDay.setTime(DateUtil.str2Date(time,"yyyyMMdd"));
 		Calendar currentDay = Calendar.getInstance();
 		currentDay.setTime(DateUtil.getCurrentDate());
 		if(queryDay.after(currentDay)){

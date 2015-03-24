@@ -145,6 +145,43 @@ public class InitSystemService {
 				schemes.add(s4);
 				mode.setSchemes(schemes);
 			}
+			if(BusinessConstant.DPSH_NO.equals(mode.getModeNo())){
+				Scheme s = new Scheme(SchemeType.CASHBACK,"满100减30");
+				s.setCommission(new BigDecimal(1));
+				s.setPrice(new BigDecimal(30));
+				s.setPaymode(mode);
+				List<Scheme> schemes = new ArrayList<Scheme>();
+				schemes.add(s);
+				mode.setSchemes(schemes);
+			}
+			if(BusinessConstant.LS_NO.equals(mode.getModeNo())){
+//				Scheme s1 = new Scheme(SchemeType.FIFITY,"50元代金券");
+//				s1.setPrice(new BigDecimal(50));
+//				s1.setPostPrice(new BigDecimal(44));
+//				s1.setCommission(new BigDecimal(1));
+//				s1.setPaymode(mode);
+//				Scheme s2 = new Scheme(SchemeType.HUNDRED,"100元代金券");
+//				s2.setPrice(new BigDecimal(100));
+//				s2.setPostPrice(new BigDecimal(88));
+//				s2.setCommission(new BigDecimal(1));
+//				s2.setPaymode(mode);
+//				Scheme s3 = new Scheme(SchemeType.BIG_SUIT,"大份套餐");
+//				s3.setPrice(new BigDecimal(98));
+//				s3.setPostPrice(new BigDecimal(98));
+//				s3.setCommission(new BigDecimal(1));
+//				s3.setPaymode(mode);
+//				Scheme s4 = new Scheme(SchemeType.LITTLE_SUIT,"小份套餐");
+//				s4.setPrice(new BigDecimal(50));
+//				s4.setPostPrice(new BigDecimal(50));
+//				s4.setCommission(new BigDecimal(1));
+//				s4.setPaymode(mode);
+//				List<Scheme> schemes = new ArrayList<Scheme>();
+//				schemes.add(s1);
+//				schemes.add(s2);
+//				schemes.add(s3);
+//				schemes.add(s4);
+//				mode.setSchemes(schemes);
+			}
 			paymodes.add(mode);
 			Account account = new Account(mode.getModeNo());
 			account.setAccountName(mode.getModeName()+"账户");

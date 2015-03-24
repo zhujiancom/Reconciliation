@@ -15,17 +15,24 @@ import com.rci.bean.entity.Order;
 import com.rci.bean.scheme.PairKey;
 import com.rci.bean.scheme.SchemeWrapper;
 import com.rci.constants.enums.SchemeType;
-import com.rci.exceptions.ExceptionManage;
 import com.rci.exceptions.ExceptionConstant.SERVICE;
+import com.rci.exceptions.ExceptionManage;
+import com.rci.tools.DigitUtil;
 
+/**
+ * 大众点评
+ * 
+ * @author zj
+ * 
+ */
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class MTFilter extends AbstractFilter {
-	
+public class LSFilter extends AbstractFilter {
 	private Map<SchemeType, Integer> chitMap = new HashMap<SchemeType,Integer>();
+	
 	@Override
 	public boolean support(Map<String, BigDecimal> paymodeMapping) {
-		return paymodeMapping.containsKey(MT_NO);
+		return paymodeMapping.containsKey(LS_NO);
 	}
 
 	@Override
@@ -34,6 +41,7 @@ public class MTFilter extends AbstractFilter {
 		if (support(order.getPaymodeMapping())) {
 			/* 标记该订单中是否有套餐 */
 			boolean suitFlag = false;
+			// 1. 有大众点评券
 			/* 不能使用代金券的菜品总额 。 即酒水和配料 */
 			BigDecimal nodiscountAmount = BigDecimal.ZERO;
 			/* 正常菜品，条件满足使用代金券的总金额 */
@@ -72,16 +80,19 @@ public class MTFilter extends AbstractFilter {
 				}
 				String dishNo = item.getDishNo();
 				BigDecimal originPrice = item.getPrice();
+				BigDecimal count = item.getCount();
+				BigDecimal countBack = item.getCountback();
+				BigDecimal originTotalAmount = DigitUtil.mutiplyDown(originPrice, count.subtract(countBack));
 				if (!suitFlag && isNodiscount(dishNo)) {
-					// 3. 饮料酒水配菜除外
-					nodiscountAmount = nodiscountAmount.add(originPrice);
+					// 3. 饮料酒水除外
+					nodiscountAmount = nodiscountAmount.add(originTotalAmount);
 					continue;
 				}
-				bediscountAmount = bediscountAmount.add(originPrice);
+				bediscountAmount = bediscountAmount.add(originTotalAmount);
 				
 				/* 判断是否有单品折扣  */
 				BigDecimal rate = item.getDiscountRate();
-				if(isSingleDiscount(rate) &&!order.getSingleDiscount()){
+				if(isSingleDiscount(rate) && (order.getSingleDiscount() == null || !order.getSingleDiscount())){
 					order.setSingleDiscount(true);
 				}
 			}
@@ -92,34 +103,32 @@ public class MTFilter extends AbstractFilter {
 				schemes = new HashMap<PairKey<SchemeType,String>,SchemeWrapper>();
 				order.setSchemes(schemes);
 			}
-			BigDecimal chitAmount = order.getPaymodeMapping().get(MT_NO);
+			BigDecimal chitAmount = order.getPaymodeMapping().get(LS_NO);
 			if(bediscountAmount.compareTo(chitAmount) < 0){
 				//如果可打折金额小于代金券实际使用金额，则这单属于异常单
 				order.setUnusual(UNUSUAL);
 			}
-			schemes.putAll(createSchemes(chitAmount, MT_NO,suitFlag));
+			schemes.putAll(createSchemes(chitAmount, LS_NO,suitFlag));
 			//计算订余额
 			BigDecimal balance = chain.getBalance();
-			logger.debug("MTFilter - balance = "+balance);
+			logger.debug("LSFilter - balance = "+balance);
 			if(balance.compareTo(chitAmount) < 0){
 				logger.error("余额计算错了了！");
 				ExceptionManage.throwServiceException(SERVICE.DATA_ERROR, "余额计算出错");
 			}
 			balance = balance.subtract(chitAmount);
 			chain.setBalance(balance);
-			
 		}
 		chain.doFilter(order, items, chain);
 	}
 
 	@Override
 	public String getChit() {
-		return "美团";
+		return "拉手网";
 	}
 
 	@Override
 	protected Map<SchemeType, Integer> getChitMap() {
 		return chitMap;
 	}
-
 }

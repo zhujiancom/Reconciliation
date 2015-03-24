@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import com.rci.bean.OrderItemDTO;
@@ -15,6 +18,8 @@ import com.rci.bean.scheme.SchemeWrapper;
 import com.rci.constants.enums.SchemeType;
 import com.rci.tools.DigitUtil;
 
+@Component
+@Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class TDDFilter extends AbstractFilter {
 
 	@Override
@@ -23,7 +28,7 @@ public class TDDFilter extends AbstractFilter {
 	}
 
 	@Override
-	public void doFilter(Order order, List<OrderItemDTO> items,
+	public void generateScheme(Order order, List<OrderItemDTO> items,
 			FilterChain chain) {
 		if(support(order.getPaymodeMapping())){
 			Map<PairKey<SchemeType,String>,SchemeWrapper> schemes = order.getSchemes();
@@ -49,10 +54,10 @@ public class TDDFilter extends AbstractFilter {
 				order.setUnusual(UNUSUAL);
 				logger.debug("[--- TDDFilter ---]: 收银机显示金额："+onlineAmount+" , 应该显示金额： "+actualAmount);
 			}
-			Scheme scheme = new Scheme(SchemeType.VIRTUALPAY,getChit());
+			Scheme scheme = new Scheme(SchemeType.ONLINEPAY,getChit());
 			SchemeWrapper wrapper = new SchemeWrapper(scheme);
 			wrapper.setTotalAmount(actualAmount);
-			PairKey<SchemeType,String> key = new PairKey<SchemeType,String>(SchemeType.VIRTUALPAY,TDD_NO);
+			PairKey<SchemeType,String> key = new PairKey<SchemeType,String>(SchemeType.ONLINEPAY,TDD_NO);
 			schemes.put(key, wrapper);
 		}
 		chain.doFilter(order, items, chain);
@@ -63,4 +68,8 @@ public class TDDFilter extends AbstractFilter {
 		return "淘点点";
 	}
 
+	@Override
+	protected Map<SchemeType, Integer> getChitMap() {
+		return null;
+	}
 }

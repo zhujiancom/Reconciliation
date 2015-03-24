@@ -95,8 +95,8 @@
 	
 	<!-- XML 风格支持 -->
 	<aop:config proxy-target-class="true" expose-proxy="true">
-<!-- 		<aop:advisor pointcut="execution(* com.rci.dao..*DAOFacadeImpl.*(..))" -->
-<!-- 					advice-ref="txAdvice" /> -->
+		<aop:advisor pointcut="execution(* com.rci.dao..*DAOFacadeImpl.*(..))"
+					advice-ref="txAdvice" />
 		<aop:advisor
 			pointcut="execution(* com.rci.service..*ServiceImpl.*(..))"
 			advice-ref="txAdvice" />
@@ -106,12 +106,16 @@
 			<tx:method name="rw*" propagation="REQUIRED" read-only="false" rollback-for="Exception" />
 <!-- 			<tx:method name="rwOrderMark" propagation="NESTED" read-only="false" rollback-for="Exception" /> -->
 			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
-			<tx:method name="query*" propagation="REQUIRED" read-only="false" />
+			<tx:method name="query*" propagation="REQUIRED" read-only="false" isolation="READ_COMMITTED" />
+<!-- 			<tx:method name="rwInsertOrder" propagation="REQUIRES_NEW" read-only="false" /> -->
+<!-- 			<tx:method name="rwOrderMark" propagation="REQUIRES_NEW" read-only="false" /> -->
+<!-- 			<tx:method name="queryOrderVOsByDay" propagation="NOT_SUPPORTED" read-only="false" /> -->
 			<tx:method name="*" propagation="REQUIRED" read-only="true" />
+			
 			<!-- for DAO -->
-<!-- 			<tx:method name="save*" propagation="REQUIRED" read-only="false" rollback-for="Exception"/> -->
-<!-- 			<tx:method name="update*" propagation="REQUIRED" read-only="false" rollback-for="Exception"/> -->
-<!-- 			<tx:method name="delete*" propagation="REQUIRED" read-only="false" rollback-for="Exception"/> -->
+			<tx:method name="save*" propagation="REQUIRES_NEW" read-only="false" rollback-for="Exception"/>
+			<tx:method name="update*" propagation="REQUIRES_NEW" read-only="false" rollback-for="Exception"/>
+			<tx:method name="delete*" propagation="REQUIRES_NEW" read-only="false" rollback-for="Exception"/>
 		</tx:attributes>
 	</tx:advice>
 

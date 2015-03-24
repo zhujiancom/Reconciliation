@@ -10,6 +10,8 @@ import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,7 @@ import com.rci.service.filter.FilterChain;
 @Component("PostAccountCalculator")
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class PostAccountCalculator implements InitializingBean{
+	private static final Log logger = LogFactory.getLog(PostAccountCalculator.class);
 	@Autowired
 	private Mapper beanMapper;
 	@Resource(name="DishService")
@@ -39,7 +42,6 @@ public class PostAccountCalculator implements InitializingBean{
 	
 	@Autowired
 	private List<CalculateFilter> filters;
-	@Resource(name="FilterChain")
 	private FilterChain chain;
 	
 	@Resource(name="AccountService")
@@ -85,7 +87,14 @@ public class PostAccountCalculator implements InitializingBean{
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		chain.addFilters(filters);
+		chain = new FilterChain();
+		int index = filters.size();
+		while(index > 0){
+			CalculateFilter filter = filters.get(index-1);
+			chain.addFilter(filter);
+			logger.debug("Filter instance -> "+filter);
+			index--;
+		}
 	}
 
 }

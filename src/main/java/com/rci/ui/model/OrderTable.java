@@ -9,8 +9,4 @@ public class OrderTable extends JTable {
 	 */
 	private static final long serialVersionUID = 4935140318205918006L;
 
-	public void setFirstRowSelected(){
-		
-	}
-	
 }

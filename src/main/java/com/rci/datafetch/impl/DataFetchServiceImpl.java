@@ -16,11 +16,13 @@ import com.rci.bean.DishTypeDTO;
 import com.rci.bean.OrderDTO;
 import com.rci.bean.OrderItemDTO;
 import com.rci.bean.PaymodeDTO;
+import com.rci.config.PropertyConstants;
 import com.rci.datafetch.IDataFetchService;
 import com.rci.datafetch.SQLGen;
 import com.rci.mapper.BeanRowMappers;
 import com.rci.mapper.ResultSetExtractorImpl;
 import com.rci.tools.DateUtil;
+import com.rci.tools.properties.PropertyUtils;
 
 @Service("DataFetchService")
 public class DataFetchServiceImpl implements IDataFetchService {
@@ -55,18 +57,24 @@ public class DataFetchServiceImpl implements IDataFetchService {
 	@Override
 	public List<DishTypeDTO> fetchDishType() {
 		List<DishTypeDTO> types = sqlServerJdbcTemplate.query(SQLGen.QUERY_DISH_TYPE, new BeanRowMappers<DishTypeDTO>(DishTypeDTO.class));
-		List<String> discountDishNos = sqlServerJdbcTemplate.query(SQLGen.QUERY_PROJECTDETAIL_DISHTYPE, new RowMapper<String>() {
-
-			@Override
-			public String mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return rs.getString(1);
-			}
-		});
+//		List<String> discountDishNos = sqlServerJdbcTemplate.query(SQLGen.QUERY_PROJECTDETAIL_DISHTYPE, new RowMapper<String>() {
+//
+//			@Override
+//			public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+//				return rs.getString(1);
+//			}
+//		});
+		String nodiscountType = (String) PropertyUtils.getProperties(PropertyConstants.NODISCOUNT_DISHTYPE);
 		for(DishTypeDTO type:types){
-			if(!discountDishNos.contains(type.getDtNo())){
-				type.setNodiscount("N");
+//			if(!discountDishNos.contains(type.getDtNo())){
+//				type.setNodiscount("N");
+//			}else{
+//				type.setNodiscount("Y");
+//			}
+			if(nodiscountType.equals(type.getDtNo().trim())){
+				type.setBeDiscount("N");
 			}else{
-				type.setNodiscount("Y");
+				type.setBeDiscount("Y");
 			}
 		}
 		return types;

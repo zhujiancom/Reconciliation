@@ -72,6 +72,8 @@ public class SchemeWrapper {
 		SchemeType stype = scheme.getType();
 		if(SchemeType.EIGHTDISCOUNT.equals(stype) || SchemeType.NODISCOUNT.equals(stype)){
 			name.append(scheme.getName()).append(totalAmount);
+		}else if(SchemeType.ONLINEPAY.equals(stype)){
+			name.append(scheme.getName()).append(totalAmount);
 		}else{
 			name.append(scheme.getName()).append("【").append(+this.count).append("】张");
 		}
@@ -87,10 +89,14 @@ public class SchemeWrapper {
 		this.totalAmount = totalAmount;
 	}
 
-	public void add(Integer amount){
-		this.count += amount;
+	public void increasement(){
+		this.count++;
 	}
 	
+	/**
+	 * 计算每笔订单各种支付方式所支付的总额
+	 * @return
+	 */
 	public BigDecimal calculatePostAmount(){
 		BigDecimal postAmount = new BigDecimal(0);
 		if(scheme == null){
@@ -98,21 +104,25 @@ public class SchemeWrapper {
 			return null;
 		}else{
 			SchemeType stype = scheme.getType();
-			if(stype.equals(SchemeType.VIRTUALPAY) || stype.equals(SchemeType.EIGHTDISCOUNT) || stype.equals(SchemeType.NODISCOUNT)){
+			if(stype.equals(SchemeType.ONLINEPAY) || stype.equals(SchemeType.EIGHTDISCOUNT) || stype.equals(SchemeType.NODISCOUNT)){
 				//1.如果是现金支付,饿了么，淘点点支付
 				postAmount = totalAmount;
+			}else if(stype.equals(SchemeType.CASHBACK)){
+				BigDecimal backPrice = scheme.getPrice();
+				if(totalAmount.compareTo(new BigDecimal(100)) >= 0){
+					BigDecimal actualAmount = totalAmount.subtract(backPrice);
+					BigDecimal rate = BigDecimal.ONE.subtract(DigitUtil.precentDown(scheme.getCommission(), new BigDecimal(100)));
+					postAmount = DigitUtil.mutiplyDown(actualAmount, rate);
+				}
 			}else{
 				BigDecimal rate = BigDecimal.ONE.subtract(DigitUtil.precentDown(scheme.getCommission(), new BigDecimal(100)));
-				postAmount = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(scheme.getPostPrice(), rate).add(scheme.getSpread()),new BigDecimal(count));
+				BigDecimal singlePrice = DigitUtil.mutiplyDown(scheme.getPostPrice(), rate);
+				if(scheme.getSpread() != null){
+					singlePrice = singlePrice.add(scheme.getSpread());
+				}
+				postAmount = DigitUtil.mutiplyDown(singlePrice,new BigDecimal(count));
 			}
 		}
 		return postAmount;
 	}
-	
-//	public static void main(String[] args){
-//		StringBuffer sb = new StringBuffer("");
-//		sb.append("a");
-//		System.out.println(sb.toString());
-//	}
-	
 }

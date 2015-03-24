@@ -20,7 +20,7 @@
 		<property name="mappingFiles" value="classpath*:/dozer/*Mapping.xml" />
 	</bean>
 	
-	<util:list id="filters" list-class="java.util.ArrayList" value-type="com.rci.service.filter.CalculateFilter">
+	<util:list id="filters" list-class="java.util.LinkedList" value-type="com.rci.service.filter.CalculateFilter">
 		<bean class="com.rci.service.filter.CashFilter"></bean>
 		<bean class="com.rci.service.filter.DPTGFilter"></bean>
 		<bean class="com.rci.service.filter.DPSHFilter"></bean>

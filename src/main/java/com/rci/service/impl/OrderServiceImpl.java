@@ -24,7 +24,6 @@ import com.rci.service.DataTransformFacade;
 import com.rci.service.IFetchMarkService;
 import com.rci.service.IOrderService;
 import com.rci.tools.DateUtil;
-import com.rci.tools.StringUtility;
 import com.rci.ui.vo.OrderItemVO;
 import com.rci.ui.vo.OrderVO;
 
@@ -55,9 +54,6 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 
 	@Override
 	public List<Order> queryOrdersByDay(String day) {
-		if(!StringUtility.isDateFormated(day)){
-			return null;
-		}
 		DetachedCriteria dc = DetachedCriteria.forClass(Order.class);
 		dc.add(Restrictions.eq("day", day));
 		List<Order> orders = baseDAO.queryListByCriteria(dc);
@@ -70,7 +66,7 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 		try{
 			DataFetchMark mark = markService.getMarkRecordByDay(day);
 			if(mark == null || !mark.isMarked()){
-				dataTransform.accquireOrderInfo(DateUtil.str2Date(day));
+				dataTransform.accquireOrderInfo(DateUtil.str2Date(day,"yyyyMMdd"));
 				markService.rwOrderMark(day);
 			}
 			List<Order> orders = queryOrdersByDay(day);

@@ -3,7 +3,6 @@ package com.rci.ui.swing;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -27,7 +26,7 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
-import com.rci.constants.PropertyConstants;
+import com.rci.config.PropertyConstants;
 import com.rci.tools.properties.PropertyUtils;
 import com.rci.ui.swing.handle.QueryListener;
 import com.rci.ui.swing.handle.SystemInitHandler;
@@ -121,14 +120,16 @@ public class MainFrame extends JFrame {
 //		JPanel dataPanel = new JPanel();
 		JSplitPane dataPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
 		containerPanel.add(dataPanel, BorderLayout.CENTER);
-		dataPanel.setDividerLocation(1150);
+		dataPanel.setDividerLocation(800);
 		dataPanel.setDividerSize(5);
 		mainScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
-		mainScrollPane.setMaximumSize(new Dimension(1000,800));
+//		mainScrollPane.setMaximumSize(new Dimension(400,600));
 		mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		mainTable = new JTable();
 		mainScrollPane.setViewportView(mainTable);
 		subScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
+//		subScrollPane.setMaximumSize(new Dimension(300,600));
+//		subScrollPane.setMinimumSize(new Dimension(300,600));
 		subScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		itemTable = new JTable();
 		subScrollPane.setViewportView(itemTable);

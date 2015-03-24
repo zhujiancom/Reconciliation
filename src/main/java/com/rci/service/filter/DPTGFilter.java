@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -13,6 +15,9 @@ import com.rci.bean.entity.Order;
 import com.rci.bean.scheme.PairKey;
 import com.rci.bean.scheme.SchemeWrapper;
 import com.rci.constants.enums.SchemeType;
+import com.rci.exceptions.ExceptionConstant.SERVICE;
+import com.rci.exceptions.ExceptionManage;
+import com.rci.tools.DigitUtil;
 
 /**
  * 大众点评
@@ -21,22 +26,21 @@ import com.rci.constants.enums.SchemeType;
  * 
  */
 @Component
+@Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class DPTGFilter extends AbstractFilter {
-
-	/* 标记该订单中是否有套餐 */
-//	private boolean suitFlag = false;
-
-//	private Map<SchemeType, Integer> chitMap;
-
+	private Map<SchemeType, Integer> chitMap = new HashMap<SchemeType,Integer>();
+	
 	@Override
 	public boolean support(Map<String, BigDecimal> paymodeMapping) {
 		return paymodeMapping.containsKey(DPTG_NO);
 	}
 
 	@Override
-	public void doFilter(Order order, List<OrderItemDTO> items,
+	public void generateScheme(Order order, List<OrderItemDTO> items,
 			FilterChain chain) {
 		if (support(order.getPaymodeMapping())) {
+			/* 标记该订单中是否有套餐 */
+			boolean suitFlag = false;
 			// 1. 有大众点评券
 			/* 不能使用代金券的菜品总额 。 即酒水和配料 */
 			BigDecimal nodiscountAmount = BigDecimal.ZERO;
@@ -58,8 +62,7 @@ public class DPTGFilter extends AbstractFilter {
 						if (count != null) {
 							count++;
 						} else {
-							count = 0;
-							count++;
+							count = 1;
 							chitMap.put(SchemeType.BIG_SUIT, count);
 						}
 					}
@@ -70,20 +73,22 @@ public class DPTGFilter extends AbstractFilter {
 						if (count != null) {
 							count++;
 						} else {
-							count = 0;
-							count++;
+							count = 1;
 							chitMap.put(SchemeType.LITTLE_SUIT, count);
 						}
 					}
 				}
 				String dishNo = item.getDishNo();
 				BigDecimal originPrice = item.getPrice();
+				BigDecimal count = item.getCount();
+				BigDecimal countBack = item.getCountback();
+				BigDecimal originTotalAmount = DigitUtil.mutiplyDown(originPrice, count.subtract(countBack));
 				if (!suitFlag && isNodiscount(dishNo)) {
-					// 3. 饮料酒水配菜除外
-					nodiscountAmount = nodiscountAmount.add(originPrice);
+					// 3. 饮料酒水除外
+					nodiscountAmount = nodiscountAmount.add(originTotalAmount);
 					continue;
 				}
-				bediscountAmount = bediscountAmount.add(originPrice);
+				bediscountAmount = bediscountAmount.add(originTotalAmount);
 				
 				/* 判断是否有单品折扣  */
 				BigDecimal rate = item.getDiscountRate();
@@ -103,7 +108,16 @@ public class DPTGFilter extends AbstractFilter {
 				//如果可打折金额小于代金券实际使用金额，则这单属于异常单
 				order.setUnusual(UNUSUAL);
 			}
-			schemes.putAll(createSchemes(chitAmount, DPTG_NO));
+			schemes.putAll(createSchemes(chitAmount, DPTG_NO,suitFlag));
+			//计算订余额
+			BigDecimal balance = chain.getBalance();
+			logger.debug("DPTGFilter - balance = "+balance);
+			if(balance.compareTo(chitAmount) < 0){
+				logger.error("余额计算错了了！");
+				ExceptionManage.throwServiceException(SERVICE.DATA_ERROR, "余额计算出错");
+			}
+			balance = balance.subtract(chitAmount);
+			chain.setBalance(balance);
 		}
 		chain.doFilter(order, items, chain);
 	}
@@ -111,5 +125,10 @@ public class DPTGFilter extends AbstractFilter {
 	@Override
 	public String getChit() {
 		return "大众点评团购";
+	}
+
+	@Override
+	protected Map<SchemeType, Integer> getChitMap() {
+		return chitMap;
 	}
 }

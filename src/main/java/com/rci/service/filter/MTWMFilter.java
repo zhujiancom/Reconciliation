@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -16,16 +18,16 @@ import com.rci.bean.entity.Scheme;
 import com.rci.bean.scheme.PairKey;
 import com.rci.bean.scheme.SchemeWrapper;
 import com.rci.constants.enums.SchemeType;
-import com.rci.exceptions.ExceptionConstant.SERVICE;
-import com.rci.exceptions.ExceptionManage;
 import com.rci.tools.DigitUtil;
 
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class CashFilter extends AbstractFilter {
+public class MTWMFilter extends AbstractFilter {
+	private static final Log logger = LogFactory.getLog(MTWMFilter.class);
+
 	@Override
 	public boolean support(Map<String, BigDecimal> paymodeMapping) {
-		return paymodeMapping.containsKey(CASH_NO);
+		return paymodeMapping.containsKey(MTWM_NO);
 	}
 
 	@Override
@@ -37,9 +39,7 @@ public class CashFilter extends AbstractFilter {
 				schemes = new HashMap<PairKey<SchemeType,String>,SchemeWrapper>();
 				order.setSchemes(schemes);
 			}
-			
-			BigDecimal cashAmount = order.getPaymodeMapping().get(CASH_NO);
-			BigDecimal originAmount = order.getOriginPrice();
+			BigDecimal onlineAmount = order.getPaymodeMapping().get(MTWM_NO);
 			BigDecimal actualAmount = BigDecimal.ZERO;
 			for(OrderItemDTO item:items){
 				BigDecimal singlePrice = item.getPrice();
@@ -53,47 +53,28 @@ public class CashFilter extends AbstractFilter {
 					order.setSingleDiscount(true);
 				}
 			}
-			SchemeWrapper wrapper = null;
-			if(actualAmount.compareTo(originAmount)<0){
-				//可享受8折优惠
-				if(cashAmount.compareTo(actualAmount) != 0){
-					//如果收银机显示现金收入和计算收入不相符时，报异常
-					order.setUnusual(UNUSUAL);
-					logger.debug("[--- CashFilter ---]:#8折优惠# 收银机显示金额："+cashAmount+" , 应该显示金额： "+actualAmount);
-				}
-				Scheme scheme = schemeService.getScheme(SchemeType.EIGHTDISCOUNT,CASH_NO);
-				wrapper = new SchemeWrapper(getChit(),scheme);
-				wrapper.setTotalAmount(actualAmount);
-				PairKey<SchemeType,String> key = new PairKey<SchemeType,String>(SchemeType.EIGHTDISCOUNT,CASH_NO);
-				schemes.put(key, wrapper);
+			if(actualAmount.compareTo(onlineAmount) != 0){
+				order.setUnusual(UNUSUAL);
+				logger.debug("[--- MTWMFilter ---]: 收银机显示金额："+onlineAmount+" , 应该显示金额： "+actualAmount);
 			}
-			if(actualAmount.compareTo(originAmount) > 0){
-				ExceptionManage.throwServiceException(SERVICE.DATA_ERROR, "数据错误");
-			}
-			if(actualAmount.compareTo(originAmount)==0){
-				//无折扣
-				if(cashAmount.compareTo(chain.getBalance()) != 0){
-					//如果收银机显示现金收入和计算收入不相符时，报异常
-					order.setUnusual(UNUSUAL);
-					logger.debug("[--- CashFilter ---]:#无折扣# 收银机显示金额："+cashAmount+" , 应该显示金额： "+actualAmount);
-				}
-				Scheme scheme = schemeService.getScheme(SchemeType.NODISCOUNT,CASH_NO);
-				wrapper = new SchemeWrapper(getChit(),scheme);
-				wrapper.setTotalAmount(chain.getBalance());
-				PairKey<SchemeType,String> key = new PairKey<SchemeType,String>(SchemeType.NODISCOUNT,CASH_NO);
-				schemes.put(key, wrapper);
-			}
+			Scheme scheme = new Scheme(SchemeType.ONLINEPAY,getChit());
+			SchemeWrapper wrapper = new SchemeWrapper(scheme);
+			wrapper.setTotalAmount(actualAmount);
+			PairKey<SchemeType,String> key = new PairKey<SchemeType,String>(SchemeType.ONLINEPAY,MTWM_NO);
+			schemes.put(key, wrapper);
 		}
 		chain.doFilter(order, items, chain);
 	}
 
 	@Override
 	public String getChit() {
-		return "现金";
+		return "美团外卖";
 	}
 
 	@Override
 	protected Map<SchemeType, Integer> getChitMap() {
+		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

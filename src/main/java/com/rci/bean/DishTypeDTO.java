@@ -10,7 +10,7 @@ public class DishTypeDTO {
 	/* 类型名称  */
 	private String dtName;
 	
-	private String nodiscount;
+	private String beDiscount;
 	
 	public String getDtNo() {
 		return dtNo;
@@ -30,11 +30,12 @@ public class DishTypeDTO {
 		this.dtName = dtName;
 	}
 
-	public String getNodiscount() {
-		return nodiscount;
+	public String getBeDiscount() {
+		return beDiscount;
 	}
 
-	public void setNodiscount(String nodiscount) {
-		this.nodiscount = nodiscount;
+	public void setBeDiscount(String beDiscount) {
+		this.beDiscount = beDiscount;
 	}
+
 }
