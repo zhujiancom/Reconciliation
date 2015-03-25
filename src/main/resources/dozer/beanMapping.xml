@@ -26,5 +26,9 @@ http://dozer.sourceforge.net/schema/beanmapping.xsd">
 			<a>originPrice</a>
 			<b>originAmount</b>
 		</field>
+		<field>
+			<a>realAmount</a>
+			<b>actualAmount</b>
+		</field>
 	</mapping>
 </mappings>

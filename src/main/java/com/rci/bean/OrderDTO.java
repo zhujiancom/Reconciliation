@@ -17,25 +17,16 @@ public class OrderDTO {
 	private Timestamp checkoutTime;
 	
 	/* 票据应收金额    */
-	@Deprecated
-	private BigDecimal receivableAmount;
 	private BigDecimal originAmount;
 	
 	/* 支付方式  */
 	private String paymode;  //现金或代金券
 	
-	/* 优惠活动  */
-	@Deprecated
-	private String project;  //8折优惠，无折扣
-	
-//	/* 临时折扣方案  */
-//	private BigDecimal tempDiscountRate; //解决收银员自己手动输入打折率
-	
 	/* 是否有临时折扣方案  */
 	private Boolean isTempDiscount;
 	
 	/* 实收金额   */
-	private BigDecimal actualAmount;
+	private BigDecimal realAmount;
 
 	public String getOrderNo() {
 		return orderNo;
@@ -73,15 +64,6 @@ public class OrderDTO {
 		this.checkoutTime = checkoutTime;
 	}
 
-	public BigDecimal getReceivableAmount() {
-		return receivableAmount;
-	}
-
-	@ColumnName("originamount")
-	public void setReceivableAmount(BigDecimal receivableAmount) {
-		this.receivableAmount = receivableAmount;
-	}
-	
 	public BigDecimal getOriginAmount() {
 		return originAmount;
 	}
@@ -100,15 +82,6 @@ public class OrderDTO {
 		this.paymode = paymode;
 	}
 
-	public String getProject() {
-		return project;
-	}
-
-//	@ColumnName("project")
-	public void setProject(String project) {
-		this.project = project;
-	}
-
 	public Boolean getIsTempDiscount() {
 		return isTempDiscount;
 	}
@@ -117,12 +90,14 @@ public class OrderDTO {
 		this.isTempDiscount = isTempDiscount;
 	}
 
-	public BigDecimal getActualAmount() {
-		return actualAmount;
+	public BigDecimal getRealAmount() {
+		return realAmount;
 	}
 
 	@ColumnName("realamount")
-	public void setActualAmount(BigDecimal actualAmount) {
-		this.actualAmount = actualAmount;
+	public void setRealAmount(BigDecimal realAmount) {
+		this.realAmount = realAmount;
 	}
+	
+	
 }

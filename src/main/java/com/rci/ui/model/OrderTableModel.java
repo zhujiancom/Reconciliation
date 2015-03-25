@@ -25,7 +25,11 @@ public class OrderTableModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-		return 13;
+		return 15;
+	}
+	
+	public OrderVO getOrderAt(int rowIndex){
+		return orders.get(rowIndex);
 	}
 
 	@Override
@@ -41,22 +45,26 @@ public class OrderTableModel extends AbstractTableModel {
 		case 3:
 			return order.getActualAmount();
 		case 4:
-			return order.getSchemeName();
+			return order.getNodiscountAmount();
 		case 5:
-			return DateUtil.time2Str(order.getCheckoutTime());
+			return order.getSchemeName();
 		case 6:
-			return order.getPosAmount();
+			return order.getSingleDiscount();
 		case 7:
-			return order.getMtAmount();
+			return DateUtil.time2Str(order.getCheckoutTime());
 		case 8:
-			return order.getDptgAmount();
+			return order.getPosAmount();
 		case 9:
-			return order.getDpshAmount();
+			return order.getMtAmount();
 		case 10:
-			return order.getEleAmount();
+			return order.getDptgAmount();
 		case 11:
-			return order.getTddAmount();
+			return order.getDpshAmount();
 		case 12:
+			return order.getEleAmount();
+		case 13:
+			return order.getTddAmount();
+		case 14:
 			return order.getTotalAmount();
 		default:
 			break;

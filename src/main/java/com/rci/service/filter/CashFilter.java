@@ -20,6 +20,11 @@ import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.exceptions.ExceptionManage;
 import com.rci.tools.DigitUtil;
 
+/**
+ * pos机现金
+ * @author zj
+ *
+ */
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class CashFilter extends AbstractFilter {
@@ -93,7 +98,7 @@ public class CashFilter extends AbstractFilter {
 	}
 
 	@Override
-	protected Map<SchemeType, Integer> getChitMap() {
+	protected Map<SchemeType, Integer> getSuitMap() {
 		return null;
 	}
 }

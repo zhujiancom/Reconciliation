@@ -59,7 +59,7 @@ public class PostAccountCalculator implements InitializingBean{
 				Entry<PairKey<SchemeType,String>,SchemeWrapper> entry = it.next();
 				PairKey<SchemeType,String> key = entry.getKey();
 				SchemeWrapper wrapper = entry.getValue();
-				schemeName.append(wrapper.getName()).append("-");
+				schemeName.append("-").append(wrapper.getName());
 				String paymodeno = key.getValue();
 				Account account = accService.getAccountByNo(paymodeno);
 				PostOrderAccount poa = null;

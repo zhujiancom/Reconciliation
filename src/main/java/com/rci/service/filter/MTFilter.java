@@ -22,7 +22,7 @@ import com.rci.exceptions.ExceptionConstant.SERVICE;
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class MTFilter extends AbstractFilter {
 	
-	private Map<SchemeType, Integer> chitMap = new HashMap<SchemeType,Integer>();
+	private Map<SchemeType, Integer> suitMap;
 	@Override
 	public boolean support(Map<String, BigDecimal> paymodeMapping) {
 		return paymodeMapping.containsKey(MT_NO);
@@ -32,6 +32,7 @@ public class MTFilter extends AbstractFilter {
 	public void generateScheme(Order order, List<OrderItemDTO> items,
 			FilterChain chain) {
 		if (support(order.getPaymodeMapping())) {
+			suitMap = new HashMap<SchemeType,Integer>();
 			/* 标记该订单中是否有套餐 */
 			boolean suitFlag = false;
 			/* 不能使用代金券的菜品总额 。 即酒水和配料 */
@@ -50,24 +51,24 @@ public class MTFilter extends AbstractFilter {
 					// 如果是大份套餐，记录套餐数量
 					if (item.getPrice().intValue() == OLD_BIGSUIT_PRICE
 							|| item.getPrice().intValue() == NEW_BIGSUIT_PRICE) {
-						Integer count = chitMap.get(SchemeType.BIG_SUIT);
+						Integer count = suitMap.get(SchemeType.BIG_SUIT);
 						if (count != null) {
 							count++;
 						} else {
 							count = 1;
-							chitMap.put(SchemeType.BIG_SUIT, count);
 						}
+						suitMap.put(SchemeType.BIG_SUIT, count);
 					}
 					// 如果是小份套餐，记录套餐数量
 					if (item.getPrice().intValue() == OLD_SMALLSUIT_PRICE
 							|| item.getPrice().intValue() == NEW_SMALLSUIT_PRICE) {
-						Integer count = chitMap.get(SchemeType.LITTLE_SUIT);
+						Integer count = suitMap.get(SchemeType.LITTLE_SUIT);
 						if (count != null) {
 							count++;
 						} else {
 							count = 1;
-							chitMap.put(SchemeType.LITTLE_SUIT, count);
 						}
+						suitMap.put(SchemeType.LITTLE_SUIT, count);
 					}
 				}
 				String dishNo = item.getDishNo();
@@ -118,8 +119,8 @@ public class MTFilter extends AbstractFilter {
 	}
 
 	@Override
-	protected Map<SchemeType, Integer> getChitMap() {
-		return chitMap;
+	protected Map<SchemeType, Integer> getSuitMap() {
+		return suitMap;
 	}
 
 }

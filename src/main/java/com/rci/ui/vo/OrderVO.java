@@ -31,6 +31,12 @@ public class OrderVO {
 	private BigDecimal eleAmount;
 	
 	private BigDecimal totalAmount;
+	
+	private Integer unusual;
+	
+	private BigDecimal nodiscountAmount;
+	
+	private Boolean singleDiscount;
 
 	public Long getOrderId() {
 		return orderId;
@@ -149,5 +155,29 @@ public class OrderVO {
 //			this.totalAmount = this.totalAmount.add(this.mtAmount);
 //		}
 		this.totalAmount = totalAmount;
+	}
+
+	public Integer getUnusual() {
+		return unusual;
+	}
+
+	public void setUnusual(Integer unusual) {
+		this.unusual = unusual;
+	}
+
+	public BigDecimal getNodiscountAmount() {
+		return nodiscountAmount;
+	}
+
+	public void setNodiscountAmount(BigDecimal nodiscountAmount) {
+		this.nodiscountAmount = nodiscountAmount;
+	}
+
+	public Boolean getSingleDiscount() {
+		return singleDiscount;
+	}
+
+	public void setSingleDiscount(Boolean singleDiscount) {
+		this.singleDiscount = singleDiscount;
 	}
 }

@@ -26,6 +26,7 @@ import com.rci.tools.DateUtil;
 import com.rci.tools.SpringUtils;
 import com.rci.tools.StringUtility;
 import com.rci.ui.model.OrderItemTableModel;
+import com.rci.ui.model.OrderTable;
 import com.rci.ui.model.OrderTableModel;
 import com.rci.ui.vo.OrderItemVO;
 import com.rci.ui.vo.OrderVO;
@@ -128,34 +129,11 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 		this.orders = ordervos;
 		OrderTableModel otm = new OrderTableModel(orders);
 		mainTable.setModel(otm);
-		TableColumnModel cm = mainTable.getColumnModel();
-		cm.getColumn(0).setHeaderValue("序号");
-		cm.getColumn(0).setPreferredWidth(50);
-		cm.getColumn(1).setHeaderValue("付款编号");
-		cm.getColumn(1).setPreferredWidth(105);
-		cm.getColumn(2).setHeaderValue("原价");
-		cm.getColumn(2).setPreferredWidth(75);
-		cm.getColumn(3).setHeaderValue("实收金额");
-		cm.getColumn(3).setPreferredWidth(75);
-		cm.getColumn(4).setHeaderValue("折扣方案");
-		cm.getColumn(4).setPreferredWidth(115);
-		cm.getColumn(5).setHeaderValue("结账时间");
-		cm.getColumn(5).setPreferredWidth(140);
-		cm.getColumn(6).setHeaderValue("pos机入账");
-		cm.getColumn(6).setPreferredWidth(70);
-		cm.getColumn(7).setHeaderValue("美团入账");
-		cm.getColumn(7).setPreferredWidth(70);
-		cm.getColumn(8).setHeaderValue("大众点评团购");
-		cm.getColumn(8).setPreferredWidth(105);
-		cm.getColumn(9).setHeaderValue("大众点评闪惠");
-		cm.getColumn(9).setPreferredWidth(105);
-		cm.getColumn(10).setHeaderValue("饿了么入账");
-		cm.getColumn(10).setPreferredWidth(75);
-		cm.getColumn(11).setHeaderValue("淘点点入账");
-		cm.getColumn(11).setPreferredWidth(75);
-		cm.getColumn(12).setHeaderValue("总金额");
-		cm.getColumn(12).setPreferredWidth(75);
-		mainTable.setColumnModel(cm);
+		OrderTable ot = (OrderTable) mainTable; 
+		ot.markRed();
+		ot.setHeaderLabel();
+		OrderVO order = otm.getOrderAt(0);
+		loadItemData(order.getPayNo());
 		mainTable.setRowHeight(20);
 		mainTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	}
@@ -265,5 +243,4 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	public void setTddValue(JLabel tddValue) {
 		this.tddValue = tddValue;
 	}
-
 }

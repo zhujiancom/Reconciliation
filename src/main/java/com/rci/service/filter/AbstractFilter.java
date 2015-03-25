@@ -80,8 +80,8 @@ public abstract class AbstractFilter implements CalculateFilter {
 		BigDecimal littleSuitAmount = BigDecimal.ZERO;
 		// 1.如果有套餐
 		if (suitFlag) {
-			Integer big_count = getChitMap().get(SchemeType.BIG_SUIT);
-			Integer little_count = getChitMap().get(SchemeType.LITTLE_SUIT);
+			Integer big_count = getSuitMap().get(SchemeType.BIG_SUIT);
+			Integer little_count = getSuitMap().get(SchemeType.LITTLE_SUIT);
 			if (big_count != null && big_count != 0) {
 				// 1.1 如果有大份套餐
 				Scheme scheme = schemeService.getScheme(SchemeType.BIG_SUIT,paymodeno);
@@ -165,5 +165,5 @@ public abstract class AbstractFilter implements CalculateFilter {
 		loopSchemes(amount,schemes,paymodeno);
 	}
 	
-	protected abstract Map<SchemeType, Integer> getChitMap();
+	protected abstract Map<SchemeType, Integer> getSuitMap();
 }

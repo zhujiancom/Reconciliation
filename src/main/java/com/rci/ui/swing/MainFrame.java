@@ -28,6 +28,7 @@ import javax.swing.UIManager;
 
 import com.rci.config.PropertyConstants;
 import com.rci.tools.properties.PropertyUtils;
+import com.rci.ui.model.OrderTable;
 import com.rci.ui.swing.handle.QueryListener;
 import com.rci.ui.swing.handle.SystemInitHandler;
 
@@ -125,7 +126,7 @@ public class MainFrame extends JFrame {
 		mainScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
 //		mainScrollPane.setMaximumSize(new Dimension(400,600));
 		mainScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		mainTable = new JTable();
+		mainTable = new OrderTable();
 		mainScrollPane.setViewportView(mainTable);
 		subScrollPane = new JScrollPane(); //将表格加入到滚动条组件中
 //		subScrollPane.setMaximumSize(new Dimension(300,600));

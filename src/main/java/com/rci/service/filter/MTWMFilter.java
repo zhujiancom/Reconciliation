@@ -72,8 +72,7 @@ public class MTWMFilter extends AbstractFilter {
 	}
 
 	@Override
-	protected Map<SchemeType, Integer> getChitMap() {
-		// TODO Auto-generated method stub
+	protected Map<SchemeType, Integer> getSuitMap() {
 		return null;
 	}
 

@@ -69,7 +69,7 @@ public class TDDFilter extends AbstractFilter {
 	}
 
 	@Override
-	protected Map<SchemeType, Integer> getChitMap() {
+	protected Map<SchemeType, Integer> getSuitMap() {
 		return null;
 	}
 }
