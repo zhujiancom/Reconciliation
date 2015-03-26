@@ -15,6 +15,7 @@ import com.rci.bean.entity.Order;
 import com.rci.bean.entity.Scheme;
 import com.rci.bean.scheme.PairKey;
 import com.rci.bean.scheme.SchemeWrapper;
+import com.rci.constants.BusinessConstant;
 import com.rci.constants.enums.SchemeType;
 import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.exceptions.ExceptionManage;
@@ -30,20 +31,20 @@ import com.rci.tools.DigitUtil;
 public class CashFilter extends AbstractFilter {
 	@Override
 	public boolean support(Map<String, BigDecimal> paymodeMapping) {
-		return paymodeMapping.containsKey(CASH_NO);
+		return paymodeMapping.containsKey(BusinessConstant.CASH_NO);
 	}
 
 	@Override
 	public void generateScheme(Order order, List<OrderItemDTO> items,
 			FilterChain chain) {
-		if(support(order.getPaymodeMapping())){
+//		if(support(order.getPaymodeMapping())){
 			Map<PairKey<SchemeType,String>,SchemeWrapper> schemes = order.getSchemes();
 			if (CollectionUtils.isEmpty(schemes)) {
 				schemes = new HashMap<PairKey<SchemeType,String>,SchemeWrapper>();
 				order.setSchemes(schemes);
 			}
 			
-			BigDecimal cashAmount = order.getPaymodeMapping().get(CASH_NO);
+			BigDecimal cashAmount = order.getPaymodeMapping().get(BusinessConstant.CASH_NO);
 			BigDecimal originAmount = order.getOriginPrice();
 			BigDecimal actualAmount = BigDecimal.ZERO;
 			for(OrderItemDTO item:items){
@@ -52,12 +53,14 @@ public class CashFilter extends AbstractFilter {
 				BigDecimal countback = item.getCountback();
 				BigDecimal ratepercent = item.getDiscountRate();
 				BigDecimal rate = DigitUtil.precentDown(ratepercent, new BigDecimal(100));
-				BigDecimal price = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(singlePrice, count.subtract(countback)),rate).setScale(0, BigDecimal.ROUND_CEILING);
+				BigDecimal price = DigitUtil.mutiplyDown(DigitUtil.mutiplyDown(singlePrice, count.subtract(countback)),rate);
 				actualAmount = actualAmount.add(price);
 				if(isSingleDiscount(ratepercent) && (order.getSingleDiscount() == null || !order.getSingleDiscount())){
 					order.setSingleDiscount(true);
 				}
 			}
+			//整单结算 向上取整
+			actualAmount = actualAmount.setScale(0, BigDecimal.ROUND_CEILING);
 			SchemeWrapper wrapper = null;
 			if(actualAmount.compareTo(originAmount)<0){
 				//可享受8折优惠
@@ -66,10 +69,10 @@ public class CashFilter extends AbstractFilter {
 					order.setUnusual(UNUSUAL);
 					logger.debug("[--- CashFilter ---]:#8折优惠# 收银机显示金额："+cashAmount+" , 应该显示金额： "+actualAmount);
 				}
-				Scheme scheme = schemeService.getScheme(SchemeType.EIGHTDISCOUNT,CASH_NO);
+				Scheme scheme = schemeService.getScheme(SchemeType.EIGHTDISCOUNT,BusinessConstant.CASH_NO);
 				wrapper = new SchemeWrapper(getChit(),scheme);
 				wrapper.setTotalAmount(actualAmount);
-				PairKey<SchemeType,String> key = new PairKey<SchemeType,String>(SchemeType.EIGHTDISCOUNT,CASH_NO);
+				PairKey<SchemeType,String> key = new PairKey<SchemeType,String>(SchemeType.EIGHTDISCOUNT,BusinessConstant.CASH_NO);
 				schemes.put(key, wrapper);
 			}
 			if(actualAmount.compareTo(originAmount) > 0){
@@ -82,14 +85,14 @@ public class CashFilter extends AbstractFilter {
 					order.setUnusual(UNUSUAL);
 					logger.debug("[--- CashFilter ---]:#无折扣# 收银机显示金额："+cashAmount+" , 应该显示金额： "+actualAmount);
 				}
-				Scheme scheme = schemeService.getScheme(SchemeType.NODISCOUNT,CASH_NO);
+				Scheme scheme = schemeService.getScheme(SchemeType.NODISCOUNT,BusinessConstant.CASH_NO);
 				wrapper = new SchemeWrapper(getChit(),scheme);
-				wrapper.setTotalAmount(chain.getBalance());
-				PairKey<SchemeType,String> key = new PairKey<SchemeType,String>(SchemeType.NODISCOUNT,CASH_NO);
+				wrapper.setTotalAmount(cashAmount);
+				PairKey<SchemeType,String> key = new PairKey<SchemeType,String>(SchemeType.NODISCOUNT,BusinessConstant.CASH_NO);
 				schemes.put(key, wrapper);
 			}
-		}
-		chain.doFilter(order, items, chain);
+//		}
+//		chain.doFilter(order, items, chain);
 	}
 
 	@Override

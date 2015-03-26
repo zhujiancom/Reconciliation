@@ -32,12 +32,14 @@ public class OrderVO {
 	
 	private BigDecimal totalAmount;
 	
+	private BigDecimal freeAmount;
+	
 	private Integer unusual;
 	
 	private BigDecimal nodiscountAmount;
 	
 	private Boolean singleDiscount;
-
+	
 	public Long getOrderId() {
 		return orderId;
 	}
@@ -155,6 +157,14 @@ public class OrderVO {
 //			this.totalAmount = this.totalAmount.add(this.mtAmount);
 //		}
 		this.totalAmount = totalAmount;
+	}
+
+	public BigDecimal getFreeAmount() {
+		return freeAmount;
+	}
+
+	public void setFreeAmount(BigDecimal freeAmount) {
+		this.freeAmount = freeAmount;
 	}
 
 	public Integer getUnusual() {

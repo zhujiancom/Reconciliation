@@ -27,6 +27,9 @@
 		<bean class="com.rci.service.filter.MTFilter"></bean>
 		<bean class="com.rci.service.filter.ELEFilter"></bean>
 		<bean class="com.rci.service.filter.TDDFilter"></bean>
+		<bean class="com.rci.service.filter.LSFilter"></bean>
+		<bean class="com.rci.service.filter.MTWMFilter"></bean>
+		<bean class="com.rci.service.filter.FreeFilter"></bean>
 	</util:list>
 	
 	<bean id="springcontext" class="com.rci.tools.SpringUtils"></bean>

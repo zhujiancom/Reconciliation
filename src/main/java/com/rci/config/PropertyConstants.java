@@ -38,11 +38,14 @@ public class PropertyConstants{
 	public static final String TDD = "paymode.num.tdd";
 	public static final String MTWM = "paymode.num.mtwm";
 	public static final String LS = "paymode.num.ls";
+	public static final String FREE = "paymode.num.free";
 	
-	public static final String BIGSUIT_1 = "big.suit.one";
-	public static final String BIGSUIT_2 = "big.suit.two";
-	public static final String SMALLSUIT_1 = "small.suit.one";
-	public static final String SMALLSUIT_2 = "small.suit.two";
+	public static final String BIGSUIT_A="big.suit.a";
+	public static final String BIGSUIT_B="big.suit.a";
+	public static final String SMALLSUIT="small.suit";
+	public static final String SUITA="suit.a";
+	public static final String SUITB="suit.b";
+	public static final String SUITC="suit.c";
 	
 	public static final String NODISCOUNT_DISHTYPE = "nodiscount.dishtype.no";
 }

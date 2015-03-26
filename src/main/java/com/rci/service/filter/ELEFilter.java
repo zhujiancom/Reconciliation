@@ -17,6 +17,7 @@ import com.rci.bean.entity.Order;
 import com.rci.bean.entity.Scheme;
 import com.rci.bean.scheme.PairKey;
 import com.rci.bean.scheme.SchemeWrapper;
+import com.rci.constants.BusinessConstant;
 import com.rci.constants.enums.SchemeType;
 import com.rci.tools.DigitUtil;
 
@@ -27,19 +28,19 @@ public class ELEFilter extends AbstractFilter {
 
 	@Override
 	public boolean support(Map<String, BigDecimal> paymodeMapping) {
-		return paymodeMapping.containsKey(ELE_NO);
+		return paymodeMapping.containsKey(BusinessConstant.ELE_NO);
 	}
 
 	@Override
 	public void generateScheme(Order order, List<OrderItemDTO> items,
 			FilterChain chain) {
-		if(support(order.getPaymodeMapping())){
+//		if(support(order.getPaymodeMapping())){
 			Map<PairKey<SchemeType,String>,SchemeWrapper> schemes = order.getSchemes();
 			if (CollectionUtils.isEmpty(schemes)) {
 				schemes = new HashMap<PairKey<SchemeType,String>,SchemeWrapper>();
 				order.setSchemes(schemes);
 			}
-			BigDecimal onlineAmount = order.getPaymodeMapping().get(ELE_NO);
+			BigDecimal onlineAmount = order.getPaymodeMapping().get(BusinessConstant.ELE_NO);
 			BigDecimal actualAmount = BigDecimal.ZERO;
 			for(OrderItemDTO item:items){
 				BigDecimal singlePrice = item.getPrice();
@@ -60,10 +61,10 @@ public class ELEFilter extends AbstractFilter {
 			Scheme scheme = new Scheme(SchemeType.ONLINEPAY,getChit());
 			SchemeWrapper wrapper = new SchemeWrapper(scheme);
 			wrapper.setTotalAmount(actualAmount);
-			PairKey<SchemeType,String> key = new PairKey<SchemeType,String>(SchemeType.ONLINEPAY,ELE_NO);
+			PairKey<SchemeType,String> key = new PairKey<SchemeType,String>(SchemeType.ONLINEPAY,BusinessConstant.ELE_NO);
 			schemes.put(key, wrapper);
-		}
-		chain.doFilter(order, items, chain);
+//		}
+//		chain.doFilter(order, items, chain);
 	}
 
 	@Override

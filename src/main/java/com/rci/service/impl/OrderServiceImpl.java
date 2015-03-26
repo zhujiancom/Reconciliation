@@ -55,7 +55,7 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 	@Override
 	public List<Order> queryOrdersByDay(String day) {
 		DetachedCriteria dc = DetachedCriteria.forClass(Order.class);
-		dc.add(Restrictions.eq("day", day));
+		dc.add(Restrictions.eq("day", day)).addOrder(org.hibernate.criterion.Order.asc("checkoutTime"));
 		List<Order> orders = baseDAO.queryListByCriteria(dc);
 		return orders;
 	}
@@ -96,6 +96,9 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 							vo.setTddAmount(postAmount);
 						}
 						totalAmount = totalAmount.add(postAmount);
+					}
+					if(vo.getFreeAmount() != null){
+						totalAmount = totalAmount.subtract(vo.getFreeAmount());	
 					}
 					vo.setSchemeName(order.getSchemeName());
 					vo.setTotalAmount(totalAmount);

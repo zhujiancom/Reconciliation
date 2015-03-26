@@ -17,9 +17,15 @@ import com.rci.bean.entity.Order;
 import com.rci.bean.entity.Scheme;
 import com.rci.bean.scheme.PairKey;
 import com.rci.bean.scheme.SchemeWrapper;
+import com.rci.constants.BusinessConstant;
 import com.rci.constants.enums.SchemeType;
 import com.rci.tools.DigitUtil;
 
+/**
+ * 美团外卖
+ * @author zj
+ *
+ */
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class MTWMFilter extends AbstractFilter {
@@ -27,19 +33,19 @@ public class MTWMFilter extends AbstractFilter {
 
 	@Override
 	public boolean support(Map<String, BigDecimal> paymodeMapping) {
-		return paymodeMapping.containsKey(MTWM_NO);
+		return paymodeMapping.containsKey(BusinessConstant.MTWM_NO);
 	}
 
 	@Override
 	public void generateScheme(Order order, List<OrderItemDTO> items,
 			FilterChain chain) {
-		if(support(order.getPaymodeMapping())){
+//		if(support(order.getPaymodeMapping())){
 			Map<PairKey<SchemeType,String>,SchemeWrapper> schemes = order.getSchemes();
 			if (CollectionUtils.isEmpty(schemes)) {
 				schemes = new HashMap<PairKey<SchemeType,String>,SchemeWrapper>();
 				order.setSchemes(schemes);
 			}
-			BigDecimal onlineAmount = order.getPaymodeMapping().get(MTWM_NO);
+			BigDecimal onlineAmount = order.getPaymodeMapping().get(BusinessConstant.MTWM_NO);
 			BigDecimal actualAmount = BigDecimal.ZERO;
 			for(OrderItemDTO item:items){
 				BigDecimal singlePrice = item.getPrice();
@@ -60,10 +66,10 @@ public class MTWMFilter extends AbstractFilter {
 			Scheme scheme = new Scheme(SchemeType.ONLINEPAY,getChit());
 			SchemeWrapper wrapper = new SchemeWrapper(scheme);
 			wrapper.setTotalAmount(actualAmount);
-			PairKey<SchemeType,String> key = new PairKey<SchemeType,String>(SchemeType.ONLINEPAY,MTWM_NO);
+			PairKey<SchemeType,String> key = new PairKey<SchemeType,String>(SchemeType.ONLINEPAY,BusinessConstant.MTWM_NO);
 			schemes.put(key, wrapper);
-		}
-		chain.doFilter(order, items, chain);
+//		}
+//		chain.doFilter(order, items, chain);
 	}
 
 	@Override

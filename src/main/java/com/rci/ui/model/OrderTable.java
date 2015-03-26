@@ -2,6 +2,7 @@ package com.rci.ui.model;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.math.BigDecimal;
 
 import javax.swing.JTable;
 import javax.swing.UIManager;
@@ -24,6 +25,8 @@ public class OrderTable extends JTable {
 			TableColumn tc = tcm.getColumn(i);
 			tc.setCellRenderer(new RowMarkReadRenderer());
 		}
+		TableColumn tc = tcm.getColumn(tcm.getColumnCount()-1);
+		tc.setCellRenderer(new FeelOrderMarkRenderer());
 	}
 	
 	public void setHeaderLabel(){
@@ -39,9 +42,9 @@ public class OrderTable extends JTable {
 		cm.getColumn(4).setHeaderValue("不可打折金额");
 		cm.getColumn(4).setPreferredWidth(75);
 		cm.getColumn(5).setHeaderValue("折扣方案");
-		cm.getColumn(5).setPreferredWidth(135);
+		cm.getColumn(5).setPreferredWidth(175);
 		cm.getColumn(6).setHeaderValue("有临时折扣方案");
-		cm.getColumn(6).setPreferredWidth(75);
+		cm.getColumn(6).setPreferredWidth(45);
 		cm.getColumn(7).setHeaderValue("结账时间");
 		cm.getColumn(7).setPreferredWidth(140);
 		cm.getColumn(8).setHeaderValue("pos机入账");
@@ -56,8 +59,10 @@ public class OrderTable extends JTable {
 		cm.getColumn(12).setPreferredWidth(75);
 		cm.getColumn(13).setHeaderValue("淘点点入账");
 		cm.getColumn(13).setPreferredWidth(75);
-		cm.getColumn(14).setHeaderValue("总金额");
+		cm.getColumn(14).setHeaderValue("免单金额");
 		cm.getColumn(14).setPreferredWidth(75);
+		cm.getColumn(15).setHeaderValue("总金额");
+		cm.getColumn(15).setPreferredWidth(75);
 	}
 	
 	private class RowMarkReadRenderer extends DefaultTableCellRenderer{
@@ -86,6 +91,30 @@ public class OrderTable extends JTable {
 			}else{
 				table.setSelectionBackground(UIManager.getColor("Table.selectionBackground"));
 				table.setSelectionForeground(UIManager.getColor("Table.selectionForeground"));
+			}
+			return super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
+					row, column);
+		}
+		
+	}
+	
+	private class FeelOrderMarkRenderer extends DefaultTableCellRenderer{
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 9016998600727653300L;
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column) {
+			OrderTableModel tm = (OrderTableModel) table.getModel();
+			OrderVO order = tm.getOrderAt(row);
+			if(order.getTotalAmount().compareTo(BigDecimal.ZERO) == 0){
+				setBackground(Color.YELLOW);
+			}else{
+				setBackground(Color.WHITE);
 			}
 			return super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
 					row, column);

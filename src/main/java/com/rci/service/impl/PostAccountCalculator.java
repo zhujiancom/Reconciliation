@@ -48,6 +48,7 @@ public class PostAccountCalculator implements InitializingBean{
 	private IAccountService accService;
 	
 	public Order calculate(Order order,List<OrderItemDTO> itemDTOs) {
+		chain.setBalance(order.getOriginPrice());
 		chain.doFilter(order, itemDTOs, chain);
 		chain.reset();
 		StringBuffer schemeName = new StringBuffer();

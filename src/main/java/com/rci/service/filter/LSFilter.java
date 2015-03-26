@@ -14,6 +14,7 @@ import com.rci.bean.OrderItemDTO;
 import com.rci.bean.entity.Order;
 import com.rci.bean.scheme.PairKey;
 import com.rci.bean.scheme.SchemeWrapper;
+import com.rci.constants.BusinessConstant;
 import com.rci.constants.enums.SchemeType;
 import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.exceptions.ExceptionManage;
@@ -21,7 +22,7 @@ import com.rci.tools.DigitUtil;
 
 /**
  * 
- * 
+ * 拉手网
  * @author zj
  * 
  */
@@ -32,13 +33,13 @@ public class LSFilter extends AbstractFilter {
 	
 	@Override
 	public boolean support(Map<String, BigDecimal> paymodeMapping) {
-		return paymodeMapping.containsKey(LS_NO);
+		return paymodeMapping.containsKey(BusinessConstant.LS_NO);
 	}
 
 	@Override
 	public void generateScheme(Order order, List<OrderItemDTO> items,
 			FilterChain chain) {
-		if (support(order.getPaymodeMapping())) {
+//		if (support(order.getPaymodeMapping())) {
 			suitMap = new HashMap<SchemeType,Integer>();
 			/* 标记该订单中是否有套餐 */
 			boolean suitFlag = false;
@@ -48,6 +49,7 @@ public class LSFilter extends AbstractFilter {
 			/* 正常菜品，条件满足使用代金券的总金额 */
 			BigDecimal bediscountAmount = BigDecimal.ZERO;
 			for (OrderItemDTO item : items) {
+				String dishNo = item.getDishNo();
 				if ("Y".equals(item.getSuitFlag())) {
 					// 2.如果是套餐，则过滤
 					continue;
@@ -56,30 +58,15 @@ public class LSFilter extends AbstractFilter {
 					if (!suitFlag) {
 						suitFlag = true;
 					}
-					// 如果是大份套餐，记录套餐数量
-					if (item.getPrice().intValue() == OLD_BIGSUIT_PRICE
-							|| item.getPrice().intValue() == NEW_BIGSUIT_PRICE) {
-						Integer count = suitMap.get(SchemeType.BIG_SUIT);
-						if (count != null) {
-							count++;
-						} else {
-							count = 1;
-						}
-						suitMap.put(SchemeType.BIG_SUIT, count);
+					SchemeType type = SchemeType.getType(dishNo);
+					Integer count = suitMap.get(type);
+					if (count != null) {
+						count++;
+					} else {
+						count = 1;
 					}
-					// 如果是小份套餐，记录套餐数量
-					if (item.getPrice().intValue() == OLD_SMALLSUIT_PRICE
-							|| item.getPrice().intValue() == NEW_SMALLSUIT_PRICE) {
-						Integer count = suitMap.get(SchemeType.LITTLE_SUIT);
-						if (count != null) {
-							count++;
-						} else {
-							count = 1;
-						}
-						suitMap.put(SchemeType.LITTLE_SUIT, count);
-					}
+					suitMap.put(type, count);
 				}
-				String dishNo = item.getDishNo();
 				BigDecimal originPrice = item.getPrice();
 				BigDecimal count = item.getCount();
 				BigDecimal countBack = item.getCountback();
@@ -104,12 +91,12 @@ public class LSFilter extends AbstractFilter {
 				schemes = new HashMap<PairKey<SchemeType,String>,SchemeWrapper>();
 				order.setSchemes(schemes);
 			}
-			BigDecimal chitAmount = order.getPaymodeMapping().get(LS_NO);
+			BigDecimal chitAmount = order.getPaymodeMapping().get(BusinessConstant.LS_NO);
 			if(bediscountAmount.compareTo(chitAmount) < 0){
 				//如果可打折金额小于代金券实际使用金额，则这单属于异常单
 				order.setUnusual(UNUSUAL);
 			}
-			schemes.putAll(createSchemes(chitAmount, LS_NO,suitFlag));
+			schemes.putAll(createSchemes(chitAmount, BusinessConstant.LS_NO,suitFlag));
 			//计算订余额
 			BigDecimal balance = chain.getBalance();
 			logger.debug("LSFilter - balance = "+balance);
@@ -119,8 +106,8 @@ public class LSFilter extends AbstractFilter {
 			}
 			balance = balance.subtract(chitAmount);
 			chain.setBalance(balance);
-		}
-		chain.doFilter(order, items, chain);
+//		}
+//		chain.doFilter(order, items, chain);
 	}
 
 	@Override

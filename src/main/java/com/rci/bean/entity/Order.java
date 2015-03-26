@@ -87,6 +87,9 @@ public class Order extends BaseEntity{
 	
 	/* 不可打折金额   */
 	private BigDecimal nodiscountAmount;
+	
+	/* 免单金额 */
+	private BigDecimal freeAmount;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) // MYSQL ID generator
@@ -230,6 +233,15 @@ public class Order extends BaseEntity{
 
 	public void setNodiscountAmount(BigDecimal nodiscountAmount) {
 		this.nodiscountAmount = nodiscountAmount;
+	}
+
+	@Column(name="free_amount")
+	public BigDecimal getFreeAmount() {
+		return freeAmount;
+	}
+
+	public void setFreeAmount(BigDecimal freeAmount) {
+		this.freeAmount = freeAmount;
 	}
 
 	@Transient

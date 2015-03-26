@@ -72,7 +72,7 @@ public class SchemeWrapper {
 		SchemeType stype = scheme.getType();
 		if(SchemeType.EIGHTDISCOUNT.equals(stype) || SchemeType.NODISCOUNT.equals(stype)){
 			name.append(scheme.getName()).append(totalAmount);
-		}else if(SchemeType.ONLINEPAY.equals(stype)){
+		}else if(SchemeType.ONLINEPAY.equals(stype) || SchemeType.FREE.equals(stype)){
 			name.append(scheme.getName()).append(totalAmount);
 		}else{
 			name.append(scheme.getName()).append("【").append(+this.count).append("】张");
@@ -104,8 +104,8 @@ public class SchemeWrapper {
 			return null;
 		}else{
 			SchemeType stype = scheme.getType();
-			if(stype.equals(SchemeType.ONLINEPAY) || stype.equals(SchemeType.EIGHTDISCOUNT) || stype.equals(SchemeType.NODISCOUNT)){
-				//1.如果是现金支付,饿了么，淘点点支付
+			if(stype.equals(SchemeType.ONLINEPAY) || stype.equals(SchemeType.FREE) || stype.equals(SchemeType.EIGHTDISCOUNT) || stype.equals(SchemeType.NODISCOUNT)){
+				//1.如果是现金支付,饿了么，淘点点支付,免单
 				postAmount = totalAmount;
 			}else if(stype.equals(SchemeType.CASHBACK)){
 				BigDecimal backPrice = scheme.getPrice();

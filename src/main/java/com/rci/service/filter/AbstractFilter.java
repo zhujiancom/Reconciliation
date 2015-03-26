@@ -2,8 +2,10 @@ package com.rci.service.filter;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
@@ -27,21 +29,19 @@ public abstract class AbstractFilter implements CalculateFilter {
 	@Resource(name="DishService")
 	private IDishService dishService;
 	
-//	@Resource(name = "PayModeService")
-//	protected IPayModeService paymodeService;
-	
 	@Resource(name="SchemeService")
 	protected ISchemeService schemeService;
 	@Override
 	public void doFilter(Order order, List<OrderItemDTO> items,
 			FilterChain chain) {
-		BigDecimal originAmount = order.getOriginPrice();
 		BigDecimal balance = chain.getBalance();
 		if(balance.compareTo(BigDecimal.ZERO) == 0){
-			logger.debug("balance = "+balance.intValue());
-			chain.setBalance(originAmount);
+			logger.debug("----异常： balance = 0, balance不应该为 0 ");
 		}
-		generateScheme(order,items,chain);
+		if (support(order.getPaymodeMapping())) {
+			generateScheme(order,items,chain);
+		}
+		chain.doFilter(order, items, chain);
 	}
 
 	protected abstract void generateScheme(Order order, List<OrderItemDTO> items,FilterChain chain);
@@ -76,44 +76,22 @@ public abstract class AbstractFilter implements CalculateFilter {
 	 */
 	protected Map<PairKey<SchemeType,String>,SchemeWrapper> createSchemes(BigDecimal amount, String paymodeno,boolean suitFlag) {
 		Map<PairKey<SchemeType,String>,SchemeWrapper> schemes = new HashMap<PairKey<SchemeType,String>,SchemeWrapper>();
-		BigDecimal bigSuitAmount = BigDecimal.ZERO;
-		BigDecimal littleSuitAmount = BigDecimal.ZERO;
+		BigDecimal suitAmount = BigDecimal.ZERO;
 		// 1.如果有套餐
 		if (suitFlag) {
-			Integer big_count = getSuitMap().get(SchemeType.BIG_SUIT);
-			Integer little_count = getSuitMap().get(SchemeType.LITTLE_SUIT);
-			if (big_count != null && big_count != 0) {
-				// 1.1 如果有大份套餐
-				Scheme scheme = schemeService.getScheme(SchemeType.BIG_SUIT,paymodeno);
-				BigDecimal bigSuitPrice = scheme.getPrice();
-				bigSuitAmount = bigSuitAmount.add(bigSuitPrice.multiply(new BigDecimal(big_count)));
-				PairKey<SchemeType,String> key = new PairKey<SchemeType,String>(SchemeType.BIG_SUIT,paymodeno);
-				SchemeWrapper schemewrapper = new SchemeWrapper(getChit(),scheme,big_count);
-//				if(schemes.get(key) != null){
-//					schemewrapper = schemes.get(key);
-//					schemewrapper.add(big_count);
-//				}else{
-//					schemes.put(key, schemewrapper);
-//				}
-				schemes.put(key, schemewrapper);
-			}
-			if (little_count != null && little_count != 0) {
-				// 1.2 如果有小份套餐
-				Scheme scheme = schemeService.getScheme(SchemeType.LITTLE_SUIT, paymodeno);
-				BigDecimal littleSuitPrice = scheme.getPrice();
-				littleSuitAmount = littleSuitAmount.add(littleSuitPrice.multiply(new BigDecimal(little_count)));
-				PairKey<SchemeType,String> key = new PairKey<SchemeType,String>(SchemeType.LITTLE_SUIT,paymodeno);
-				SchemeWrapper schemewrapper = new SchemeWrapper(getChit(),scheme,little_count);
-//				if(schemes.get(key) != null){
-//					schemewrapper = schemes.get(key);
-//					schemewrapper.add(little_count);
-//				}else{
-//					schemes.put(key, schemewrapper);
-//				}
+			for(Iterator<Entry<SchemeType, Integer>> it=getSuitMap().entrySet().iterator();it.hasNext();){
+				Entry<SchemeType, Integer> entry = it.next();
+				SchemeType type = entry.getKey();
+				Integer count = entry.getValue();
+				Scheme scheme = schemeService.getScheme(type, paymodeno);
+				BigDecimal suitPrice = scheme.getPrice();
+				suitAmount = suitAmount.add(suitPrice.multiply(new BigDecimal(count)));
+				PairKey<SchemeType,String> key = new PairKey<SchemeType,String>(type,paymodeno);
+				SchemeWrapper schemewrapper = new SchemeWrapper(getChit(),scheme,count);
 				schemes.put(key, schemewrapper);
 			}
 		}
-		BigDecimal leftAmount = amount.subtract(bigSuitAmount).subtract(littleSuitAmount);
+		BigDecimal leftAmount = amount.subtract(suitAmount);
 		loopSchemes(leftAmount.intValue(),schemes,paymodeno);
 		return schemes;
 	}

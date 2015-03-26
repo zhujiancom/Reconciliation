@@ -61,8 +61,6 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 			shValue.setText(getTotalAmount(PaymodeType.DPSH).toString());
 			eleValue.setText(getTotalAmount(PaymodeType.ELE).toString());
 			tddValue.setText(getTotalAmount(PaymodeType.TDD).toString());
-			mainTable.setRowSelectionAllowed(true);
-			mainTable.setRowSelectionInterval(0, 0);
 			mainTable.getSelectionModel().addListSelectionListener(this);
 		}catch(ServiceException se){
 			JOptionPane.showMessageDialog(null, se.getMessage());
@@ -132,8 +130,12 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 		OrderTable ot = (OrderTable) mainTable; 
 		ot.markRed();
 		ot.setHeaderLabel();
-		OrderVO order = otm.getOrderAt(0);
-		loadItemData(order.getPayNo());
+		if(!CollectionUtils.isEmpty(ordervos)){
+			OrderVO order = otm.getOrderAt(0);
+			loadItemData(order.getPayNo());
+			mainTable.setRowSelectionAllowed(true);
+			mainTable.setRowSelectionInterval(0, 0);
+		}
 		mainTable.setRowHeight(20);
 		mainTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	}
