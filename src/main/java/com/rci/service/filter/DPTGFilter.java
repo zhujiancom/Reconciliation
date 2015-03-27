@@ -16,8 +16,6 @@ import com.rci.bean.scheme.PairKey;
 import com.rci.bean.scheme.SchemeWrapper;
 import com.rci.constants.BusinessConstant;
 import com.rci.constants.enums.SchemeType;
-import com.rci.exceptions.ExceptionConstant.SERVICE;
-import com.rci.exceptions.ExceptionManage;
 import com.rci.tools.DigitUtil;
 
 /**
@@ -91,17 +89,20 @@ public class DPTGFilter extends AbstractFilter {
 			order.setSchemes(schemes);
 		}
 		BigDecimal chitAmount = order.getPaymodeMapping().get(BusinessConstant.DPTG_NO);
+		if(order.getFreeAmount()!=null){
+			bediscountAmount = bediscountAmount.subtract(order.getFreeAmount());
+		}
 		if(bediscountAmount.compareTo(chitAmount) < 0){
 			//如果可打折金额小于代金券实际使用金额，则这单属于异常单
 			order.setUnusual(UNUSUAL);
+			logger.warn("----【"+order.getOrderNo()+"】支付金额异常----， 实际支付金额："+chitAmount+" , 可打折金额： "+bediscountAmount+". 可打折金额不应该小于代金券支付金额");
 		}
 		schemes.putAll(createSchemes(chitAmount, BusinessConstant.DPTG_NO,suitFlag));
-		//计算订余额
+		//计算余额
 		BigDecimal balance = chain.getBalance();
 		logger.debug("DPTGFilter - balance = "+balance);
 		if(balance.compareTo(chitAmount) < 0){
-			logger.error("余额计算错了了！");
-			ExceptionManage.throwServiceException(SERVICE.DATA_ERROR, "余额计算出错");
+			logger.error("----【"+order.getOrderNo()+"】数据异常----,余额:"+balance+" , 需支付金额:"+chitAmount+". 余额不能小于需支付金额");
 		}
 		balance = balance.subtract(chitAmount);
 		chain.setBalance(balance);

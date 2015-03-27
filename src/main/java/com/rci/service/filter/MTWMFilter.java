@@ -59,9 +59,12 @@ public class MTWMFilter extends AbstractFilter {
 					order.setSingleDiscount(true);
 				}
 			}
+			if(order.getFreeAmount() != null){
+				actualAmount = actualAmount.subtract(order.getFreeAmount());
+			}
 			if(actualAmount.compareTo(onlineAmount) != 0){
 				order.setUnusual(UNUSUAL);
-				logger.debug("[--- MTWMFilter ---]: 收银机显示金额："+onlineAmount+" , 应该显示金额： "+actualAmount);
+				logger.warn("[--- MTWMFilter ---]: 收银机显示金额："+onlineAmount+" , 应该显示金额： "+actualAmount);
 			}
 			Scheme scheme = new Scheme(SchemeType.ONLINEPAY,getChit());
 			SchemeWrapper wrapper = new SchemeWrapper(scheme);

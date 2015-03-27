@@ -80,15 +80,13 @@ public class InitSystemService {
 			if(BusinessConstant.DPTG_NO.equals(mode.getModeNo())){
 				Scheme s1 = new Scheme(SchemeType.FIFITY,"50元代金券");
 				s1.setPrice(new BigDecimal(50));
-				s1.setPostPrice(new BigDecimal(37.5));
+				s1.setPostPrice(new BigDecimal(44));
 				s1.setCommission(new BigDecimal(1));
-				s1.setSpread(new BigDecimal(-0.02));
 				s1.setPaymode(mode);
 				Scheme s2 = new Scheme(SchemeType.HUNDRED,"100元代金券");
 				s2.setPrice(new BigDecimal(100));
-				s2.setPostPrice(new BigDecimal(75));
+				s2.setPostPrice(new BigDecimal(88));
 				s2.setCommission(new BigDecimal(1));
-				s2.setSpread(new BigDecimal(-0.05));
 				s2.setPaymode(mode);
 				Scheme s3 = new Scheme(SchemeType.BIG_SUIT_A,"大份套餐(香辣)");
 				s3.setPrice(new BigDecimal(98));
@@ -134,15 +132,15 @@ public class InitSystemService {
 				schemes.add(s8);
 				mode.setSchemes(schemes);
 			}
-			if( BusinessConstant.MT_NO.equals(mode.getModeNo()) || BusinessConstant.LS_NO.equals(mode.getModeNo())){
+			if( BusinessConstant.MT_NO.equals(mode.getModeNo())){
 				Scheme s1 = new Scheme(SchemeType.FIFITY,"50元代金券");
 				s1.setPrice(new BigDecimal(50));
-				s1.setPostPrice(new BigDecimal(37.5));
+				s1.setPostPrice(new BigDecimal(44));
 				s1.setCommission(new BigDecimal(1));
 				s1.setPaymode(mode);
 				Scheme s2 = new Scheme(SchemeType.HUNDRED,"100元代金券");
 				s2.setPrice(new BigDecimal(100));
-				s2.setPostPrice(new BigDecimal(75));
+				s2.setPostPrice(new BigDecimal(88));
 				s2.setCommission(new BigDecimal(1));
 				s2.setPaymode(mode);
 				Scheme s3 = new Scheme(SchemeType.BIG_SUIT_A,"大份套餐(香辣)");
@@ -181,6 +179,45 @@ public class InitSystemService {
 				schemes.add(s3);
 				schemes.add(s4);
 				schemes.add(s5);
+				schemes.add(s6);
+				schemes.add(s7);
+				schemes.add(s8);
+				mode.setSchemes(schemes);
+			}
+			if(BusinessConstant.LS_NO.equals(mode.getModeNo())){
+				Scheme s1 = new Scheme(SchemeType.FIFITY,"50元代金券");
+				s1.setPrice(new BigDecimal(50));
+				s1.setPostPrice(new BigDecimal(44));
+				s1.setCommission(new BigDecimal(1));
+				s1.setSpread(new BigDecimal(-0.06));
+				s1.setPaymode(mode);
+				Scheme s2 = new Scheme(SchemeType.HUNDRED,"100元代金券");
+				s2.setPrice(new BigDecimal(100));
+				s2.setPostPrice(new BigDecimal(88));
+				s2.setCommission(new BigDecimal(1));
+				s2.setSpread(new BigDecimal(-0.02));
+				s2.setPaymode(mode);
+				Scheme s6 = new Scheme(SchemeType.SUIT_A,"套餐A");
+				s6.setPrice(new BigDecimal(32));
+				s6.setPostPrice(new BigDecimal(32));
+				s6.setCommission(new BigDecimal(1));
+				s6.setSpread(new BigDecimal(-0.08));
+				s6.setPaymode(mode);
+				Scheme s7 = new Scheme(SchemeType.SUIT_B,"套餐B");
+				s7.setPrice(new BigDecimal(68));
+				s7.setPostPrice(new BigDecimal(68));
+				s7.setCommission(new BigDecimal(1));
+				s7.setSpread(new BigDecimal(-0.02));
+				s7.setPaymode(mode);
+				Scheme s8 = new Scheme(SchemeType.SUIT_C,"套餐C");
+				s8.setPrice(new BigDecimal(98));
+				s8.setPostPrice(new BigDecimal(98));
+				s8.setCommission(new BigDecimal(1));
+				s8.setSpread(new BigDecimal(-0.02));
+				s8.setPaymode(mode);
+				List<Scheme> schemes = new ArrayList<Scheme>();
+				schemes.add(s1);
+				schemes.add(s2);
 				schemes.add(s6);
 				schemes.add(s7);
 				schemes.add(s8);

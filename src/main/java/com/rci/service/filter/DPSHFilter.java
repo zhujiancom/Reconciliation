@@ -17,8 +17,6 @@ import com.rci.bean.scheme.PairKey;
 import com.rci.bean.scheme.SchemeWrapper;
 import com.rci.constants.BusinessConstant;
 import com.rci.constants.enums.SchemeType;
-import com.rci.exceptions.ExceptionManage;
-import com.rci.exceptions.ExceptionConstant.SERVICE;
 import com.rci.tools.DigitUtil;
 
 /**
@@ -68,9 +66,13 @@ public class DPSHFilter extends AbstractFilter {
 			order.setNodiscountAmount(nodiscountAmount);
 			Scheme scheme = schemeService.getScheme(SchemeType.CASHBACK,BusinessConstant.DPSH_NO);
 			SchemeWrapper wrapper = new SchemeWrapper(getChit(),scheme);
+			if(order.getFreeAmount()!=null){
+				bediscountAmount = bediscountAmount.subtract(order.getFreeAmount());
+			}
 			wrapper.setTotalAmount(bediscountAmount);
-			if(bediscountAmount.compareTo(payAmount) != 0){
+			if(bediscountAmount.compareTo(payAmount) != 0){  // 如果使用闪惠，则支付金额应该和可打折金额一致
 				order.setUnusual(UNUSUAL);
+				logger.warn("----【"+order.getOrderNo()+"】支付金额异常----， 实际支付金额："+payAmount+" , 应付金额： "+bediscountAmount);
 			}
 			PairKey<SchemeType,String> key = new PairKey<SchemeType,String>(SchemeType.CASHBACK,BusinessConstant.DPSH_NO);
 			schemes.put(key,wrapper);
@@ -78,13 +80,10 @@ public class DPSHFilter extends AbstractFilter {
 			BigDecimal balance = chain.getBalance();
 			logger.debug("DPSHFilter - balance = "+balance);
 			if(balance.compareTo(bediscountAmount) < 0){
-				logger.error("余额计算错了了！");
-				ExceptionManage.throwServiceException(SERVICE.DATA_ERROR, "余额计算出错");
+				logger.error("----【"+order.getOrderNo()+"】数据异常----,余额:"+balance+" , 需支付金额:"+bediscountAmount+". 余额不能小于需支付金额");
 			}
 			balance = balance.subtract(bediscountAmount);
 			chain.setBalance(balance);
-//		}
-//		chain.doFilter(order, items, chain);
 	}
 
 	@Override

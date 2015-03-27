@@ -36,7 +36,7 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 	private IFetchMarkService markService;
 	@Resource(name="DataTransformFacade")
 	private DataTransformFacade dataTransform;
-
+	
 	@Override
 	public Order getOrder(Long pk) {
 		return super.get(pk);
@@ -63,50 +63,46 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 	@Override
 	public List<OrderVO> queryOrderVOsByDay(String day) {
 		List<OrderVO> vos = new LinkedList<OrderVO>();
-		try{
-			DataFetchMark mark = markService.getMarkRecordByDay(day);
-			if(mark == null || !mark.isMarked()){
-				dataTransform.accquireOrderInfo(DateUtil.str2Date(day,"yyyyMMdd"));
-				markService.rwOrderMark(day);
-			}
-			List<Order> orders = queryOrdersByDay(day);
-			if(!CollectionUtils.isEmpty(orders)){
-				for(Order order:orders){
-					OrderVO vo = beanMapper.map(order, OrderVO.class);
-					List<PostOrderAccount> poas = order.getPostOrderAccounts();
-					BigDecimal totalAmount = BigDecimal.ZERO;
-					for(PostOrderAccount account:poas){
-						BigDecimal postAmount = account.getPostAmount();
-						if(BusinessConstant.CASH_NO.equals(account.getAccountNo())){
-							vo.setPosAmount(postAmount);
-						}
-						if(BusinessConstant.MT_NO.equals(account.getAccountNo())){
-							vo.setMtAmount(postAmount);
-						}
-						if(BusinessConstant.DPTG_NO.equals(account.getAccountNo())){
-							vo.setDptgAmount(postAmount);
-						}
-						if(BusinessConstant.DPSH_NO.equals(account.getAccountNo())){
-							vo.setDpshAmount(postAmount);
-						}
-						if(BusinessConstant.ELE_NO.equals(account.getAccountNo())){
-							vo.setEleAmount(postAmount);
-						}
-						if(BusinessConstant.TDD_NO.equals(account.getAccountNo())){
-							vo.setTddAmount(postAmount);
-						}
-						totalAmount = totalAmount.add(postAmount);
+		DataFetchMark mark = markService.getMarkRecordByDay(day);
+		if(mark == null || !mark.isMarked()){
+			dataTransform.accquireOrderInfo(DateUtil.str2Date(day,"yyyyMMdd"));
+			markService.rwOrderMark(day);
+		}
+		List<Order> orders = queryOrdersByDay(day);
+		if(!CollectionUtils.isEmpty(orders)){
+			for(Order order:orders){
+				OrderVO vo = beanMapper.map(order, OrderVO.class);
+				List<PostOrderAccount> poas = order.getPostOrderAccounts();
+				BigDecimal totalAmount = BigDecimal.ZERO;
+				for(PostOrderAccount account:poas){
+					BigDecimal postAmount = account.getPostAmount();
+					if(BusinessConstant.CASH_NO.equals(account.getAccountNo())){
+						vo.setPosAmount(postAmount);
 					}
-					if(vo.getFreeAmount() != null){
-						totalAmount = totalAmount.subtract(vo.getFreeAmount());	
+					if(BusinessConstant.MT_NO.equals(account.getAccountNo())){
+						vo.setMtAmount(postAmount);
 					}
-					vo.setSchemeName(order.getSchemeName());
-					vo.setTotalAmount(totalAmount);
-					vos.add(vo);
+					if(BusinessConstant.DPTG_NO.equals(account.getAccountNo())){
+						vo.setDptgAmount(postAmount);
+					}
+					if(BusinessConstant.DPSH_NO.equals(account.getAccountNo())){
+						vo.setDpshAmount(postAmount);
+					}
+					if(BusinessConstant.ELE_NO.equals(account.getAccountNo())){
+						vo.setEleAmount(postAmount);
+					}
+					if(BusinessConstant.TDD_NO.equals(account.getAccountNo())){
+						vo.setTddAmount(postAmount);
+					}
+					totalAmount = totalAmount.add(postAmount);
 				}
+				if(vo.getFreeAmount() != null){
+					totalAmount = totalAmount.subtract(vo.getFreeAmount());	
+				}
+				vo.setSchemeName(order.getSchemeName());
+				vo.setTotalAmount(totalAmount);
+				vos.add(vo);
 			}
-		}catch(Exception e){
-			e.printStackTrace();
 		}
 		return vos;
 	}

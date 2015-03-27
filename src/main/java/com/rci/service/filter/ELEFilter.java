@@ -34,7 +34,6 @@ public class ELEFilter extends AbstractFilter {
 	@Override
 	public void generateScheme(Order order, List<OrderItemDTO> items,
 			FilterChain chain) {
-//		if(support(order.getPaymodeMapping())){
 			Map<PairKey<SchemeType,String>,SchemeWrapper> schemes = order.getSchemes();
 			if (CollectionUtils.isEmpty(schemes)) {
 				schemes = new HashMap<PairKey<SchemeType,String>,SchemeWrapper>();
@@ -54,17 +53,18 @@ public class ELEFilter extends AbstractFilter {
 					order.setSingleDiscount(true);
 				}
 			}
+			if(order.getFreeAmount() != null){
+				actualAmount = actualAmount.subtract(order.getFreeAmount());
+			}
 			if(actualAmount.compareTo(onlineAmount) != 0){
 				order.setUnusual(UNUSUAL);
-				logger.debug("[--- ELEFilter ---]: 收银机显示金额："+onlineAmount+" , 应该显示金额： "+actualAmount);
+				logger.warn("[--- ELEFilter ---]: 收银机显示金额："+onlineAmount+" , 应该显示金额： "+actualAmount);
 			}
 			Scheme scheme = new Scheme(SchemeType.ONLINEPAY,getChit());
 			SchemeWrapper wrapper = new SchemeWrapper(scheme);
 			wrapper.setTotalAmount(actualAmount);
 			PairKey<SchemeType,String> key = new PairKey<SchemeType,String>(SchemeType.ONLINEPAY,BusinessConstant.ELE_NO);
 			schemes.put(key, wrapper);
-//		}
-//		chain.doFilter(order, items, chain);
 	}
 
 	@Override

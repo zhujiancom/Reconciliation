@@ -34,10 +34,6 @@ public abstract class AbstractFilter implements CalculateFilter {
 	@Override
 	public void doFilter(Order order, List<OrderItemDTO> items,
 			FilterChain chain) {
-		BigDecimal balance = chain.getBalance();
-		if(balance.compareTo(BigDecimal.ZERO) == 0){
-			logger.debug("----异常： balance = 0, balance不应该为 0 ");
-		}
 		if (support(order.getPaymodeMapping())) {
 			generateScheme(order,items,chain);
 		}

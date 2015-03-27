@@ -17,8 +17,6 @@ import com.rci.bean.scheme.PairKey;
 import com.rci.bean.scheme.SchemeWrapper;
 import com.rci.constants.BusinessConstant;
 import com.rci.constants.enums.SchemeType;
-import com.rci.exceptions.ExceptionConstant.SERVICE;
-import com.rci.exceptions.ExceptionManage;
 import com.rci.tools.DigitUtil;
 
 /**
@@ -67,7 +65,7 @@ public class CashFilter extends AbstractFilter {
 				if(cashAmount.compareTo(actualAmount) != 0){
 					//如果收银机显示现金收入和计算收入不相符时，报异常
 					order.setUnusual(UNUSUAL);
-					logger.debug("[--- CashFilter ---]:#8折优惠# 收银机显示金额："+cashAmount+" , 应该显示金额： "+actualAmount);
+					logger.debug("----【"+order.getOrderNo()+"】:#8折优惠# 收银机显示金额："+cashAmount+" , 应该显示金额： "+actualAmount);
 				}
 				Scheme scheme = schemeService.getScheme(SchemeType.EIGHTDISCOUNT,BusinessConstant.CASH_NO);
 				wrapper = new SchemeWrapper(getChit(),scheme);
@@ -76,14 +74,14 @@ public class CashFilter extends AbstractFilter {
 				schemes.put(key, wrapper);
 			}
 			if(actualAmount.compareTo(originAmount) > 0){
-				ExceptionManage.throwServiceException(SERVICE.DATA_ERROR, "数据错误");
+				logger.error("----【"+order.getOrderNo()+"】实际金额不应该大于原价");
 			}
 			if(actualAmount.compareTo(originAmount)==0){
 				//无折扣
 				if(cashAmount.compareTo(chain.getBalance()) != 0){
 					//如果收银机显示现金收入和计算收入不相符时，报异常
 					order.setUnusual(UNUSUAL);
-					logger.debug("[--- CashFilter ---]:#无折扣# 收银机显示金额："+cashAmount+" , 应该显示金额： "+actualAmount);
+					logger.warn("----【"+order.getOrderNo()+"】#无折扣# 收银机显示金额："+cashAmount+" , 应该显示金额： "+actualAmount);
 				}
 				Scheme scheme = schemeService.getScheme(SchemeType.NODISCOUNT,BusinessConstant.CASH_NO);
 				wrapper = new SchemeWrapper(getChit(),scheme);

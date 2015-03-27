@@ -17,8 +17,6 @@ import com.rci.bean.scheme.PairKey;
 import com.rci.bean.scheme.SchemeWrapper;
 import com.rci.constants.BusinessConstant;
 import com.rci.constants.enums.SchemeType;
-import com.rci.exceptions.ExceptionManage;
-import com.rci.exceptions.ExceptionConstant.SERVICE;
 
 /**
  * 免单
@@ -59,8 +57,8 @@ public class FreeFilter extends AbstractFilter {
 		BigDecimal balance = chain.getBalance();
 		logger.debug("FreeFilter - balance = "+balance);
 		if(balance.compareTo(freeAmount) < 0){
-			logger.error("余额计算错了了！");
-			ExceptionManage.throwServiceException(SERVICE.DATA_ERROR, "余额计算出错");
+			logger.error("----【"+order.getOrderNo()+"】:免单金额超出了原价");
+			order.setUnusual(UNUSUAL);
 		}
 		balance = balance.subtract(freeAmount);
 		chain.setBalance(balance);
