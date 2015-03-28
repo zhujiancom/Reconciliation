@@ -16,6 +16,7 @@ import com.rci.bean.scheme.PairKey;
 import com.rci.bean.scheme.SchemeWrapper;
 import com.rci.constants.BusinessConstant;
 import com.rci.constants.enums.SchemeType;
+import com.rci.tools.DigitUtil;
 
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
@@ -59,16 +60,19 @@ public class MTFilter extends AbstractFilter {
 				}
 				
 				BigDecimal originPrice = item.getPrice();
+				BigDecimal count = item.getCount();
+				BigDecimal countBack = item.getCountback();
+				BigDecimal originTotalAmount = DigitUtil.mutiplyDown(originPrice, count.subtract(countBack));
 				if (!suitFlag && isNodiscount(dishNo)) {
 					// 3. 饮料酒水配菜除外
-					nodiscountAmount = nodiscountAmount.add(originPrice);
+					nodiscountAmount = nodiscountAmount.add(originTotalAmount);
 					continue;
 				}
-				bediscountAmount = bediscountAmount.add(originPrice);
+				bediscountAmount = bediscountAmount.add(originTotalAmount);
 				
 				/* 判断是否有单品折扣  */
 				BigDecimal rate = item.getDiscountRate();
-				if(isSingleDiscount(rate) &&!order.getSingleDiscount()){
+				if(isSingleDiscount(rate) && (order.getSingleDiscount() == null || !order.getSingleDiscount())){
 					order.setSingleDiscount(true);
 				}
 			}
