@@ -2,6 +2,8 @@ package com.rci.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -64,10 +66,18 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 	public List<OrderVO> queryOrderVOsByDay(String day) {
 		List<OrderVO> vos = new LinkedList<OrderVO>();
 		DataFetchMark mark = markService.getMarkRecordByDay(day);
-		if(mark == null || !mark.isMarked()){
+		if(mark == null){
 			dataTransform.accquireOrderInfo(DateUtil.str2Date(day,"yyyyMMdd"));
 			markService.rwOrderMark(day);
+		}else{
+			Date savepoint = mark.getSavepoint();
+			Date current = DateUtil.getCurrentDate();
+			//当前查询时间在savepoint 之后，则作增量查询
+			if(current.after(savepoint)){
+				
+			}
 		}
+		
 		List<Order> orders = queryOrdersByDay(day);
 		if(!CollectionUtils.isEmpty(orders)){
 			for(Order order:orders){

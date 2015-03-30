@@ -10,6 +10,7 @@ import com.rci.bean.entity.DataFetchMark;
 import com.rci.constants.enums.MarkType;
 import com.rci.service.BaseService;
 import com.rci.service.IFetchMarkService;
+import com.rci.tools.DateUtil;
 
 @Service("FetchMarkService")
 public class FetchMarkServiceImpl extends BaseService<DataFetchMark, Long>
@@ -28,7 +29,7 @@ public class FetchMarkServiceImpl extends BaseService<DataFetchMark, Long>
 		DetachedCriteria dc = DetachedCriteria.forClass(DataFetchMark.class);
 		dc.add(Restrictions.eq("type", MarkType.SYSTEM_INIT));
 		DataFetchMark mark = baseDAO.queryUniqueByCriteria(dc);
-		if(mark == null || !mark.isMarked()){
+		if(mark == null){
 			return false;
 		}
 		return true;
@@ -48,6 +49,7 @@ public class FetchMarkServiceImpl extends BaseService<DataFetchMark, Long>
 		DataFetchMark mark = new DataFetchMark(MarkType.ORDER_FETCH);
 		mark.setRciDate(day);
 		mark.setMark(1);
+		mark.setSavepoint(DateUtil.getCurrentDate());
 		baseDAO.save(mark);
 	}
 
