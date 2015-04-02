@@ -21,7 +21,6 @@ import com.rci.datafetch.IDataFetchService;
 import com.rci.datafetch.SQLGen;
 import com.rci.mapper.BeanRowMappers;
 import com.rci.mapper.ResultSetExtractorImpl;
-import com.rci.tools.DateUtil;
 import com.rci.tools.properties.PropertyUtils;
 
 @Service("DataFetchService")
@@ -36,8 +35,15 @@ public class DataFetchServiceImpl implements IDataFetchService {
 	}
 
 	@Override
-	public List<OrderDTO> fetchAllDayOrders(Date sdate) {
-		Date edate = DateUtil.addDays(sdate, 1);
+	public List<OrderDTO> fetchAllDayOrders(Date sdate,Date edate) {
+//		Date edate = null;
+//		Date current = DateUtil.getCurrentDate();
+//		if((DateUtil.getYear(current) > DateUtil.getYear(sdate)) || 
+//				(DateUtil.getDayOfYear(current)> DateUtil.getDayOfYear(sdate))){
+//			edate = DateUtil.getEndTimeOfDay(sdate);
+//		}else{
+//			edate = current;
+//		}
 		List<OrderDTO> orders = sqlServerJdbcTemplate.query(SQLGen.QUERY_ORDER,new Object[]{sdate,edate}, new BeanRowMappers<OrderDTO>(OrderDTO.class));
 		return orders;
 	}

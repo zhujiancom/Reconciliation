@@ -51,6 +51,11 @@ public abstract class BaseService<T extends BaseEntity, PK extends Serializable>
 	public void rwDelete(PK pk){
 		baseDAO.delete(pk);
 	}
+	
+	public void rwDelete(T[] entities){
+		baseDAO.delete(entities);
+	}
+	
 	public T get(PK pk){
 		return baseDAO.get(pk);
 	}

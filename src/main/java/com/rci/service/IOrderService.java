@@ -11,6 +11,10 @@ public interface IOrderService {
 	
 	void rwInsertOrder(Order order);
 	
+	void rwDeleteOrders(Order[] orders);
+	
+	void rwDeleteOrders(String day);
+	
 	List<Order> queryAllDayOrders();
 	
 	List<Order> queryOrdersByDay(String day);

@@ -3,24 +3,45 @@ package com.rci;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 import org.junit.Test;
 
+import com.rci.tools.DateUtil;
 import com.rci.tools.DigitUtil;
 
 public class DefaultTest {
 
 	@Test
-	public void testCalendar(){
-		Calendar c = Calendar.getInstance();
-		c.setTime(new Date());
-		c.set(Calendar.HOUR_OF_DAY, 0);
-		c.set(Calendar.MINUTE, 0);
-		c.set(Calendar.SECOND, 0);
-		c.set(Calendar.MILLISECOND, 0);
-		System.out.println(c.getTime());
+	public void testCalendar() throws Exception{
+//		Calendar c = Calendar.getInstance();
+//		c.setTime(new Date());
+//		c.set(Calendar.HOUR_OF_DAY, 0);
+//		c.set(Calendar.MINUTE, 0);
+//		c.set(Calendar.SECOND, 0);
+//		c.set(Calendar.MILLISECOND, 0);
+//		System.out.println(c.getTime());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date savepoint = sdf.parse("2015-03-25 09:32:01"); 
+		Date current = DateUtil.getCurrentDate();
+//		Calendar c = Calendar.getInstance();
+//		c.setTime(current);
+//		System.out.println(c.after(savepoint));
+//		System.out.println(savepoint.before(current));
+//		System.out.println(current.after(savepoint));
+//		System.out.println(savepoint.before(current));
+		Date edate = DateUtil.getEndTimeOfDay(savepoint);
+		System.out.println(edate);
+		System.out.println(DateUtil.getDayOfYear(savepoint));
+		System.out.println(DateUtil.getDayOfYear(current));
+		System.out.println(DateUtil.getYear(current));
+		System.out.println(DateUtil.getYear(savepoint));
+		System.out.println(DateUtil.str2Date("20150325","yyyyMMdd"));
+		System.out.println(current);
 	}
 	
 	@Test

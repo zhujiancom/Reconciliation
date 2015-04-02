@@ -153,6 +153,28 @@ public class DateUtil extends DateUtils{
 		cal.roll(Calendar.DAY_OF_MONTH, -1);
 		return cal.getTime();
 	}
+	
+	/**
+	 * 获取一年中的第几天
+	 * @param date
+	 * @return
+	 */
+	public static int getDayOfYear(Date date){
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		return cal.get(Calendar.DAY_OF_YEAR);
+	}
+	
+	/**
+	 * 获取年份
+	 * @param date
+	 * @return
+	 */
+	public static int getYear(Date date){
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		return cal.get(Calendar.YEAR);
+	}
 
 	/**
 	 * 
@@ -210,18 +232,38 @@ public class DateUtil extends DateUtils{
 		return date;
 	}
 	
+	public static Date str2Time(String timestr){
+		return str2Date(timestr,DEFAULT_TIME_PATTERN);
+	}
+	
 	/**
-	 * 去除给定时间的时分秒
+	 * 获取一天的零点时间
 	 * 
 	 * @param date
 	 * @return
 	 */
-	public static Date wipeoutHMS(Date date){
+	public static Date getStartTimeOfDay(Date date){
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
 		c.set(Calendar.HOUR_OF_DAY, 0);
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		return c.getTime();
+	}
+	
+	/**
+	 * 获取一天的最后时间
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public static Date getEndTimeOfDay(Date date){
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.set(Calendar.HOUR_OF_DAY, 23);
+		c.set(Calendar.MINUTE, 59);
+		c.set(Calendar.SECOND, 59);
 		c.set(Calendar.MILLISECOND, 0);
 		return c.getTime();
 	}

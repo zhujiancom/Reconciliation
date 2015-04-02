@@ -12,7 +12,7 @@ import com.rci.bean.PaymodeDTO;
 public interface IDataFetchService {
 	OrderDTO fetchOrderByNo(String orderNo);
 	
-	List<OrderDTO> fetchAllDayOrders(Date sdate);
+	List<OrderDTO> fetchAllDayOrders(Date sdate,Date edate);
 	
 	List<OrderItemDTO> fetchOrderItemsByOrder(String orderNo);
 	

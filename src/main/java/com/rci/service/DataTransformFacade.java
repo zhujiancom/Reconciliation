@@ -6,5 +6,5 @@ import org.springframework.stereotype.Service;
 
 @Service("DataTransformFacade")
 public interface DataTransformFacade {
-	public void accquireOrderInfo(Date date);
+	public void accquireOrderInfo(Date sdate);
 }

@@ -44,17 +44,19 @@ public class DataTransformFacadeImpl implements DataTransformFacade {
 	@Resource(name="DishService")
 	private IDishService dishService;
 	
+	
 	@Override
-	public void accquireOrderInfo(Date date) {
-		//1. 根据日期获取当日的所有订单
-		List<OrderDTO> orderDTOs = dataFetch.fetchAllDayOrders(DateUtil.wipeoutHMS(date));
+	public void accquireOrderInfo(Date sdate) {
+		Date edate = DateUtil.getEndTimeOfDay(sdate);
+		//1. 根据日期获取当前时间之前的符合日期订单
+		List<OrderDTO> orderDTOs = dataFetch.fetchAllDayOrders(sdate,edate);
 		Map<String,Order> container = mergerOrder(orderDTOs);
 		//2. 迭代order,获取对应的item信息
 		for(Iterator<Entry<String,Order>> it = container.entrySet().iterator();it.hasNext();){
 			Entry<String,Order> entry = it.next();
 			String key = entry.getKey();
 			Order value = entry.getValue();
-			value.setDay(DateUtil.date2Str(date, "yyyyMMdd"));
+			value.setDay(DateUtil.date2Str(sdate, "yyyyMMdd"));
 			List<OrderItemDTO> itemDTOs = dataFetch.fetchOrderItemsByOrder(key);
 			Order order = postCalculator.calculate(value, itemDTOs);
 			//设置关联的order Item

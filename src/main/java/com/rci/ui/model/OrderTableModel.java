@@ -1,5 +1,6 @@
 package com.rci.ui.model;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -12,7 +13,7 @@ public class OrderTableModel extends AbstractTableModel {
 	 * 
 	 */
 	private static final long serialVersionUID = -4006879882193678115L;
-	private List<OrderVO> orders;
+	private List<OrderVO> orders = Collections.emptyList();
 	
 	public OrderTableModel(List<OrderVO> orders){
 		this.orders = orders;
@@ -72,6 +73,12 @@ public class OrderTableModel extends AbstractTableModel {
 			break;
 		}
 		return null;
+	}
+	
+	public void setRowCount(int rowCount){
+		int old = getRowCount();
+		orders = Collections.emptyList();
+		super.fireTableRowsDeleted(rowCount,old-1);
 	}
 
 }

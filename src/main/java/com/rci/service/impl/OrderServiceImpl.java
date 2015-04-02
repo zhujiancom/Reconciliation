@@ -2,7 +2,6 @@ package com.rci.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,6 +47,8 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 	public void rwInsertOrder(Order order) {
 		rwCreate(order);
 	}
+	
+	
 
 	@Override
 	public List<Order> queryAllDayOrders() {
@@ -66,15 +67,17 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 	public List<OrderVO> queryOrderVOsByDay(String day) {
 		List<OrderVO> vos = new LinkedList<OrderVO>();
 		DataFetchMark mark = markService.getMarkRecordByDay(day);
+		Date queryDate = DateUtil.str2Date(day,"yyyyMMdd");
+		Date queryEndofDate = DateUtil.getEndTimeOfDay(queryDate);
 		if(mark == null){
-			dataTransform.accquireOrderInfo(DateUtil.str2Date(day,"yyyyMMdd"));
+			dataTransform.accquireOrderInfo(queryDate);
 			markService.rwOrderMark(day);
 		}else{
 			Date savepoint = mark.getSavepoint();
-			Date current = DateUtil.getCurrentDate();
-			//当前查询时间在savepoint 之后，则作增量查询
-			if(current.after(savepoint)){
-				
+			// savepoint 在当天24点之前,则作增量查询
+			if(savepoint.before(queryEndofDate)){
+				dataTransform.accquireOrderInfo(savepoint);
+				markService.rwUpdateMark(mark);
 			}
 		}
 		
@@ -132,5 +135,16 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 			}
 		}
 		return vos;
+	}
+
+	@Override
+	public void rwDeleteOrders(Order[] orders) {
+		baseDAO.delete(orders);
+	}
+
+	@Override
+	public void rwDeleteOrders(String day) {
+		List<Order> orders = queryOrdersByDay(day);
+		baseDAO.delete(orders.toArray(new Order[0]));
 	}
 }

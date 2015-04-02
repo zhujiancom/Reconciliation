@@ -52,5 +52,18 @@ public class FetchMarkServiceImpl extends BaseService<DataFetchMark, Long>
 		mark.setSavepoint(DateUtil.getCurrentDate());
 		baseDAO.save(mark);
 	}
+	
+	@Override
+	@Transactional(propagation=Propagation.REQUIRES_NEW)
+	public void rwUpdateMark(DataFetchMark mark){
+		mark.setSavepoint(DateUtil.getCurrentDate());
+		baseDAO.update(mark);
+	}
+
+	@Override
+	public void rwDeleteMark(String day) {
+		DataFetchMark mark = getMarkRecordByDay(day);
+		baseDAO.delete(mark);
+	}
 
 }
