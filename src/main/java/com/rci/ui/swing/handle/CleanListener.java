@@ -2,7 +2,9 @@ package com.rci.ui.swing.handle;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -23,7 +25,13 @@ public class CleanListener implements ActionListener {
 	private IOrderService orderService;
 	private IFetchMarkService markService;
 	private JTextField timeInput;
-	
+	private JLabel posValue;
+	private JLabel mtValue;
+	private JLabel tgValue;
+	private JLabel shValue;
+	private JLabel eleValue;
+	private JLabel tddValue;
+	private JLabel mtwmValue;
 	
 	public CleanListener(JTable mainTable,JTable subTable){
 		this.mainTable = mainTable;
@@ -48,6 +56,13 @@ public class CleanListener implements ActionListener {
 			}
 			orderService.rwDeleteOrders(time);
 			markService.rwDeleteMark(time);
+			posValue.setText(BigDecimal.ZERO.toString());
+			mtValue.setText(BigDecimal.ZERO.toString());
+			tgValue.setText(BigDecimal.ZERO.toString());
+			shValue.setText(BigDecimal.ZERO.toString());
+			eleValue.setText(BigDecimal.ZERO.toString());
+			tddValue.setText(BigDecimal.ZERO.toString());
+			mtwmValue.setText(BigDecimal.ZERO.toString());
 		}catch(ServiceException se){
 			JOptionPane.showMessageDialog(null, se.getMessage());
 		}
@@ -59,6 +74,34 @@ public class CleanListener implements ActionListener {
 
 	public void setTimeInput(JTextField timeInput) {
 		this.timeInput = timeInput;
+	}
+
+	public void setPosValue(JLabel posValue) {
+		this.posValue = posValue;
+	}
+
+	public void setMtValue(JLabel mtValue) {
+		this.mtValue = mtValue;
+	}
+
+	public void setTgValue(JLabel tgValue) {
+		this.tgValue = tgValue;
+	}
+
+	public void setShValue(JLabel shValue) {
+		this.shValue = shValue;
+	}
+
+	public void setEleValue(JLabel eleValue) {
+		this.eleValue = eleValue;
+	}
+
+	public void setTddValue(JLabel tddValue) {
+		this.tddValue = tddValue;
+	}
+
+	public void setMtwmValue(JLabel mtwmValue) {
+		this.mtwmValue = mtwmValue;
 	}
 
 }

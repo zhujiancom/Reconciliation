@@ -53,6 +53,7 @@ public class MainFrame extends JFrame {
 	private JLabel shValue;
 	private JLabel eleValue;
 	private JLabel tddValue;
+	private JLabel mtwmValue;
 	
 	public MainFrame(){
 		initComponent();
@@ -64,11 +65,19 @@ public class MainFrame extends JFrame {
 		listener.setShValue(shValue);
 		listener.setTddValue(tddValue);
 		listener.setTgValue(tgValue);
+		listener.setMtwmValue(mtwmValue);
 		queryBtn.registerKeyboardAction(listener, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 		queryBtn.addActionListener(listener);
 		
 		CleanListener clistener = new CleanListener(mainTable, itemTable);
 		clistener.setTimeInput(timeInput);
+		clistener.setEleValue(eleValue);
+		clistener.setMtValue(mtValue);
+		clistener.setPosValue(posValue);
+		clistener.setShValue(shValue);
+		clistener.setTddValue(tddValue);
+		clistener.setTgValue(tgValue);
+		clistener.setMtwmValue(mtwmValue);
 		cleanBtn.addActionListener(clistener);
 		
 		try {
@@ -140,7 +149,7 @@ public class MainFrame extends JFrame {
 		
 		JPanel conclusionPanel = new JPanel();
 		containerPanel.add(conclusionPanel, BorderLayout.SOUTH);
-		conclusionPanel.setLayout(new GridLayout(6, 1));
+		conclusionPanel.setLayout(new GridLayout(7, 1));
 		
 		JLabel pos = new JLabel("收银机入账总额：");
 		posValue = new JLabel();
@@ -184,8 +193,16 @@ public class MainFrame extends JFrame {
 		tddPanel.add(tdd);
 		tddPanel.add(tddValue);
 		
+		JLabel mtwm = new JLabel("美团外卖入账总额：");
+		mtwmValue = new JLabel();
+		mtwmValue.setForeground(Color.RED);
+		JPanel mtwmPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		mtwmPanel.add(mtwm);
+		mtwmPanel.add(mtwmValue);
+		
 		conclusionPanel.add(posPanel);
 		conclusionPanel.add(mtPanel);
+		conclusionPanel.add(mtwmPanel);
 		conclusionPanel.add(tgPanel);
 		conclusionPanel.add(shPanel);
 		conclusionPanel.add(elePanel);

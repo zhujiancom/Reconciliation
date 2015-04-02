@@ -75,7 +75,7 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 		}else{
 			Date savepoint = mark.getSavepoint();
 			// savepoint 在当天24点之前,则作增量查询
-			if(savepoint.before(queryEndofDate)){
+			if(savepoint != null && savepoint.before(queryEndofDate)){
 				dataTransform.accquireOrderInfo(savepoint);
 				markService.rwUpdateMark(mark);
 			}
@@ -106,6 +106,9 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 					}
 					if(BusinessConstant.TDD_NO.equals(account.getAccountNo())){
 						vo.setTddAmount(postAmount);
+					}
+					if(BusinessConstant.MTWM_NO.equals(account.getAccountNo())){
+						vo.setMtwmAmount(postAmount);
 					}
 					totalAmount = totalAmount.add(postAmount);
 				}

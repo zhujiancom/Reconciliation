@@ -34,6 +34,8 @@ public class OrderVO {
 	
 	private BigDecimal freeAmount;
 	
+	private BigDecimal mtwmAmount;
+	
 	private Integer unusual;
 	
 	private BigDecimal nodiscountAmount;
@@ -165,6 +167,14 @@ public class OrderVO {
 
 	public void setFreeAmount(BigDecimal freeAmount) {
 		this.freeAmount = freeAmount;
+	}
+
+	public BigDecimal getMtwmAmount() {
+		return mtwmAmount;
+	}
+
+	public void setMtwmAmount(BigDecimal mtwmAmount) {
+		this.mtwmAmount = mtwmAmount;
 	}
 
 	public Integer getUnusual() {

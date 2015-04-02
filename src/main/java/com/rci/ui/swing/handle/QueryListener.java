@@ -43,6 +43,7 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 	private JLabel shValue;
 	private JLabel eleValue;
 	private JLabel tddValue;
+	private JLabel mtwmValue;
 	
 	public QueryListener(JTable mainTable,JTable subTable){
 		this.mainTable = mainTable;
@@ -61,6 +62,7 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 			shValue.setText(getTotalAmount(PaymodeType.DPSH).toString());
 			eleValue.setText(getTotalAmount(PaymodeType.ELE).toString());
 			tddValue.setText(getTotalAmount(PaymodeType.TDD).toString());
+			mtwmValue.setText(getTotalAmount(PaymodeType.MTWM).toString());
 			mainTable.getSelectionModel().addListSelectionListener(this);
 		}catch(ServiceException se){
 			JOptionPane.showMessageDialog(null, se.getMessage());
@@ -195,6 +197,13 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 				}
 			}
 		}
+		if(PaymodeType.MTWM.equals(paymode)){
+			for(OrderVO order:orders){
+				if(order.getMtwmAmount() != null){
+					totalAmount = totalAmount.add(order.getMtwmAmount());
+				}
+			}
+		}
 		return totalAmount;
 	}
 
@@ -244,5 +253,9 @@ public class QueryListener implements ActionListener,ListSelectionListener {
 
 	public void setTddValue(JLabel tddValue) {
 		this.tddValue = tddValue;
+	}
+
+	public void setMtwmValue(JLabel mtwmValue) {
+		this.mtwmValue = mtwmValue;
 	}
 }
