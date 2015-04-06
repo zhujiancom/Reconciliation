@@ -59,10 +59,12 @@ public class OrderTable extends JTable {
 		cm.getColumn(12).setPreferredWidth(75);
 		cm.getColumn(13).setHeaderValue("淘点点入账");
 		cm.getColumn(13).setPreferredWidth(75);
-		cm.getColumn(14).setHeaderValue("免单金额");
+		cm.getColumn(14).setHeaderValue("美团外卖入账");
 		cm.getColumn(14).setPreferredWidth(75);
-		cm.getColumn(15).setHeaderValue("总金额");
+		cm.getColumn(15).setHeaderValue("免单金额");
 		cm.getColumn(15).setPreferredWidth(75);
+		cm.getColumn(16).setHeaderValue("总金额");
+		cm.getColumn(16).setPreferredWidth(75);
 	}
 	
 	private class RowMarkReadRenderer extends DefaultTableCellRenderer{

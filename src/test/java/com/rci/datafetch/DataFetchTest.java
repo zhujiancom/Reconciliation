@@ -41,7 +41,7 @@ public class DataFetchTest extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void testFetchAllDayOrders(){
 		Date sdate = DateUtil.str2Date("2015-01-21");
-		List<OrderDTO> orders = datafetch.fetchAllDayOrders(sdate);
+		List<OrderDTO> orders = datafetch.fetchAllDayOrders(sdate,sdate);
 		int count = 0;
 		for(OrderDTO order:orders){
 			System.out.println((++count)+"-"+order.getOrderNo()+"-"+order.getPayNo()+"-"+order.getPaymode());

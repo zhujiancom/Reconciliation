@@ -10,4 +10,8 @@ public interface IFetchMarkService {
 	public void rwSystemInit();
 	
 	public void rwOrderMark(String day);
+	
+	public void rwUpdateMark(DataFetchMark mark);
+	
+	public void rwDeleteMark(String day);
 }

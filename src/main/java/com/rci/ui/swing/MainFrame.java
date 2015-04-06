@@ -29,6 +29,7 @@ import javax.swing.UIManager;
 import com.rci.config.PropertyConstants;
 import com.rci.tools.properties.PropertyUtils;
 import com.rci.ui.model.OrderTable;
+import com.rci.ui.swing.handle.CleanListener;
 import com.rci.ui.swing.handle.QueryListener;
 import com.rci.ui.swing.handle.SystemInitHandler;
 
@@ -39,6 +40,7 @@ public class MainFrame extends JFrame {
 	private static final long serialVersionUID = -8216786708977859424L;
 	
 	private JButton queryBtn;
+	private JButton cleanBtn;
 	private JTextField timeInput;
 	private JScrollPane mainScrollPane;
 	private JScrollPane subScrollPane;
@@ -51,6 +53,7 @@ public class MainFrame extends JFrame {
 	private JLabel shValue;
 	private JLabel eleValue;
 	private JLabel tddValue;
+	private JLabel mtwmValue;
 	
 	public MainFrame(){
 		initComponent();
@@ -62,16 +65,21 @@ public class MainFrame extends JFrame {
 		listener.setShValue(shValue);
 		listener.setTddValue(tddValue);
 		listener.setTgValue(tgValue);
+		listener.setMtwmValue(mtwmValue);
 		queryBtn.registerKeyboardAction(listener, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 		queryBtn.addActionListener(listener);
 		
-//		try {
-//			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-//		} catch (ClassNotFoundException | InstantiationException
-//				| IllegalAccessException | UnsupportedLookAndFeelException e) {
-//			e.printStackTrace();
-//		}
-//		
+		CleanListener clistener = new CleanListener(mainTable, itemTable);
+		clistener.setTimeInput(timeInput);
+		clistener.setEleValue(eleValue);
+		clistener.setMtValue(mtValue);
+		clistener.setPosValue(posValue);
+		clistener.setShValue(shValue);
+		clistener.setTddValue(tddValue);
+		clistener.setTgValue(tgValue);
+		clistener.setMtwmValue(mtwmValue);
+		cleanBtn.addActionListener(clistener);
+		
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (Exception e) {
@@ -110,9 +118,11 @@ public class MainFrame extends JFrame {
 		JLabel rciTime = new JLabel("日期");
 		timeInput = new JTextField(10);
 		queryBtn = new JButton("查询");
+		cleanBtn = new JButton("清空");
 		formPanel.add(rciTime);
 		formPanel.add(timeInput);
 		formPanel.add(queryBtn);
+		formPanel.add(cleanBtn);
 		formPanel.setVisible(true);
 		formPanel.setSize(500, 300);
 		formPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
@@ -139,7 +149,7 @@ public class MainFrame extends JFrame {
 		
 		JPanel conclusionPanel = new JPanel();
 		containerPanel.add(conclusionPanel, BorderLayout.SOUTH);
-		conclusionPanel.setLayout(new GridLayout(6, 1));
+		conclusionPanel.setLayout(new GridLayout(7, 1));
 		
 		JLabel pos = new JLabel("收银机入账总额：");
 		posValue = new JLabel();
@@ -183,8 +193,16 @@ public class MainFrame extends JFrame {
 		tddPanel.add(tdd);
 		tddPanel.add(tddValue);
 		
+		JLabel mtwm = new JLabel("美团外卖入账总额：");
+		mtwmValue = new JLabel();
+		mtwmValue.setForeground(Color.RED);
+		JPanel mtwmPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		mtwmPanel.add(mtwm);
+		mtwmPanel.add(mtwmValue);
+		
 		conclusionPanel.add(posPanel);
 		conclusionPanel.add(mtPanel);
+		conclusionPanel.add(mtwmPanel);
 		conclusionPanel.add(tgPanel);
 		conclusionPanel.add(shPanel);
 		conclusionPanel.add(elePanel);

@@ -1,5 +1,7 @@
 package com.rci.bean.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -8,7 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 import com.rci.constants.enums.MarkType;
@@ -31,6 +34,9 @@ public class DataFetchMark extends BaseEntity{
 	
 	/* 标记 */
 	private Integer mark;
+	
+	/* 增量备份点 */
+	private Date savepoint;
 	
 	public DataFetchMark(){}
 	
@@ -77,6 +83,16 @@ public class DataFetchMark extends BaseEntity{
 		this.mark = mark;
 	}
 
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="savepoint")
+	public Date getSavepoint() {
+		return savepoint;
+	}
+
+	public void setSavepoint(Date savepoint) {
+		this.savepoint = savepoint;
+	}
+
 	@Override
 	public Integer getVersion() {
 		return version;
@@ -87,13 +103,4 @@ public class DataFetchMark extends BaseEntity{
 	public void setVersion(Integer version) {
 		this.version = version;
 	}
-	
-	@Transient
-	public Boolean isMarked(){
-		if(mark==null || mark==0){
-			return false;
-		}
-		return true;
-	}
-
 }

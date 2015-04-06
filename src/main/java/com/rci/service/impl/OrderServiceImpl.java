@@ -2,6 +2,7 @@ package com.rci.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -46,6 +47,8 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 	public void rwInsertOrder(Order order) {
 		rwCreate(order);
 	}
+	
+	
 
 	@Override
 	public List<Order> queryAllDayOrders() {
@@ -64,10 +67,20 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 	public List<OrderVO> queryOrderVOsByDay(String day) {
 		List<OrderVO> vos = new LinkedList<OrderVO>();
 		DataFetchMark mark = markService.getMarkRecordByDay(day);
-		if(mark == null || !mark.isMarked()){
-			dataTransform.accquireOrderInfo(DateUtil.str2Date(day,"yyyyMMdd"));
+		Date queryDate = DateUtil.str2Date(day,"yyyyMMdd");
+		Date queryEndofDate = DateUtil.getEndTimeOfDay(queryDate);
+		if(mark == null){
+			dataTransform.accquireOrderInfo(queryDate);
 			markService.rwOrderMark(day);
+		}else{
+			Date savepoint = mark.getSavepoint();
+			// savepoint 在当天24点之前,则作增量查询
+			if(savepoint != null && savepoint.before(queryEndofDate)){
+				dataTransform.accquireOrderInfo(savepoint);
+				markService.rwUpdateMark(mark);
+			}
 		}
+		
 		List<Order> orders = queryOrdersByDay(day);
 		if(!CollectionUtils.isEmpty(orders)){
 			for(Order order:orders){
@@ -93,6 +106,9 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 					}
 					if(BusinessConstant.TDD_NO.equals(account.getAccountNo())){
 						vo.setTddAmount(postAmount);
+					}
+					if(BusinessConstant.MTWM_NO.equals(account.getAccountNo())){
+						vo.setMtwmAmount(postAmount);
 					}
 					totalAmount = totalAmount.add(postAmount);
 				}
@@ -122,5 +138,16 @@ public class OrderServiceImpl extends BaseService<Order, Long> implements
 			}
 		}
 		return vos;
+	}
+
+	@Override
+	public void rwDeleteOrders(Order[] orders) {
+		baseDAO.delete(orders);
+	}
+
+	@Override
+	public void rwDeleteOrders(String day) {
+		List<Order> orders = queryOrdersByDay(day);
+		baseDAO.delete(orders.toArray(new Order[0]));
 	}
 }
