@@ -20,5 +20,6 @@ public class BusinessConstant {
 	public static final String SUITA=(String) PropertyUtils.getProperties(PropertyConstants.SUITA);
 	public static final String SUITB=(String) PropertyUtils.getProperties(PropertyConstants.SUITB);
 	public static final String SUITC=(String) PropertyUtils.getProperties(PropertyConstants.SUITC);
+	public static final String SUITC_2=(String) PropertyUtils.getProperties(PropertyConstants.SUITC_2);
 	
 }

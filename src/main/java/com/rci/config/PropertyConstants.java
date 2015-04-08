@@ -46,6 +46,7 @@ public class PropertyConstants{
 	public static final String SUITA="suit.a";
 	public static final String SUITB="suit.b";
 	public static final String SUITC="suit.c";
+	public static final String SUITC_2="suit.c2";
 	
 	public static final String NODISCOUNT_DISHTYPE = "nodiscount.dishtype.no";
 }

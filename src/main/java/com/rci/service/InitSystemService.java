@@ -116,11 +116,16 @@ public class InitSystemService {
 				s7.setPostPrice(new BigDecimal(68));
 				s7.setCommission(new BigDecimal(1));
 				s7.setPaymode(mode);
-				Scheme s8 = new Scheme(SchemeType.SUIT_C,"套餐C");
+				Scheme s8 = new Scheme(SchemeType.SUIT_C,"套餐C（原味）");
 				s8.setPrice(new BigDecimal(98));
 				s8.setPostPrice(new BigDecimal(98));
 				s8.setCommission(new BigDecimal(1));
 				s8.setPaymode(mode);
+				Scheme s9 = new Scheme(SchemeType.SUIT_C2,"套餐C（香辣）");
+				s9.setPrice(new BigDecimal(98));
+				s9.setPostPrice(new BigDecimal(98));
+				s9.setCommission(new BigDecimal(1));
+				s9.setPaymode(mode);
 				List<Scheme> schemes = new ArrayList<Scheme>();
 				schemes.add(s1);
 				schemes.add(s2);
@@ -130,6 +135,7 @@ public class InitSystemService {
 				schemes.add(s6);
 				schemes.add(s7);
 				schemes.add(s8);
+				schemes.add(s9);
 				mode.setSchemes(schemes);
 			}
 			if( BusinessConstant.MT_NO.equals(mode.getModeNo())){
@@ -168,11 +174,16 @@ public class InitSystemService {
 				s7.setPostPrice(new BigDecimal(68));
 				s7.setCommission(new BigDecimal(1));
 				s7.setPaymode(mode);
-				Scheme s8 = new Scheme(SchemeType.SUIT_C,"套餐C");
+				Scheme s8 = new Scheme(SchemeType.SUIT_C,"套餐C(原味)");
 				s8.setPrice(new BigDecimal(98));
 				s8.setPostPrice(new BigDecimal(98));
 				s8.setCommission(new BigDecimal(1));
 				s8.setPaymode(mode);
+				Scheme s9 = new Scheme(SchemeType.SUIT_C2,"套餐C（香辣）");
+				s9.setPrice(new BigDecimal(98));
+				s9.setPostPrice(new BigDecimal(98));
+				s9.setCommission(new BigDecimal(1));
+				s9.setPaymode(mode);
 				List<Scheme> schemes = new ArrayList<Scheme>();
 				schemes.add(s1);
 				schemes.add(s2);
@@ -182,6 +193,7 @@ public class InitSystemService {
 				schemes.add(s6);
 				schemes.add(s7);
 				schemes.add(s8);
+				schemes.add(s9);
 				mode.setSchemes(schemes);
 			}
 			if(BusinessConstant.LS_NO.equals(mode.getModeNo())){
@@ -209,18 +221,24 @@ public class InitSystemService {
 				s7.setCommission(new BigDecimal(1));
 				s7.setSpread(new BigDecimal(-0.02));
 				s7.setPaymode(mode);
-				Scheme s8 = new Scheme(SchemeType.SUIT_C,"套餐C");
+				Scheme s8 = new Scheme(SchemeType.SUIT_C,"套餐C（原味）");
 				s8.setPrice(new BigDecimal(98));
 				s8.setPostPrice(new BigDecimal(98));
 				s8.setCommission(new BigDecimal(1));
 				s8.setSpread(new BigDecimal(-0.02));
 				s8.setPaymode(mode);
+				Scheme s9 = new Scheme(SchemeType.SUIT_C2,"套餐C（香辣）");
+				s9.setPrice(new BigDecimal(98));
+				s9.setPostPrice(new BigDecimal(98));
+				s9.setCommission(new BigDecimal(1));
+				s9.setPaymode(mode);
 				List<Scheme> schemes = new ArrayList<Scheme>();
 				schemes.add(s1);
 				schemes.add(s2);
 				schemes.add(s6);
 				schemes.add(s7);
 				schemes.add(s8);
+				schemes.add(s9);
 				mode.setSchemes(schemes);
 			}
 			if(BusinessConstant.DPSH_NO.equals(mode.getModeNo())){
