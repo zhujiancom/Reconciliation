@@ -119,7 +119,7 @@
 	</logger>
 
 	<root>
-		<priority value="WARN" />
+		<priority value="ERROR" />
 		<appender-ref ref="CONSOLE" />
 		<appender-ref ref="COMMONLOG" />
 	</root>

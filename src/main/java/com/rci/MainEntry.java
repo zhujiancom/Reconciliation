@@ -19,8 +19,6 @@ public class MainEntry {
 		frame.setVisible(true);
 //		frame.pack();
 //		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		
-		//test config  remote
 	}
 
 }
