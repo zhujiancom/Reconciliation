@@ -20,7 +20,7 @@ public class MainEntry {
 //		frame.pack();
 //		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
-		//test config
+		//test config  remote
 	}
 
 }
