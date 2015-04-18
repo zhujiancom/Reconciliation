@@ -53,8 +53,9 @@ public class ELEFilter extends AbstractFilter {
 					order.setSingleDiscount(true);
 				}
 			}
-			if(order.getFreeAmount() != null){
-				actualAmount = actualAmount.subtract(order.getFreeAmount());
+			BigDecimal freeAmount = order.getPaymodeMapping().get(BusinessConstant.FREE_NO);
+			if(freeAmount != null){
+				actualAmount = actualAmount.subtract(freeAmount);
 			}
 			if(actualAmount.compareTo(onlineAmount) != 0){
 				order.setUnusual(UNUSUAL);
